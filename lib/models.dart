@@ -96,3 +96,30 @@ class Company {
   final String adress;
   final double rate;
 }
+
+class Review {
+  Review({
+    @required this.userAvatarImg,
+    @required this.userName,
+    @required this.userRank,
+    @required this.dateReview,
+    @required this.textReview,
+    @required this.service,
+    @required this.kitchen,
+    @required this.priceQuality,
+    @required this.ambiance,
+    this.likes = 0,
+    this.response,
+  });
+  final String userAvatarImg;
+  final String userName;
+  final String userRank;
+  final String dateReview;
+  final String textReview;
+  final int service;
+  final int kitchen;
+  final int priceQuality;
+  final int ambiance;
+  final int likes;
+  final String response;
+}
