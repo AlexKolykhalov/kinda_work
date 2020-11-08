@@ -63,16 +63,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key key,
     @required this.size,
     @required this.title,
-    this.showBottom = false,
     this.showActions = true,
-    this.bottomListViewData,
+    this.showBottom = false,
+    this.tabController,
+    this.bottomData,
   }) : super(key: key);
 
   final Size size;
   final String title;
-  final bool showBottom;
   final bool showActions;
-  final List<String> bottomListViewData;
+  final bool showBottom;
+  final TabController tabController;
+  final List<String> bottomData;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +99,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
       bottom: (showBottom)
           //TODO определиться, что выбрать
-          ? CustomBottomAppBar1(preferredSize: preferredSize)
+          ? CustomBottomAppBar1(
+              preferredSize: preferredSize,
+              tabController: tabController,
+              bottomData: bottomData,
+            )
           // CustomBottomAppBar(
           //     size: size,
           //     bottomListViewData: bottomListViewData,
@@ -440,40 +446,43 @@ class ListViewElement extends StatelessWidget {
 }
 
 class RateBadge extends StatelessWidget {
-  const RateBadge({Key key, @required this.rate}) : super(key: key);
+  const RateBadge({
+    Key key,
+    @required this.rate,
+    @required this.textColor,
+  }) : super(key: key);
 
-  final double rate;
+  final num rate;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
     //print('-->RateBadge');
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.star,
-            color: rate == 0.0 ? Colors.grey[600] : Colors.green,
-            size: cConstantWidth * 0.1,
-          ),
-          SizedBox(width: cConstantWidth * 0.01),
-          (rate == 0.0)
-              ? Container(
-                  width: cConstantWidth * 0.45,
-                  child: Text(
-                    'Нет оценок',
-                    style: TextStyle(fontSize: cConstantWidth * scaleLightText),
-                  ),
-                )
-              : Text(
-                  rate.toString(),
-                  style: TextStyle(
-                    fontSize: cConstantWidth * scaleLightText,
-                    color: Colors.green,
-                  ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.star,
+          color: rate == 0.0 ? Colors.grey[600] : textColor,
+          size: cConstantWidth * 0.1,
+        ),
+        SizedBox(width: cConstantWidth * 0.01),
+        (rate == 0.0)
+            ? Container(
+                width: cConstantWidth * 0.45,
+                child: Text(
+                  'Нет оценок',
+                  style: TextStyle(fontSize: cConstantWidth * scaleLightText),
                 ),
-        ],
-      ),
+              )
+            : Text(
+                rate.toString(),
+                style: TextStyle(
+                  fontSize: cConstantWidth * scaleLightText,
+                  color: textColor,
+                ),
+              ),
+      ],
     );
   }
 }
