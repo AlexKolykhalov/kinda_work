@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/widgets/custom_grid.dart';
-import 'package:kinda_work/models.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/info_element/info_element_page.dart';
+import 'package:kinda_work/main/widgets/custom_grid.dart';
+import 'package:kinda_work/models.dart';
 import 'package:kinda_work/widgets.dart';
 
 enum zoomButtonsType { zoomIn, zoomOut, center }
@@ -286,10 +287,6 @@ void _displayBottomSheet(BuildContext context, Size size) {
     context: context,
     isScrollControlled: false,
     builder: (ctx) {
-      // Size size = Size(
-      //   MediaQuery.of(context).size.width,
-      //   MediaQuery.of(context).size.height * 0.4,
-      // );
       return Container(
         padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
         height: size.height,
@@ -328,10 +325,30 @@ void _displayBottomSheet(BuildContext context, Size size) {
                 ),
               ),
               Container(
-                height: size.height * 0.15,
+                height: cConstantWidth / cRatioSmallSize,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => Container(),
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            InfoElementPage(),
+                      ),
+                    ),
+                    child: Container(
+                      width: cConstantWidth,
+                      child: CustomGridViewElement(
+                          infoElement: InfoElement(
+                        isLargeGridElement: false,
+                        isDiscountVisible: false,
+                        isFavoriteVisible: false,
+                        lightText: 'Массажный салон',
+                        img: 'assets/png/grid/2.png',
+                        rate: 9.5,
+                      )),
+                    ),
+                  ),
 
                   // CustomGridViewElement(
                   //   infoElement: InfoElement(

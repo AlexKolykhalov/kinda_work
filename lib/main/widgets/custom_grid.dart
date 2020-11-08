@@ -221,7 +221,7 @@ List<Widget> _listWidgetsWithPrices(String lightText, double rate,
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [RateBadge(rate: rate)],
+          children: [RateBadge(rate: rate, textColor: Colors.green)],
         ),
         Row(
           children: [
@@ -261,7 +261,7 @@ List<Widget> _listWidgetsWithPrices(String lightText, double rate,
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RateBadge(rate: rate),
+        RateBadge(rate: rate, textColor: Colors.green),
         MessagesBadge(countMessages: countMessages),
       ],
     ),
@@ -312,7 +312,7 @@ List<Widget> _listWidgetsWithoutPrices(
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RateBadge(rate: rate),
+        RateBadge(rate: rate, textColor: Colors.green),
         MessagesBadge(countMessages: countMessages),
       ],
     ),

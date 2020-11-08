@@ -9,8 +9,22 @@ import 'package:kinda_work/promo/BLoC/horizontal_listview_switcher_cubit.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/widgets.dart';
 
-class PromotionsPage extends StatelessWidget {
+class PromotionsPage extends StatefulWidget {
   const PromotionsPage({Key key}) : super(key: key);
+
+  @override
+  _PromotionsPageState createState() => _PromotionsPageState();
+}
+
+class _PromotionsPageState extends State<PromotionsPage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 6, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +44,8 @@ class PromotionsPage extends StatelessWidget {
           size: _size,
           title: 'Акции - бесплатно',
           showBottom: true,
-          bottomListViewData: [
+          tabController: _tabController,
+          bottomData: [
             'Все акции',
             'Рестораны и кафе',
             'Красота',
@@ -39,60 +54,72 @@ class PromotionsPage extends StatelessWidget {
             'Авто',
           ],
         ),
-        body: Stack(
+        body: TabBarView(
+          controller: _tabController,
           children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      _size.width * cHorizont,
-                      _size.height * 0.02,
-                      0.0,
-                      _size.height * 0.04,
-                    ),
-                    child: BlocProvider(
-                      create: (context) => SwitcherHorigontalListViewCubit(),
-                      child: BlocBuilder<SwitcherHorigontalListViewCubit, int>(
-                        builder: (context, selectedElement) {
-                          return CustomHorizontalListView(
-                            size: _size,
-                            listViewData: _listViewData,
-                            selectedElement: selectedElement,
-                          );
-                        },
+            Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          _size.width * cHorizont,
+                          _size.height * 0.02,
+                          0.0,
+                          _size.height * 0.04,
+                        ),
+                        child: BlocProvider(
+                          create: (context) =>
+                              SwitcherHorigontalListViewCubit(),
+                          child:
+                              BlocBuilder<SwitcherHorigontalListViewCubit, int>(
+                            builder: (context, selectedElement) {
+                              return CustomHorizontalListView(
+                                size: _size,
+                                listViewData: _listViewData,
+                                selectedElement: selectedElement,
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: _size.width * cHorizont),
-                    child: Column(
-                      children: [
-                        CustomFilterSortBar(size: _size),
-                        CustomGridView(
-                          size: _size,
-                          childAspectRatio: cRatioLargeSize,
-                          infoElements: popularPromotions,
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _size.width * cHorizont),
+                        child: Column(
+                          children: [
+                            CustomFilterSortBar(size: _size),
+                            CustomGridView(
+                              size: _size,
+                              childAspectRatio: cRatioLargeSize,
+                              infoElements: popularPromotions,
+                            ),
+                            CustomGridView(
+                              size: _size,
+                              childAspectRatio: cRatioMediumSize,
+                              infoElements: popularPromotions,
+                            ),
+                          ],
                         ),
-                        CustomGridView(
-                          size: _size,
-                          childAspectRatio: cRatioMediumSize,
-                          infoElements: popularPromotions,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  left: _size.width * cHorizont,
+                  right: _size.width * cHorizont,
+                  bottom: _size.height * 0.04,
+                  //width: _size.width - (_size.width * cEditProfilePageHorizontal),
+                  child: BottomButtons(size: _size),
+                ),
+              ],
             ),
-            Positioned(
-              left: _size.width * cHorizont,
-              right: _size.width * cHorizont,
-              bottom: _size.height * 0.04,
-              //width: _size.width - (_size.width * cEditProfilePageHorizontal),
-              child: BottomButtons(size: _size),
-            ),
+            Container(),
+            Container(),
+            Container(),
+            Container(),
+            Container(),
           ],
         ),
         bottomNavigationBar: CustomBottomNavBar(size: _size, currentIndex: 2),

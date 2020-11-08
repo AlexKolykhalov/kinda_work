@@ -230,7 +230,7 @@ class SearchResultPrices extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  RateBadge(rate: 9.5),
+                                  RateBadge(rate: 9.5, textColor: Colors.green),
                                 ],
                               ),
                               Padding(
@@ -413,7 +413,9 @@ class SearchResultPromotions extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      RateBadge(rate: promotions[index].rate),
+                                      RateBadge(
+                                          rate: promotions[index].rate,
+                                          textColor: Colors.green),
                                       Row(
                                         children: [
                                           Text(
@@ -535,7 +537,8 @@ class SearchResultCompanies extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RateBadge(rate: companies[index].rate),
+                      RateBadge(
+                          rate: companies[index].rate, textColor: Colors.green),
                       SizedBox(width: size.width * 0.05),
                       GestureDetector(
                         onTap: () => null,
