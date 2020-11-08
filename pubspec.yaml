@@ -27,7 +27,7 @@ dependencies:
   carousel_slider: ^2.2.1
   cupertino_icons: ^0.1.3
   firebase_ml_vision: ^0.9.7
-  flutter_bloc: ^6.0.5
+  flutter_bloc: ^6.1.0
   flutter_svg: ^0.18.1
   google_fonts: ^1.1.0
   path_provider: ^1.6.18
@@ -51,6 +51,7 @@ flutter:
   assets:
     - assets/svg/
     - assets/svg/bottombar_icons/
+    - assets/svg/restaurant_icons/
     - assets/png/
     - assets/png/features/
     - assets/png/grid/
