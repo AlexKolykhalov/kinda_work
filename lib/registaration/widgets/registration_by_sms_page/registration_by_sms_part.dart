@@ -60,7 +60,8 @@ class _RegistrationBySmsPartState extends State<RegistrationBySmsPart> {
             ),
           ),
           CustomButton(
-            onTap: RegistrationByEmailPage(),
+            // onTap: RegistrationByEmailPage(),
+            onTap: null,
             //size: widget.size,
             buttonText: 'Отправить код',
             buttonTextColor: Colors.white,

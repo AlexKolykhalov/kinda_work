@@ -48,7 +48,8 @@ class ThanksPage extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(horizontal: size.width * 0.15),
                     child: CustomButton(
-                      onTap: MainPage(),
+                      // onTap: MainPage(),
+                      onTap: null,
                       buttonText: 'Закрыть',
                       buttonColor: cPink,
                       buttonTextColor: Colors.white,

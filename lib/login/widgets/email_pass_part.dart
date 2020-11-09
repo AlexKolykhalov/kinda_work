@@ -100,7 +100,14 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
           ),
           //TODO LogIN
           CustomButton(
-            onTap: MainPage(), // StartPage(),
+            onTap: () => Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MainPage(),
+              ),
+            ),
             // size: widget.size,
             buttonText: 'Войти',
             buttonColor: cPink,

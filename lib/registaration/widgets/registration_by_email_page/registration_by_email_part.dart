@@ -90,7 +90,8 @@ class _RegistrationByEmailPartState extends State<RegistrationByEmailPart> {
             ),
           ),
           CustomButton(
-            onTap: EditProfilePage(),
+            // onTap: EditProfilePage(),
+            onTap: null,
             //size: widget.size,
             buttonText: 'Зарегистрироваться',
             buttonTextColor: Colors.white,
