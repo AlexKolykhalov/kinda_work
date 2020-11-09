@@ -142,7 +142,7 @@ class _InfoElementPageState extends State<InfoElementPage>
     _tabController2 = TabController(length: 3, vsync: this);
     _tabControllerReviews = TabController(length: 2, vsync: this);
     _isVisible = true;
-    _reviewsWidgets = _getReviews(_reviews);
+    // _reviewsWidgets = _getReviews(_reviews);
   }
 
   @override
@@ -343,7 +343,9 @@ class _InfoElementPageState extends State<InfoElementPage>
                                       Container(
                                         width: _size.width * 0.43,
                                         child: CustomButton(
-                                          onTap: null,
+                                          onTap: () =>
+                                              _displayBottomSheet_Phones(
+                                                  context, _size),
                                           buttonText: 'Позвонить',
                                           buttonColor: Colors.green,
                                           buttonTextColor: Colors.white,
@@ -1085,7 +1087,7 @@ class _InfoElementPageState extends State<InfoElementPage>
                     buttonBorderColor: Colors.grey[600],
                   ),
                 ),
-                Column(children: _reviewsWidgets),
+                Column(children: _getReviews(_reviews)),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: _size.width * cHorizont,
@@ -1615,5 +1617,44 @@ Marker _buildCustomMarker({
         ],
       ),
     ),
+  );
+}
+
+void _displayBottomSheet_Phones(BuildContext context, Size size) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (ctx) {
+      return Container(
+        height: size.height * 0.5,
+        color: cGrey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: size.width * 0.1,
+              height: size.height * 0.005,
+              margin: EdgeInsets.only(top: size.height * 0.02),
+              decoration: BoxDecoration(
+                color: Colors.grey[600],
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Column(
+                children: [
+                  FlatButton(onPressed: null, child: Text('phone1')),
+                  FlatButton(onPressed: null, child: Text('phone1')),
+                  FlatButton(onPressed: null, child: Text('phone1')),
+                  FlatButton(onPressed: null, child: Text('phone1')),
+                ],
+              ),
+            ),
+            Container()
+          ],
+        ),
+      );
+    },
   );
 }
