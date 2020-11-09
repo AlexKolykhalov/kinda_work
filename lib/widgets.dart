@@ -21,7 +21,8 @@ class CustomButton extends StatelessWidget {
     this.isBoldButtonText = true,
   }) : super(key: key);
 
-  final Widget onTap;
+  final VoidCallback onTap;
+  // final Widget onTap;
   final String buttonText;
   final Color buttonTextColor;
   final bool isBoldButtonText;
@@ -31,13 +32,15 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          transitionDuration: Duration(seconds: 0),
-          pageBuilder: (context, animation, secondaryAnimation) => onTap,
-        ),
-      ),
+      // TODO maybe onle push
+      onTap: () => onTap(),
+      // onTap: () => Navigator.pushReplacement(
+      //   context,
+      //   PageRouteBuilder(
+      //     transitionDuration: Duration(seconds: 0),
+      //     pageBuilder: (context, animation, secondaryAnimation) => onTap,
+      //   ),
+      // ),
       child: Container(
         height: 48.0,
         decoration: BoxDecoration(
