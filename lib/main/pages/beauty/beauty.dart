@@ -42,6 +42,7 @@ class Beauty extends StatelessWidget {
                       0.0,
                       _size.height * 0.04,
                     ),
+                    //TODO change to TabBar see in info_element_page.dart
                     child: BlocProvider(
                       create: (context) => SwitcherHorigontalListViewCubit(),
                       child: BlocBuilder<SwitcherHorigontalListViewCubit, int>(
