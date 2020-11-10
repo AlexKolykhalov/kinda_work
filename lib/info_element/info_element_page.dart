@@ -142,7 +142,6 @@ class _InfoElementPageState extends State<InfoElementPage>
     _tabController2 = TabController(length: 3, vsync: this);
     _tabControllerReviews = TabController(length: 2, vsync: this);
     _isVisible = true;
-    _reviewsWidgets = _getReviews(_reviews);
   }
 
   @override
@@ -254,8 +253,12 @@ class _InfoElementPageState extends State<InfoElementPage>
                                   ),
                                   Row(
                                     children: [
-                                      RateBadge(
-                                          rate: 8.3, textColor: Colors.green),
+                                      GestureDetector(
+                                        onTap: () => _displayBottomSheet(
+                                            context: context, size: _size),
+                                        child: RateBadge(
+                                            rate: 8.3, textColor: Colors.green),
+                                      ),
                                       SizedBox(width: 10.0),
                                       MessagesBadge(countMessages: 25),
                                     ],
@@ -1085,7 +1088,7 @@ class _InfoElementPageState extends State<InfoElementPage>
                     buttonBorderColor: Colors.grey[600],
                   ),
                 ),
-                Column(children: _reviewsWidgets),
+                Column(children: _getReviews(_reviews)),
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: _size.width * cHorizont,
@@ -1615,5 +1618,115 @@ Marker _buildCustomMarker({
         ],
       ),
     ),
+  );
+}
+
+void _displayBottomSheet(
+    {@required BuildContext context, @required Size size}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (ctx) {
+      return Container(
+        height: size.height * 0.35,
+        color: cGrey,
+        child: Column(
+          children: [
+            Container(
+              width: size.width * 0.1,
+              height: size.height * 0.005,
+              margin: EdgeInsets.only(top: size.height * 0.02),
+              decoration: BoxDecoration(
+                color: Colors.grey[600],
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: size.height * 0.03),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Общая оценка',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0,
+                            ),
+                          ),
+                          RateBadge(rate: 9.4, textColor: Colors.green),
+                        ],
+                      ),
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0, height: 20.0, child: cService),
+                              SizedBox(width: 10.0),
+                              Text('Обслуживание'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.8, textColor: Colors.green)
+                        ]),
+                    SizedBox(height: 10.0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0, height: 20.0, child: cKitchen),
+                              SizedBox(width: 10.0),
+                              Text('Кухня'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.3, textColor: Colors.green)
+                        ]),
+                    SizedBox(height: 10.0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0,
+                                  height: 20.0,
+                                  child: cPriceQuality),
+                              SizedBox(width: 10.0),
+                              Text('Цена/Качество'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.4, textColor: Colors.green)
+                        ]),
+                    SizedBox(height: 10.0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0, height: 20.0, child: cAmbiance),
+                              SizedBox(width: 10.0),
+                              Text('Атмосфера'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.5, textColor: Colors.green)
+                        ]),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
   );
 }

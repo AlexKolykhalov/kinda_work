@@ -377,6 +377,7 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 }
 
+// TODO make common for all TabBars
 class CustomHorizontalListView extends StatelessWidget {
   const CustomHorizontalListView({
     Key key,
