@@ -142,10 +142,6 @@ class _InfoElementPageState extends State<InfoElementPage>
     _tabController2 = TabController(length: 3, vsync: this);
     _tabControllerReviews = TabController(length: 2, vsync: this);
     _isVisible = true;
-<<<<<<< HEAD
-    // _reviewsWidgets = _getReviews(_reviews);
-=======
->>>>>>> master
   }
 
   @override
@@ -1666,7 +1662,6 @@ void _displayBottomSheetPhones(BuildContext context, Size size) {
   );
 }
 
-
 void _displayBottomSheet(
     {@required BuildContext context, @required Size size}) {
   showModalBottomSheet(
@@ -1776,4 +1771,3 @@ void _displayBottomSheet(
     },
   );
 }
-
