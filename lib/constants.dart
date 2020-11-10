@@ -36,3 +36,10 @@ Widget cSearchIcon = SvgPicture.asset('assets/svg/search.svg');
 Widget cQrCodeIcon = SvgPicture.asset('assets/svg/qrcode.svg');
 Widget cLocationIcon = SvgPicture.asset('assets/svg/location.svg');
 Widget cScanBarCodeIcon = SvgPicture.asset('assets/svg/codescan.svg');
+Widget cService =
+    SvgPicture.asset('assets/svg/restaurant_icons/restaurant.svg');
+Widget cKitchen = SvgPicture.asset('assets/svg/restaurant_icons/fork.svg');
+Widget cPriceQuality =
+    SvgPicture.asset('assets/svg/restaurant_icons/invoice.svg');
+Widget cAmbiance =
+    SvgPicture.asset('assets/svg/restaurant_icons/happiness.svg');
