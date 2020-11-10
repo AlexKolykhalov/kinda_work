@@ -202,7 +202,8 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                     child: Container(
                       width: widget.size.width * 0.65,
                       child: CustomButton(
-                          onTap: VisitHistoryPage(size: widget.size),
+                          // onTap: VisitHistoryPage(size: widget.size),
+                          onTap: null,
                           buttonText: 'Посетил 8 раз',
                           buttonColor: cGrey,
                           buttonBorderColor: Colors.grey[600],

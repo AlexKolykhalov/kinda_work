@@ -82,7 +82,8 @@ class _RegistrationDataPartState extends State<RegistrationDataPart> {
             ),
           ),
           CustomButton(
-            onTap: RegistrationBySmsPage(),
+            // onTap: RegistrationBySmsPage(),
+            onTap: null,
             // size: widget.size,
             buttonText: 'Получить СМС с кодом',
             buttonTextColor: Colors.white,
