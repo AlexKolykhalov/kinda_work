@@ -348,7 +348,7 @@ class _InfoElementPageState extends State<InfoElementPage>
                                         child: CustomButton(
                                           onTap: () =>
                                               _displayBottomSheetPhones(
-                                                  context, _size),
+                                                  context),
                                           buttonText: 'Позвонить',
                                           buttonColor: Colors.green,
                                           buttonTextColor: Colors.white,
@@ -1225,204 +1225,209 @@ class _InfoElementPageState extends State<InfoElementPage>
   }
 
   _createReviewWidget(Review review) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              Container(
-                height: 55.0,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 55.0,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(review.userAvatarImg))),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                                text: review.userName,
-                                style: TextStyle(color: cPink)),
-                            TextSpan(
-                                text: ' ${review.userRank}',
-                                style: TextStyle(color: Colors.grey[600]))
-                          ]),
-                        ),
-                        Text(
-                          review.dateReview,
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  Container(
-                    width: 55.0,
-                    height: 55.0,
-                    padding: EdgeInsets.all(10.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.location_on_outlined,
-                        color: Colors.white,
-                        size: 18.0,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10.0),
-                  Expanded(
-                    child: Text(review.textReview),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  Container(
-                    width: 55.0,
-                    child: Center(
-                      child: Container(
-                        width: 55.0,
-                        height: 25.0,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: RateBadge(
-                          rate: 8.2,
-                          textColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.0),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svg/restaurant_icons/restaurant.svg',
-                        width: 15.0,
-                        height: 15.0,
-                      ),
-                      SizedBox(width: 4.0),
-                      RateBadge(
-                        rate: review.service,
-                        textColor: Colors.green,
-                      ),
-                      SizedBox(width: 10.0),
-                      SvgPicture.asset(
-                        'assets/svg/restaurant_icons/fork.svg',
-                        width: 15.0,
-                        height: 15.0,
-                      ),
-                      SizedBox(width: 4.0),
-                      RateBadge(
-                        rate: review.kitchen,
-                        textColor: Colors.green,
-                      ),
-                      SizedBox(width: 10.0),
-                      SvgPicture.asset(
-                        'assets/svg/restaurant_icons/invoice.svg',
-                        width: 15.0,
-                        height: 15.0,
-                      ),
-                      SizedBox(width: 4.0),
-                      RateBadge(
-                        rate: review.priceQuality,
-                        textColor: Colors.green,
-                      ),
-                      SizedBox(width: 10.0),
-                      SvgPicture.asset(
-                        'assets/svg/restaurant_icons/happiness.svg',
-                        width: 15.0,
-                        height: 15.0,
-                      ),
-                      SizedBox(width: 4.0),
-                      RateBadge(
-                        rate: review.ambiance,
-                        textColor: Colors.green,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 15.0),
-              Visibility(
-                visible: review.response != null,
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(left: 55.0 + 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Container(
+                  height: 55.0,
+                  child: Row(
                     children: [
                       Container(
                         width: 55.0,
-                        height: 26.0,
                         decoration: BoxDecoration(
-                          color: Colors.orange[200],
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Ответ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(review.userAvatarImg))),
                       ),
-                      SizedBox(height: 5.0),
-                      Text(
-                        review.response != null ? review.response : '',
-                        style: TextStyle(fontStyle: FontStyle.italic),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: review.userName,
+                                  style: TextStyle(color: cPink)),
+                              TextSpan(
+                                  text: ' ${review.userRank}',
+                                  style: TextStyle(color: Colors.grey[600]))
+                            ]),
+                          ),
+                          Text(
+                            review.dateReview,
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ],
                       )
                     ],
                   ),
                 ),
+                const SizedBox(height: 8.0),
+                Row(
+                  children: [
+                    Container(
+                      width: 55.0,
+                      height: 55.0,
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.white,
+                          size: 18.0,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
+                    Expanded(
+                      child: Text(review.textReview),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  children: [
+                    Container(
+                      width: 55.0,
+                      child: Center(
+                        child: Container(
+                          width: 55.0,
+                          height: 25.0,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: RateBadge(
+                            rate: 8.2,
+                            textColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10.0),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svg/restaurant_icons/restaurant.svg',
+                            width: 15.0,
+                            height: 15.0,
+                          ),
+                          SizedBox(width: 2.0),
+                          RateBadge(
+                            rate: review.service,
+                            textColor: Colors.green,
+                          ),
+                          SizedBox(width: _size.width * 0.02),
+                          SvgPicture.asset(
+                            'assets/svg/restaurant_icons/fork.svg',
+                            width: 15.0,
+                            height: 15.0,
+                          ),
+                          SizedBox(width: 2.0),
+                          RateBadge(
+                            rate: review.kitchen,
+                            textColor: Colors.green,
+                          ),
+                          SizedBox(width: _size.width * 0.02),
+                          SvgPicture.asset(
+                            'assets/svg/restaurant_icons/invoice.svg',
+                            width: 15.0,
+                            height: 15.0,
+                          ),
+                          SizedBox(width: 2.0),
+                          RateBadge(
+                            rate: review.priceQuality,
+                            textColor: Colors.green,
+                          ),
+                          SizedBox(width: _size.width * 0.02),
+                          SvgPicture.asset(
+                            'assets/svg/restaurant_icons/happiness.svg',
+                            width: 15.0,
+                            height: 15.0,
+                          ),
+                          SizedBox(width: 2.0),
+                          RateBadge(
+                            rate: review.ambiance,
+                            textColor: Colors.green,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15.0),
+                Visibility(
+                  visible: review.response != null,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(left: 55.0 + 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 55.0,
+                          height: 26.0,
+                          decoration: BoxDecoration(
+                            color: Colors.orange[200],
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Ответ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Text(
+                          review.response != null ? review.response : '',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Icon(Icons.remove),
+              ),
+              review.likes == 0
+                  ? Text('0')
+                  : review.likes > 0
+                      ? Text(
+                          '+${review.likes.toString()}',
+                          style: TextStyle(color: Colors.green),
+                        )
+                      : Text(
+                          '${review.likes.toString()}',
+                          style: TextStyle(color: Colors.red),
+                        ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Icon(Icons.add),
               ),
             ],
           ),
-        ),
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Icon(Icons.remove),
-            ),
-            review.likes == 0
-                ? Text('0')
-                : review.likes > 0
-                    ? Text(
-                        '+${review.likes.toString()}',
-                        style: TextStyle(color: Colors.green),
-                      )
-                    : Text(
-                        '${review.likes.toString()}',
-                        style: TextStyle(color: Colors.red),
-                      ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Icon(Icons.add),
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -1623,38 +1628,88 @@ Marker _buildCustomMarker({
   );
 }
 
-void _displayBottomSheetPhones(BuildContext context, Size size) {
-  showModalBottomSheet(
+void _displayBottomSheetPhones(BuildContext context) {
+  showDialog(
     context: context,
-    isScrollControlled: true,
-    builder: (ctx) {
+    builder: (context) {
+      Size _size = MediaQuery.of(context).size;
       return Container(
-        height: size.height * 0.5,
-        color: cGrey,
+        padding: const EdgeInsets.symmetric(horizontal: 7.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              width: size.width * 0.1,
-              height: size.height * 0.005,
-              margin: EdgeInsets.only(top: size.height * 0.02),
-              decoration: BoxDecoration(
-                color: Colors.grey[600],
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Column(
-                children: [
-                  FlatButton(onPressed: null, child: Text('phone1')),
-                  FlatButton(onPressed: null, child: Text('phone1')),
-                  FlatButton(onPressed: null, child: Text('phone1')),
-                  FlatButton(onPressed: null, child: Text('phone1')),
-                ],
+              child: Container(
+                width: _size.width,
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                decoration: BoxDecoration(color: Colors.white),
+                child: Column(
+                  children: [
+                    FlatButton(
+                      onPressed: null,
+                      child: Text(
+                        'Позвонить',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    Divider(thickness: 0.9),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text(
+                          '+375 29 625 91 00',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                        )),
+                    Divider(thickness: 0.9),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text(
+                          '+375 29 625 91 00',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                        )),
+                    Divider(thickness: 0.9),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text(
+                          '+375 29 625 91 00',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                        )),
+                  ],
+                ),
               ),
             ),
-            Container()
+            Container(
+              width: _size.width,
+              margin: EdgeInsets.symmetric(vertical: 10.0),
+              padding: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Отмена',
+                  style: TextStyle(
+                      color: cPink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17.0),
+                ),
+              ),
+            ),
           ],
         ),
       );
