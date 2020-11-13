@@ -7,8 +7,9 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/BLoC/bloc/search_result_bloc.dart';
 import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/promo/BLoC/horizontal_listview_switcher_cubit.dart';
-import 'package:kinda_work/promo/promo_page.dart';
+import 'package:kinda_work/promo/promos_page.dart';
 import 'package:kinda_work/promo/widgets/custom_bottom_appbar.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -64,20 +65,16 @@ class CustomButton extends StatelessWidget {
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key key,
-    @required this.size,
     @required this.title,
-    this.showActions = true,
-    this.showBottom = false,
+    this.actionIcon,
     this.tabController,
-    this.bottomData,
+    this.bottom = const [],
   }) : super(key: key);
 
-  final Size size;
   final String title;
-  final bool showActions;
-  final bool showBottom;
+  final Widget actionIcon;
   final TabController tabController;
-  final List<String> bottomData;
+  final List<String> bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -88,39 +85,35 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(color: Colors.black),
       ),
       leading: FlatButton(
+        padding: EdgeInsets.all(13.0),
         onPressed: () => Navigator.pop(context),
         child: cLeftArrow,
       ),
       actions: [
         Visibility(
-          visible: showActions,
+          visible: actionIcon != null,
           child: FlatButton(
+            padding: EdgeInsets.all(14.0),
             onPressed: () => Navigator.pop(context),
-            child: cSearchIcon,
+            child: actionIcon ?? Container(),
           ),
         ),
       ],
-      bottom: (showBottom)
-          //TODO определиться, что выбрать
-          ? CustomBottomAppBar1(
+      bottom: (bottom.isNotEmpty)
+          ? CustomBottomAppBar(
               preferredSize: preferredSize,
               tabController: tabController,
-              bottomData: bottomData,
+              bottomData: bottom,
             )
-          // CustomBottomAppBar(
-          //     size: size,
-          //     bottomListViewData: bottomListViewData,
-          //     preferredSize: preferredSize,
-          //   )
           : null,
       backgroundColor: Colors.white,
     );
   }
 
   @override
-  Size get preferredSize => (showBottom)
-      ? Size.fromHeight(size.height * 0.15)
-      : Size.fromHeight(AppBar().preferredSize.height);
+  Size get preferredSize => (bottom.isNotEmpty)
+      ? Size.fromHeight(1.7 * AppBar().preferredSize.height)
+      : Size.fromHeight(AppBar().preferredSize.height * 0.85);
 }
 
 class CustomAppBarWithSearch extends StatefulWidget
@@ -637,4 +630,245 @@ class CustomFilterSortBar extends StatelessWidget {
       ),
     );
   }
+}
+
+void displayQrCode(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      Size _size = MediaQuery.of(context).size;
+      return Container(
+        height: _size.height * 0.7,
+        color: cGrey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: _size.width * 0.1,
+              height: _size.height * 0.005,
+              margin: EdgeInsets.only(top: _size.height * 0.02),
+              decoration: BoxDecoration(
+                color: Colors.grey[600],
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+            Text('Покажите при оплате',
+                style: TextStyle(fontSize: _size.height * 0.021)),
+            QrImage(
+              data: '014900',
+              version: QrVersions.auto,
+              padding: EdgeInsets.all(30.0),
+              size: _size.height * 0.35,
+              backgroundColor: Colors.white,
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: _size.height * 0.1),
+              child: Text('014 900',
+                  style: TextStyle(fontSize: _size.height * 0.05)),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void displayPhones(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      Size _size = MediaQuery.of(context).size;
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 7.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Container(
+                width: _size.width,
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                decoration: BoxDecoration(color: Colors.white),
+                child: Column(
+                  children: [
+                    FlatButton(
+                      onPressed: null,
+                      child: Text(
+                        'Позвонить',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    Divider(thickness: 0.9),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text(
+                          '+375 29 625 91 00',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                        )),
+                    Divider(thickness: 0.9),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text(
+                          '+375 29 625 91 00',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                        )),
+                    Divider(thickness: 0.9),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text(
+                          '+375 29 625 91 00',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0,
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: _size.width,
+              margin: EdgeInsets.symmetric(vertical: 10.0),
+              padding: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Отмена',
+                  style: TextStyle(
+                      color: cPink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void displayRating(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      Size _size = MediaQuery.of(context).size;
+      return Container(
+        height: _size.height * 0.35,
+        color: cGrey,
+        child: Column(
+          children: [
+            Container(
+              width: _size.width * 0.1,
+              height: _size.height * 0.005,
+              margin: EdgeInsets.only(top: _size.height * 0.02),
+              decoration: BoxDecoration(
+                color: Colors.grey[600],
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: _size.height * 0.03),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Общая оценка',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0,
+                            ),
+                          ),
+                          RateBadge(rate: 9.4, textColor: Colors.green),
+                        ],
+                      ),
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0, height: 20.0, child: cService),
+                              SizedBox(width: 10.0),
+                              Text('Обслуживание'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.8, textColor: Colors.green)
+                        ]),
+                    SizedBox(height: 10.0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0, height: 20.0, child: cKitchen),
+                              SizedBox(width: 10.0),
+                              Text('Кухня'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.3, textColor: Colors.green)
+                        ]),
+                    SizedBox(height: 10.0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0,
+                                  height: 20.0,
+                                  child: cPriceQuality),
+                              SizedBox(width: 10.0),
+                              Text('Цена/Качество'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.4, textColor: Colors.green)
+                        ]),
+                    SizedBox(height: 10.0),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  width: 20.0, height: 20.0, child: cAmbiance),
+                              SizedBox(width: 10.0),
+                              Text('Атмосфера'),
+                            ],
+                          ),
+                          RateBadge(rate: 9.5, textColor: Colors.green)
+                        ]),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

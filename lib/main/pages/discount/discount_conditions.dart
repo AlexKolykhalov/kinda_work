@@ -14,8 +14,7 @@ class DiscountConditionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(
-            size: size, title: 'Условия скидки', showActions: false),
+        appBar: CustomAppBar(title: 'Условия скидки'),
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(

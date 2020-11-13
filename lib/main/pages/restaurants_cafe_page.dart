@@ -19,7 +19,7 @@ class RestaurantsCafe extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(size: _size, title: 'Рестораны и кафе'),
+        appBar: CustomAppBar(title: 'Рестораны и кафе'),
         body: SingleChildScrollView(
           child: Column(
             children: [

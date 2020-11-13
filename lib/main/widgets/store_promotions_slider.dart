@@ -1,88 +1,83 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:kinda_work/constants.dart';
+class CustomSlider extends StatefulWidget {
+  const CustomSlider({
+    Key key,
+    @required this.images,
+  })  : assert(images.length == 4),
+        super(key: key);
 
-class StorePromotionSlider extends StatefulWidget {
-  const StorePromotionSlider({Key key, @required this.size}) : super(key: key);
-
-  final Size size;
+  final List<Image> images;
 
   @override
-  _StorePromotionSliderState createState() => _StorePromotionSliderState();
+  _CustomSliderState createState() => _CustomSliderState();
 }
 
-class _StorePromotionSliderState extends State<StorePromotionSlider> {
-  int _current = 0;
+class _CustomSliderState extends State<CustomSlider> {
+  int _currentSlider;
+  Size _size;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSlider = 0;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _size = MediaQuery.of(context).size;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(widget.size.width * cHorizont),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(5.0),
-        child: Stack(
-          children: [
-            CarouselSlider(
-              items: [
-                Image.asset('assets/png/slider/slider1.png', fit: BoxFit.cover),
-                Image.asset('assets/png/slider/slider2.png', fit: BoxFit.cover),
-                Image.asset('assets/png/slider/slider3.png', fit: BoxFit.cover),
-                Image.asset('assets/png/slider/slider4.png', fit: BoxFit.cover),
-              ],
-              options: CarouselOptions(
-                scrollDirection: Axis.horizontal,
-                autoPlay: true,
-                viewportFraction: 1.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                },
-              ),
-            ),
-            Positioned(
-              bottom: widget.size.height * 0.02,
-              left: widget.size.width / 3,
-              child: Container(
-                width: widget.size.width * 0.25,
-                height: widget.size.height * 0.025,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    (_current == 0)
-                        ? FilledCircle(size: widget.size)
-                        : UnfilledCircle(size: widget.size),
-                    (_current == 1)
-                        ? FilledCircle(size: widget.size)
-                        : UnfilledCircle(size: widget.size),
-                    (_current == 2)
-                        ? FilledCircle(size: widget.size)
-                        : UnfilledCircle(size: widget.size),
-                    (_current == 3)
-                        ? FilledCircle(size: widget.size)
-                        : UnfilledCircle(size: widget.size),
-                  ],
-                ),
-              ),
-            )
-          ],
+    return Stack(
+      children: [
+        CarouselSlider(
+          items: widget.images,
+          options: CarouselOptions(
+            scrollDirection: Axis.horizontal,
+            autoPlay: true,
+            viewportFraction: 1.0,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentSlider = index;
+              });
+            },
+          ),
         ),
-      ),
+        Positioned(
+          bottom: _size.height * 0.02,
+          left: _size.width / 3,
+          child: Container(
+            width: _size.width * 0.25,
+            height: _size.height * 0.025,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                (_currentSlider == 0) ? FilledCircle() : UnfilledCircle(),
+                (_currentSlider == 1) ? FilledCircle() : UnfilledCircle(),
+                (_currentSlider == 2) ? FilledCircle() : UnfilledCircle(),
+                (_currentSlider == 3) ? FilledCircle() : UnfilledCircle(),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
 
 class FilledCircle extends StatelessWidget {
-  const FilledCircle({Key key, @required this.size}) : super(key: key);
-
-  final Size size;
+  const FilledCircle({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
     return Container(
-      width: size.height * 0.02,
-      height: size.height * 0.02,
+      width: _size.height * 0.02,
+      height: _size.height * 0.02,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50.0),
         color: Colors.white,
@@ -94,16 +89,14 @@ class FilledCircle extends StatelessWidget {
 class UnfilledCircle extends StatelessWidget {
   const UnfilledCircle({
     Key key,
-    @required this.size,
   }) : super(key: key);
-
-  final Size size;
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
     return Container(
-      width: size.height * 0.015,
-      height: size.height * 0.015,
+      width: _size.height * 0.015,
+      height: _size.height * 0.015,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50.0),
         border: Border.all(width: 2, color: Colors.white),

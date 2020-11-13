@@ -16,7 +16,7 @@ class CatalogPage extends StatelessWidget {
     print('-->CatalogPage');
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(size: _size, title: 'Каталог, привилегии'),
+        appBar: CustomAppBar(title: 'Каталог, привилегии'),
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 
 class InfoElement {
   InfoElement({
@@ -12,8 +13,8 @@ class InfoElement {
     this.boltText = '',
     this.countMessages = 0,
     this.discount = 0,
-    this.newPrice = '',
-    this.oldPrice = '',
+    this.newPrice,
+    this.oldPrice,
   });
 
   final bool isLargeGridElement;
@@ -23,8 +24,8 @@ class InfoElement {
   final String img;
   final String lightText;
   final String boltText;
-  final String newPrice;
-  final String oldPrice;
+  final num newPrice;
+  final num oldPrice;
   final double rate;
   final int countMessages;
   final int discount;
@@ -122,4 +123,28 @@ class Review {
   final int ambiance;
   final int likes;
   final String response;
+}
+
+class InfoMarker {
+  InfoMarker({
+    @required this.id,
+    @required this.position,
+    @required this.places,
+    @required this.promotions,
+  });
+
+  final int id;
+  final LatLng position;
+  final List<InfoElement> places;
+  final List<InfoElement> promotions;
+}
+
+class DiscountMarker {
+  DiscountMarker({
+    @required this.discount,
+    @required this.position,
+  });
+
+  final int discount;
+  final LatLng position;
 }

@@ -23,6 +23,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    // TODO look at this
     _customGridViewPlaces = CustomGridView(
       size: Size(414, 240),
       childAspectRatio: cRatioSmallSize,
@@ -39,11 +40,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     print('-->MainPage');
-    // var _customGridViewPlaces = CustomGridView(
-    //   size: _size,
-    //   childAspectRatio: cRatioSmallSize,
-    //   infoElements: popularPlaces,
-    // );
+    // TODO look at this
     var _customGridViewPromo = CustomGridView(
       size: _size,
       childAspectRatio: cRatioMediumSize,
@@ -91,7 +88,13 @@ class _MainPageState extends State<MainPage> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  StorePromotionSlider(size: _size),
+                  // TODO remove to Widgets.dart
+                  Padding(
+                    padding: EdgeInsets.all(_size.width * cHorizont),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5.0),
+                        child: CustomSlider(images: imagesMainPage)),
+                  ),
                   FeaturesList(size: _size, currentIndex: 0),
                   //TODO do discription for this widget & widgets at all
                   Padding(

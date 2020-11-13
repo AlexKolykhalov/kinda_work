@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
+import 'package:kinda_work/info_element/promotion_page.dart';
+import 'package:kinda_work/repository.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/info_element/info_element_page.dart';
+import 'package:kinda_work/info_element/place_page.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/widgets.dart';
@@ -12,9 +14,9 @@ import 'package:kinda_work/widgets.dart';
 enum zoomButtonsType { zoomIn, zoomOut, center }
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key key, @required this.size}) : super(key: key);
+  const MapPage({Key key}) : super(key: key);
 
-  final Size size;
+  // final Size size;
 
   @override
   _MapPageState createState() => _MapPageState();
@@ -28,68 +30,27 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _mapController = MapController();
-    _id = 0;
+    _id = 1;
   }
 
-  Marker _buildCustomMarker({
-    @required int id,
-    @required int value,
-    @required LatLng position,
-  }) {
-    return Marker(
-      width: 50.0,
-      height: 50.0,
-      point: position,
-      builder: (ctx) => GestureDetector(
-        onTap: () {
-          setState(() {
-            _id = id;
-          });
-          _displayBottomSheet(context, MediaQuery.of(context).size);
-        },
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 50.0,
-              height: 50.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
-            ),
-            Container(
-              width: 45.0,
-              height: 45.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-            ),
-            Container(
-              width: 35.0,
-              height: 35.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: id == _id ? cIndigo : Colors.red,
-              ),
-              child: Center(
-                  child: Text(
-                value.toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 21.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              )),
-            ),
-          ],
-        ),
-      ),
-    );
+  List<Marker> _buildMarkers() {
+    List<Marker> _markers = [];
+    Marker _marker;
+    var center = LatLng(53.909480, 27.544318);
+    _marker = _buildUserLocationMarker(position: center);
+    _markers.add(_marker);
+    for (var infoMarker in listInfoMarkers) {
+      _marker = _buildInfoMarker(infoMarker: infoMarker);
+      _markers.add(_marker);
+    }
+    for (var discountMarker in listDiscountMarkers) {
+      _marker = _buildDiscountMarker(discountMarker: discountMarker);
+      _markers.add(_marker);
+    }
+    return _markers;
   }
 
-  Marker _buildLocationMarker({
+  Marker _buildUserLocationMarker({
     @required LatLng position,
   }) {
     return Marker(
@@ -135,14 +96,74 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  Marker _buildCustomDiscountMarker({
-    @required int discount,
-    @required LatLng position,
+  Marker _buildInfoMarker({
+    @required InfoMarker infoMarker,
+  }) {
+    return Marker(
+      width: 50.0,
+      height: 50.0,
+      point: infoMarker.position,
+      builder: (ctx) => GestureDetector(
+        onTap: () {
+          setState(() {
+            _id = infoMarker.id;
+          });
+          _displayBottomSheet(
+            context,
+            infoMarker.places,
+            infoMarker.promotions,
+          );
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 50.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red,
+              ),
+            ),
+            Container(
+              width: 45.0,
+              height: 45.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              width: 35.0,
+              height: 35.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _id == infoMarker.id ? cIndigo : Colors.red,
+              ),
+              child: Center(
+                  child: Text(
+                (infoMarker.places.length + infoMarker.promotions.length)
+                    .toString(),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 21.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Marker _buildDiscountMarker({
+    @required DiscountMarker discountMarker,
   }) {
     return Marker(
       width: 75.0,
       height: 35.0,
-      point: position,
+      point: discountMarker.position,
       builder: (ctx) => Container(
         width: 75.0,
         height: 30.0,
@@ -183,7 +204,7 @@ class _MapPageState extends State<MapPage> {
               ],
             ),
             Text(
-              '-${discount.toString()}%',
+              '-${discountMarker.discount.toString()}%',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15.0,
@@ -201,8 +222,8 @@ class _MapPageState extends State<MapPage> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          size: widget.size,
           title: 'Красота',
+          actionIcon: cSearchIcon,
         ),
         body: FlutterMap(
             mapController: _mapController,
@@ -218,36 +239,7 @@ class _MapPageState extends State<MapPage> {
                       subdomains: ['a', 'b', 'c'])),
               MarkerLayerWidget(
                   options: MarkerLayerOptions(
-                markers: [
-                  _buildLocationMarker(position: center),
-                  _buildCustomMarker(
-                    id: 0,
-                    value: 12,
-                    position: LatLng(53.912180, 27.545018),
-                  ),
-                  _buildCustomMarker(
-                    id: 1,
-                    value: 3,
-                    position: LatLng(53.911080, 27.541718),
-                  ),
-                  _buildCustomMarker(
-                    id: 2,
-                    value: 7,
-                    position: LatLng(53.908580, 27.546318),
-                  ),
-                  _buildCustomDiscountMarker(
-                    discount: 95,
-                    position: LatLng(53.912280, 27.541818),
-                  ),
-                  _buildCustomDiscountMarker(
-                    discount: 50,
-                    position: LatLng(53.911580, 27.547918),
-                  ),
-                  _buildCustomDiscountMarker(
-                    discount: 15,
-                    position: LatLng(53.908380, 27.541318),
-                  ),
-                ],
+                markers: _buildMarkers(),
               )),
               Align(
                 alignment: Alignment.centerLeft,
@@ -282,22 +274,29 @@ class _MapPageState extends State<MapPage> {
   }
 }
 
-void _displayBottomSheet(BuildContext context, Size size) {
+void _displayBottomSheet(
+  BuildContext context,
+  List<InfoElement> listPlaces,
+  List<InfoElement> listPromotions,
+) {
   showModalBottomSheet(
     context: context,
-    isScrollControlled: false,
-    builder: (ctx) {
+    isScrollControlled: true,
+    builder: (context) {
+      Size _size = MediaQuery.of(context).size;
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
-        height: size.height,
+        height: _size.height * 0.55,
+        padding: EdgeInsets.symmetric(
+          horizontal: _size.width * cHorizont,
+          vertical: _size.height * cVertical,
+        ),
         color: cGrey,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                width: size.width * 0.1,
-                height: size.height * 0.005,
-                margin: EdgeInsets.only(top: size.height * 0.02),
+                width: _size.width * 0.1,
+                height: _size.height * 0.005,
                 decoration: BoxDecoration(
                   color: Colors.grey[600],
                   borderRadius: BorderRadius.circular(20.0),
@@ -305,7 +304,7 @@ void _displayBottomSheet(BuildContext context, Size size) {
               ),
               Padding(
                 padding:
-                    EdgeInsets.symmetric(vertical: size.height * cVertical),
+                    EdgeInsets.symmetric(vertical: _size.height * cVertical),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -318,7 +317,8 @@ void _displayBottomSheet(BuildContext context, Size size) {
                     ),
                     SizedBox(width: 15.0),
                     Text(
-                      '5 предложений',
+                      // TODO склонения
+                      '${listPlaces.length} предложений',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                   ],
@@ -333,43 +333,22 @@ void _displayBottomSheet(BuildContext context, Size size) {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            InfoElementPage(),
+                            PlacePage(),
                       ),
                     ),
                     child: Container(
                       width: cConstantWidth,
-                      child: CustomGridViewElement(
-                          infoElement: InfoElement(
-                        isLargeGridElement: false,
-                        isDiscountVisible: false,
-                        isFavoriteVisible: false,
-                        lightText: 'Массажный салон',
-                        img: 'assets/png/grid/2.png',
-                        rate: 9.5,
-                      )),
+                      child:
+                          CustomGridViewElement(infoElement: listPlaces[index]),
                     ),
                   ),
-
-                  // CustomGridViewElement(
-                  //   infoElement: InfoElement(
-                  //     isLargeGridElement: false,
-                  //     img: 'assets/png/grid/1.png',
-                  //     lightText: 'SPA-салон',
-                  //     boltText: 'Tao Спа',
-                  //     isFavoriteVisible: false,
-                  //     rate: 9.3,
-                  //     countMessages: 2,
-                  //     isDiscountVisible: false,
-                  //   ),
-                  //   gridElementSize: Size(120.0, 180.0),
-                  // ),
                   separatorBuilder: (context, index) => SizedBox(width: 15.0),
-                  itemCount: 1,
+                  itemCount: listPlaces.length,
                 ),
               ),
               Padding(
                 padding:
-                    EdgeInsets.symmetric(vertical: size.height * cVertical),
+                    EdgeInsets.symmetric(vertical: _size.height * cVertical),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -382,34 +361,32 @@ void _displayBottomSheet(BuildContext context, Size size) {
                     ),
                     SizedBox(width: 15.0),
                     Text(
-                      '2 предложения',
+                      '${listPromotions.length} предложения',
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                   ],
                 ),
               ),
               Container(
-                height: size.height * 0.15,
+                height: cConstantWidth / cRatioMediumSize,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => Container(),
-
-                  // CustomGridViewElement(
-                  //   infoElement: InfoElement(
-                  //     isLargeGridElement: false,
-                  //     img: 'assets/png/grid/2.png',
-                  //     lightText: 'SPA-салон',
-                  //     boltText: 'Tao Спа',
-                  //     isFavoriteVisible: false,
-                  //     rate: 9.3,
-                  //     countMessages: 20,
-                  //     isDiscountVisible: true,
-                  //     discount: 43,
-                  //   ),
-                  //   gridElementSize: Size(120.0, 180.0),
-                  // ),
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            PromotionPage(),
+                      ),
+                    ),
+                    child: Container(
+                      width: cConstantWidth,
+                      child: CustomGridViewElement(
+                          infoElement: listPromotions[index]),
+                    ),
+                  ),
                   separatorBuilder: (context, index) => SizedBox(width: 15.0),
-                  itemCount: 1,
+                  itemCount: listPromotions.length,
                 ),
               ),
             ],

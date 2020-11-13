@@ -29,7 +29,7 @@ class Beauty extends StatelessWidget {
     ];
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(size: _size, title: 'Красота'),
+        appBar: CustomAppBar(title: 'Красота'),
         body: Stack(
           children: [
             SingleChildScrollView(

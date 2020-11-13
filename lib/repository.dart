@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:kinda_work/models.dart';
 
 List<InfoElement> popularPlaces = [
@@ -111,8 +114,8 @@ List<InfoElement> popularPromotions = [
     discount: 50,
     isDiscountVisible: true,
     //TODO make right format to this prices
-    newPrice: '120 540',
-    oldPrice: '130 565',
+    newPrice: 120540,
+    oldPrice: 130565,
   ),
   InfoElement(
     isLargeGridElement: false,
@@ -124,8 +127,8 @@ List<InfoElement> popularPromotions = [
     countMessages: 2,
     discount: 50,
     isDiscountVisible: true,
-    newPrice: '230',
-    oldPrice: '265',
+    newPrice: 230,
+    oldPrice: 265,
   ),
   InfoElement(
     isLargeGridElement: false,
@@ -138,80 +141,118 @@ List<InfoElement> popularPromotions = [
     discount: 50,
     isDiscountVisible: true,
     //TODO make right format to this prices
-    newPrice: '120 540',
-    oldPrice: '130 565',
+    newPrice: 120540,
+    oldPrice: 130565,
   ),
-  // InfoElement(
-  //   isLargeGridElement: false,
-  //   img: 'assets/png/grid/2.png',
-  //   isFavoriteVisible: true,
-  //   isFavorite: true,
-  //   lightText: 'Блюда и напитки в сети кафе "Шантимель" со...',
-  //   rate: 0.0,
-  //   countMessages: 2,
-  //   discount: 50,
-  //   isDiscountVisible: true,
-  //   newPrice: '230',
-  //   oldPrice: '265',
-  // ),
-  // InfoElement(
-  //   isLargeGridElement: false,
+];
 
-  //   img: 'assets/png/grid/1.png',
-  //   isFavoriteVisible: true,
-  //   isFavorite: false,
-  //   lightText: 'Всё меню и напитки в ресторане грузинско...',
-  //   rate: 4.2,
-  //   countMessages: 26,
-  //   discount: 50,
-  //   isDiscountVisible: true,
+List<InfoMarker> listInfoMarkers = [
+  InfoMarker(
+    id: 1,
+    position: LatLng(53.912180, 27.545018),
+    places: [
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: false,
+        isFavoriteVisible: false,
+        lightText: 'Массажный салон',
+        img: 'assets/png/grid/2.png',
+        rate: 9.5,
+      ),
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: false,
+        isFavoriteVisible: false,
+        lightText: 'Фото салон',
+        img: 'assets/png/grid/1.png',
+        rate: 1.5,
+      ),
+    ],
+    promotions: [
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: true,
+        discount: 50,
+        isFavoriteVisible: false,
+        lightText: 'Романтический ужин',
+        img: 'assets/png/grid/2.png',
+        rate: 7.9,
+        countMessages: 26,
+        newPrice: 150,
+        oldPrice: 200,
+      ),
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: false,
+        isFavoriteVisible: false,
+        lightText: 'Романтический ужин',
+        img: 'assets/png/grid/2.png',
+        rate: 7.9,
+        countMessages: 26,
+        newPrice: 150,
+        oldPrice: 200,
+      ),
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: true,
+        discount: 45,
+        isFavoriteVisible: false,
+        lightText: 'Романтический ужин',
+        img: 'assets/png/grid/2.png',
+        rate: 7.9,
+        countMessages: 26,
+        newPrice: 150,
+        oldPrice: 200,
+      ),
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: true,
+        discount: 45,
+        isFavoriteVisible: false,
+        lightText: 'Романтический ужин',
+        img: 'assets/png/grid/2.png',
+        rate: 7.9,
+        countMessages: 26,
+        newPrice: 150,
+        oldPrice: 200,
+      ),
+      InfoElement(
+        isLargeGridElement: false,
+        isDiscountVisible: true,
+        discount: 45,
+        isFavoriteVisible: false,
+        lightText: 'Романтический ужин',
+        img: 'assets/png/grid/2.png',
+        rate: 7.9,
+        countMessages: 26,
+        newPrice: 150,
+        oldPrice: 200,
+      )
+    ],
+  ),
+  InfoMarker(
+    id: 2,
+    position: LatLng(53.911080, 27.541718),
+    places: [],
+    promotions: [],
+  ),
+  InfoMarker(
+    id: 3,
+    position: LatLng(53.908580, 27.546318),
+    places: [],
+    promotions: [],
+  ),
+];
 
-  //   //TODO make right format to this prices
-  //   newPrice: '120 540',
-  //   oldPrice: '130 565',
-  // ),
-  // InfoElement(
-  //   isLargeGridElement: false,
-  //   img: 'assets/png/grid/2.png',
-  //   isFavoriteVisible: true,
-  //   isFavorite: true,
-  //   lightText: 'Блюда и напитки в сети кафе "Шантимель" со...',
-  //   rate: 0.0,
-  //   countMessages: 2,
-  //   discount: 50,
-  //   isDiscountVisible: true,
-  //   newPrice: '230',
-  //   oldPrice: '265',
-  // ),
-  // InfoElement(
-  //   isLargeGridElement: false,
+List<DiscountMarker> listDiscountMarkers = [
+  DiscountMarker(discount: 95, position: LatLng(53.912280, 27.541818)),
+  DiscountMarker(discount: 50, position: LatLng(53.911580, 27.547918)),
+  DiscountMarker(discount: 15, position: LatLng(53.908380, 27.541318)),
+];
 
-  //   img: 'assets/png/grid/1.png',
-  //   isFavoriteVisible: true,
-  //   isFavorite: false,
-  //   //TODO create ... if text sentence too long
-  //   lightText:
-  //       'Всё меню и напитки принимаются и выдаются исключительно бесплатно и навсегда',
-  //   rate: 4.2,
-  //   countMessages: 27,
-  //   discount: 50,
-  //   isDiscountVisible: true,
-
-  //   //TODO make right format to this prices
-  //   newPrice: '120 540',
-  //   oldPrice: '130 565',
-  // ),
-  // InfoElement(
-  //   isLargeGridElement: false,
-  //   img: 'assets/png/grid/2.png',
-  //   isFavoriteVisible: true,
-  //   isFavorite: true,
-  //   lightText: 'Блюда и напитки в сети кафе "Шантимель" со...',
-  //   rate: 0.0,
-  //   countMessages: 2,
-  //   discount: 50,
-  //   isDiscountVisible: true,
-  //   newPrice: '230',
-  //   oldPrice: '265',
-  // ),
+List<Image> imagesMainPage = [
+  Image.asset('assets/png/slider/slider1.png', fit: BoxFit.cover),
+  Image.asset('assets/png/slider/slider2.png', fit: BoxFit.cover),
+  Image.asset('assets/png/slider/slider3.png', fit: BoxFit.cover),
+  Image.asset('assets/png/slider/slider4.png', fit: BoxFit.cover),
 ];

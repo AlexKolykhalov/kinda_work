@@ -49,11 +49,7 @@ class VisitHistoryPage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(
-          size: size,
-          title: 'История посещений',
-          showActions: false,
-        ),
+        appBar: CustomAppBar(title: 'История посещений'),
         body: Container(
           padding: EdgeInsets.only(top: size.height * cVertical),
           child: ListView.separated(

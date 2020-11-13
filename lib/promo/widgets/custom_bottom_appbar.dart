@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/promo/BLoC/bottom_appbar_switcher_cubit.dart';
 
-class CustomBottomAppBar1 extends StatelessWidget
+class CustomBottomAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const CustomBottomAppBar1({
+  const CustomBottomAppBar({
     Key key,
     @required this.preferredSize,
     @required this.tabController,
@@ -39,9 +39,9 @@ class CustomBottomAppBar1 extends StatelessWidget
   }
 }
 
-class CustomBottomAppBar extends StatelessWidget
+class CustomBottomAppBar1 extends StatelessWidget
     implements PreferredSizeWidget {
-  const CustomBottomAppBar({
+  const CustomBottomAppBar1({
     Key key,
     @required this.size,
     @required this.bottomListViewData,

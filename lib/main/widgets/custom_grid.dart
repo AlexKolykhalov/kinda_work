@@ -122,7 +122,7 @@ class CustomGridViewElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgets =
-        (infoElement.oldPrice.isNotEmpty || infoElement.newPrice.isNotEmpty)
+        (infoElement.oldPrice != null || infoElement.newPrice != null)
             ? _listWidgetsWithPrices(
                 infoElement.lightText,
                 infoElement.rate,
@@ -204,7 +204,7 @@ class CustomGridViewElement extends StatelessWidget {
 }
 
 List<Widget> _listWidgetsWithPrices(String lightText, double rate,
-    int countMessages, String newPrice, String oldPrice,
+    int countMessages, num newPrice, num oldPrice,
     {bool isLarge}) {
   if (isLarge) {
     return [
