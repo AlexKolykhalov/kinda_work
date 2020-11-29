@@ -5,10 +5,12 @@ class CustomSlider extends StatefulWidget {
   const CustomSlider({
     Key key,
     @required this.images,
+    this.height,
   })  : assert(images.length == 4),
         super(key: key);
 
   final List<Image> images;
+  final double height;
 
   @override
   _CustomSliderState createState() => _CustomSliderState();
@@ -38,6 +40,7 @@ class _CustomSliderState extends State<CustomSlider> {
           items: widget.images,
           options: CarouselOptions(
             scrollDirection: Axis.horizontal,
+            height: widget.height,
             autoPlay: true,
             viewportFraction: 1.0,
             onPageChanged: (index, reason) {
