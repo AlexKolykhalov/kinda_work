@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:kinda_work/main/pages/promotion/promotion_conditions.dart';
+import 'package:kinda_work/main/widgets/custom_grid.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/store_promotions_slider.dart';
+import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/widgets.dart';
 
@@ -66,6 +72,34 @@ class _DescriptionState extends State<Description> {
     _isVisible = false;
   }
 
+  final List<Review> _reviews = [
+    Review(
+      userAvatarImg: 'assets/png/face.png',
+      userName: 'Иван',
+      userRank: 'Юный герой',
+      dateReview: '16.10.18',
+      textReview:
+          'Ну очень долго все готовится, еда не плоха, официант не спешит',
+      service: 10,
+      kitchen: 10,
+      priceQuality: 10,
+      ambiance: 10,
+      likes: 1,
+    ),
+    Review(
+      userAvatarImg: 'assets/png/face.png',
+      userName: 'Роман',
+      userRank: 'Просветленный',
+      dateReview: '12.10.18',
+      textReview: 'Так себе...',
+      service: 6,
+      kitchen: 5,
+      priceQuality: 9,
+      ambiance: 10,
+      likes: -1,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -80,114 +114,150 @@ class _DescriptionState extends State<Description> {
                     color: Colors.white,
                     child: Stack(
                       children: [
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomSlider(images: imagesMainPage),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        constraints.maxWidth * cHorizont),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        Column(children: [
+                          CustomSlider(
+                            images: imagesMainPage,
+                            height: constraints.maxHeight * 0.35,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: constraints.maxWidth * cHorizont),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: constraints.maxHeight * 0.015),
+                                  child: Text('Акция',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: constraints.maxHeight * 0.025,
+                                      )),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: constraints.maxHeight * 0.005),
+                                  child: Text(
+                                      'Романтический ужин "В Баку" всего за 40 руб. Ассорти шашлык и овощи всего за 15 руб. В кафе Апшерон',
+                                      style: TextStyle(
+                                          color: cIndigo,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              constraints.maxHeight * 0.0355)),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: constraints.maxHeight * 0.02),
+                                  child: Row(
+                                    children: [
+                                      RateBadge(
+                                          rate: 4.8, textColor: Colors.green),
+                                      SizedBox(width: 10.0),
+                                      MessagesBadge(countMessages: 12),
+                                    ],
+                                  ),
+                                ),
+                                Row(
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [],
+                                    Expanded(
+                                      child: CustomButton(
+                                        onTap: () => displayPhones(context),
+                                        buttonText: 'Позвонить',
+                                        buttonColor: Colors.green,
+                                        buttonTextColor: Colors.white,
                                       ),
                                     ),
-                                    Text('Акция',
-                                        style:
-                                            TextStyle(color: Colors.grey[600])),
-                                    Text(
-                                        'Романтический ужин "В Баку" всего за 40 руб. Ассорти шашлык и овощи всего за 15 руб. В кафе Апшерон'),
-                                    Row(
-                                      children: [
-                                        RateBadge(
-                                            rate: 4.8, textColor: Colors.green),
-                                        SizedBox(width: 10.0),
-                                        MessagesBadge(countMessages: 12),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: CustomButton(
-                                            onTap: () => displayPhones(context),
-                                            buttonText: 'Позвонить',
-                                            buttonColor: Colors.green,
-                                            buttonTextColor: Colors.white,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10.0),
-                                        Expanded(
-                                          child: CustomButton(
-                                            onTap: null,
-                                            buttonText: 'Оставить отзыв',
-                                            buttonColor: Colors.white,
-                                            buttonTextColor: Colors.black,
-                                            buttonBorderColor: Colors.grey[600],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        'Сообщите, что звоните с Zabava',
-                                        style: TextStyle(color: cPink),
+                                    SizedBox(width: 10.0),
+                                    Expanded(
+                                      child: CustomButton(
+                                        onTap: null,
+                                        buttonText: 'Оставить отзыв',
+                                        buttonColor: Colors.white,
+                                        buttonTextColor: Colors.black,
+                                        buttonBorderColor: Colors.grey[600],
                                       ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                              'Романтический ужин "В Баку" и ассорти шашлык и овощи от кафе "Апшерон" за пол цены!'),
-                                        ),
-                                        Icon(Icons.keyboard_arrow_down,
-                                            color: cPink),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.calendar_today,
-                                              color: Colors.grey[600],
-                                            ),
-                                            SizedBox(width: 5.0),
-                                            Text(
-                                              'Осталось 2 дня',
-                                              style: TextStyle(
-                                                  color: Colors.grey[600]),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '31',
-                                              style: TextStyle(
-                                                  color: Colors.grey[600]),
-                                            ),
-                                            SizedBox(width: 5.0),
-                                            Icon(Icons.people_alt_outlined,
-                                                color: Colors.grey[600])
-                                          ],
-                                        )
-                                      ],
                                     ),
                                   ],
                                 ),
-                              ),
-                            ]),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: constraints.maxHeight * 0.01),
+                                  child: Center(
+                                    child: Text(
+                                      'Сообщите, что звоните с Zabava',
+                                      style: TextStyle(
+                                        color: cPink,
+                                        fontSize: constraints.maxHeight * 0.025,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                          'Романтический ужин "В Баку" и ассорти шашлык и овощи от кафе "Апшерон" за пол цены!',
+                                          style: TextStyle(
+                                              fontSize: constraints.maxHeight *
+                                                  0.03)),
+                                    ),
+                                    Icon(Icons.keyboard_arrow_down,
+                                        color: cPink),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: constraints.maxHeight * 0.015),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_today,
+                                            size: constraints.maxHeight * 0.03,
+                                            color: Colors.grey[600],
+                                          ),
+                                          SizedBox(width: 5.0),
+                                          Text(
+                                            'Осталось 2 дня',
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize:
+                                                    constraints.maxHeight *
+                                                        0.025),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '31',
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize:
+                                                    constraints.maxHeight *
+                                                        0.025),
+                                          ),
+                                          SizedBox(width: 5.0),
+                                          Icon(Icons.people_alt_outlined,
+                                              size:
+                                                  constraints.maxHeight * 0.03,
+                                              color: Colors.grey[600])
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                         Positioned(
-                          bottom: 0.0,
+                          top: constraints.maxHeight * 0.35 - 15.0,
+                          left: MediaQuery.of(context).size.width * cHorizont,
                           child: DiscountBadge(discount: 45),
                         ),
                       ],
@@ -206,19 +276,27 @@ class _DescriptionState extends State<Description> {
                             _isVisible = !_isVisible;
                           });
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Описание акции',
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                            Icon(
-                                _isVisible
-                                    ? Icons.keyboard_arrow_down
-                                    : Icons.keyboard_arrow_up,
-                                color: cPink),
-                          ],
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: constraints.maxHeight * 0.01),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Описание акции',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: constraints.maxHeight * 0.025,
+                                ),
+                              ),
+                              Icon(
+                                  _isVisible
+                                      ? Icons.keyboard_arrow_down
+                                      : Icons.keyboard_arrow_up,
+                                  color: cPink),
+                            ],
+                          ),
                         ),
                       ),
                       Visibility(
@@ -228,7 +306,11 @@ class _DescriptionState extends State<Description> {
                       ),
                     ]),
                   ),
-                  Divider(thickness: 1.0),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: constraints.maxHeight * 0.01),
+                    child: Divider(thickness: 1.0),
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: constraints.maxWidth * cHorizont),
@@ -243,7 +325,7 @@ class _DescriptionState extends State<Description> {
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13.0,
+                                fontSize: constraints.maxHeight * 0.025,
                               ),
                             ),
                             Text(
@@ -251,31 +333,357 @@ class _DescriptionState extends State<Description> {
                               style: TextStyle(
                                 color: cPink,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
+                                fontSize: constraints.maxHeight * 0.025,
                               ),
                             )
                           ],
                         ),
-                        DropdownWidget(),
-                        Text(
-                            'Поставщик несет полную ответсвенность перед потребителем за достоверность информации')
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: constraints.maxHeight * 0.01),
+                          child: DropdownWidget(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: constraints.maxHeight * 0.01),
+                          child: DropdownWidget(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: constraints.maxHeight * 0.01),
+                          child: Text(
+                              'Поставщик несет полную ответсвенность перед потребителем за достоверность информации'),
+                        ),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(seconds: 0),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      PromotionConditionsPage(
+                                          size: constraints.biggest),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Условия акции',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: constraints.maxHeight * 0.025),
+                              ),
+                              Icon(Icons.keyboard_arrow_right, color: cPink),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: constraints.maxHeight * 0.01),
+                    child: Divider(thickness: 1.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: constraints.maxWidth * cHorizont,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Отзывы (23)',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.bold,
+                            fontSize: constraints.maxHeight * 0.025,
+                          ),
+                        ),
+                        Text(
+                          'Все отзывы (54)',
+                          style: TextStyle(
+                            color: cPink,
+                            fontWeight: FontWeight.bold,
+                            fontSize: constraints.maxHeight * 0.025,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: constraints.maxHeight * 0.02),
+                    child: Column(
+                        children: getReviews(_reviews, constraints.biggest)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: constraints.maxHeight * 0.01),
+                    child: Divider(thickness: 1.0),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: constraints.maxWidth * cHorizont,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Кафе',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: constraints.maxHeight * 0.025,
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Апшерон',
+                              style: TextStyle(
+                                color: cPink,
+                                fontSize: constraints.maxHeight * 0.035,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down,
+                              color: cPink,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            RateBadge(
+                              rate: 9.4,
+                              textColor: Colors.green,
+                            ),
+                            SizedBox(width: 10.0),
+                            MessagesBadge(countMessages: 26),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.location_on_outlined,
+                              color: Colors.grey[600],
+                            ),
+                            SizedBox(width: 10.0),
+                            Text('г. Минск, ул. Мазурова, 24'),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Пн с 12:00 до 23.00',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Вт с 12:00 до 23.00',
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Ср с 12:00 до 23.00',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Чт с 12:00 до 23.00',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Пт с 12:00 до 23.00',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Сб с 12:00 до 23.00',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time_outlined,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 10.0),
+                                Text(
+                                  'Вс с 12:00 до 19.00',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.0),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: constraints.maxHeight * cVertical),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Юридическая информация',
+                                style: TextStyle(
+                                  fontSize: constraints.maxHeight * 0.025,
+                                ),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: cPink,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: constraints.maxHeight * cVertical),
+                    height: 250.0,
+                    child: FlutterMap(
+                      options: MapOptions(
+                        center: LatLng(53.912280, 27.541818),
+                        zoom: 16.0,
+                      ),
+                      children: [
+                        TileLayerWidget(
+                            options: TileLayerOptions(
+                                urlTemplate:
+                                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                subdomains: ['a', 'b', 'c'])),
+                        MarkerLayerWidget(
+                          options: MarkerLayerOptions(
+                            markers: [
+                              buildCustomMarker(
+                                position: LatLng(53.912280, 27.541818),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: constraints.maxWidth * cHorizont),
+                    child: CustomGridViewTitle(
+                      size: constraints.biggest,
+                      title: 'Другие акции',
+                      textTotalAmount: '',
+                    ),
+                  ),
+                  Container(
+                    height: cConstantWidth / cRatioMediumSize,
+                    padding:
+                        EdgeInsets.only(left: constraints.maxWidth * cHorizont),
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Container(
+                        width: cConstantWidth,
+                        child: CustomGridViewElement(
+                            infoElement: InfoElement(
+                          isLargeGridElement: false,
+                          isDiscountVisible: true,
+                          discount: 50,
+                          oldPrice: 10500,
+                          newPrice: 8500,
+                          isFavoriteVisible: true,
+                          countMessages: 25,
+                          lightText: 'Массажный салон',
+                          img: 'assets/png/grid/2.png',
+                          rate: 9.5,
+                        )),
+                      ),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: 10.0),
+                      itemCount: 1,
+                    ),
+                  ),
+                  SizedBox(height: 100.0),
                 ],
               ),
             ),
-            // Positioned(
-            //   left: constraints.maxWidth * cHorizont,
-            //   right: constraints.maxWidth * cHorizont,
-            //   bottom: 20.0,
-            //   child: CustomButton(
-            //     onTap: null,
-            //     buttonText: 'Предъявите скидку -50%',
-            //     buttonColor: cPink,
-            //     buttonTextColor: Colors.white,
-            //   ),
-            // )
+            Positioned(
+              left: constraints.maxWidth * cHorizont,
+              right: constraints.maxWidth * cHorizont,
+              bottom: 40.0,
+              child: CustomButton(
+                onTap: () => displayQrCode(context),
+                buttonText: 'Предъявите скидку -50%',
+                buttonColor: cPink,
+                buttonTextColor: Colors.white,
+              ),
+            ),
           ],
         );
       },
@@ -323,15 +731,33 @@ class _DropdownWidgetState extends State<DropdownWidget> {
       children: [
         Container(
           color: Colors.white,
+          padding: EdgeInsets.all(8.0),
           child: Column(
             children: [
               Text(
-                  'Окрашивание краской салона в один тон (мытье + сушка по форме)'),
+                  'Окрашивание краской салона в один тон (мытье + сушка по форме)',
+                  style: TextStyle(
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                  )),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('25 - 40 р.'),
+                  Text(
+                    '25 - 40 р.',
+                    style: TextStyle(
+                      color: cPink,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   SizedBox(width: 10.0),
-                  Text('Без скидки 55 - 85 р.'),
+                  Text(
+                    'Без скидки 55 - 85 р.',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
                 ],
               )
             ],
@@ -339,18 +765,32 @@ class _DropdownWidgetState extends State<DropdownWidget> {
         ),
         Visibility(
           visible: _isVisible,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Короткие волосы (до 15 см)'),
-              Row(
-                children: [
-                  Text('12 р.'),
-                  SizedBox(width: 5.0),
-                  Text('15 р.'),
-                ],
-              )
-            ],
+          child: Container(
+            color: Colors.orange[50],
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Короткие волосы (до 15 см)'),
+                Row(
+                  children: [
+                    Text(
+                      '12 р.',
+                      style: TextStyle(
+                        color: cPink,
+                      ),
+                    ),
+                    SizedBox(width: 5.0),
+                    Text(
+                      '15 р.',
+                      style: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
         GestureDetector(
@@ -361,6 +801,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
             });
           },
           child: Container(
+            color: Colors.orange[50],
             width: MediaQuery.of(context).size.width,
             child: Icon(
                 _isVisible

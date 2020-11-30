@@ -4,7 +4,6 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/main/pages/discount/discount_conditions.dart';
 import 'package:kinda_work/main/pages/discount/thanks_page.dart';
-import 'package:kinda_work/main/pages/discount/visit_history_page.dart';
 import 'package:kinda_work/widgets.dart';
 
 class DiscountDetailsPage extends StatefulWidget {
