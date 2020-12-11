@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kinda_work/cards/cards_page.dart';
+import 'package:kinda_work/other/other_page.dart';
+import 'package:kinda_work/styles.dart';
 import 'package:latlong/latlong.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -37,15 +39,8 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // TODO maybe onle push
-      onTap: () => onTap(),
-      // onTap: () => Navigator.pushReplacement(
-      //   context,
-      //   PageRouteBuilder(
-      //     transitionDuration: Duration(seconds: 0),
-      //     pageBuilder: (context, animation, secondaryAnimation) => onTap,
-      //   ),
-      // ),
+      // TODO maybe only push
+      onTap: onTap,
       child: Container(
         height: 48.0,
         decoration: BoxDecoration(
@@ -70,15 +65,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key key,
     @required this.title,
-    this.actionIcon,
+    this.actions = const [],
     this.tabController,
     this.bottom = const [],
+    this.isScrollable = false,
   }) : super(key: key);
 
   final String title;
-  final Widget actionIcon;
+  final List<Widget> actions;
   final TabController tabController;
   final List<String> bottom;
+  final bool isScrollable;
 
   @override
   Widget build(BuildContext context) {
@@ -93,21 +90,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () => Navigator.pop(context),
         child: cLeftArrow,
       ),
-      actions: [
-        Visibility(
-          visible: actionIcon != null,
-          child: FlatButton(
-            padding: EdgeInsets.all(14.0),
-            onPressed: () => Navigator.pop(context),
-            child: actionIcon ?? Container(),
-          ),
-        ),
-      ],
+      actions: actions,
+      // [
+      //   Visibility(
+      //     visible: actionIcon != null,
+      //     child: FlatButton(
+      //       padding: EdgeInsets.all(14.0),
+      //       onPressed: () => Navigator.pop(context),
+      //       child: actionIcon ?? Container(),
+      //     ),
+      //   ),
+      // ],
       bottom: (bottom.isNotEmpty)
           ? CustomBottomAppBar(
               preferredSize: preferredSize,
               tabController: tabController,
               bottomData: bottom,
+              isScrollable: isScrollable,
             )
           : null,
       backgroundColor: Colors.white,
@@ -367,12 +366,28 @@ class CustomBottomNavBar extends StatelessWidget {
                   ? IconButton(
                       icon: SvgPicture.asset(
                           'assets/svg/bottombar_icons/more_sel.svg'),
-                      onPressed: () => null,
+                      onPressed: () => Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: Duration(seconds: 0),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  OtherPage(),
+                        ),
+                      ),
                     )
                   : IconButton(
                       icon: SvgPicture.asset(
                           'assets/svg/bottombar_icons/more.svg'),
-                      onPressed: () => null,
+                      onPressed: () => Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: Duration(seconds: 0),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  OtherPage(),
+                        ),
+                      ),
                     ),
               Positioned(
                 top: size.height * 0.015,
@@ -461,6 +476,34 @@ class ListViewElement extends StatelessWidget {
   }
 }
 
+class CustomRedRightArrow extends StatelessWidget {
+  const CustomRedRightArrow({
+    Key key,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onPressed: onPressed,
+      icon: Align(
+        alignment: Alignment.centerRight,
+        child: Icon(
+          Icons.keyboard_arrow_right,
+          color: cPink,
+          size: size(context, 0.035),
+        ),
+      ),
+    );
+  }
+}
+
+// TODO refactoring
 class RateBadge extends StatelessWidget {
   const RateBadge({
     Key key,
@@ -492,7 +535,7 @@ class RateBadge extends StatelessWidget {
                 ),
               )
             : Text(
-                rate.toString(),
+                rate.toStringAsFixed(rate.truncateToDouble() == rate ? 0 : 1),
                 style: TextStyle(
                   fontSize: cConstantWidth * scaleLightText,
                   color: textColor,
@@ -919,16 +962,16 @@ createReviewWidget(Review review, Size _size) {
           child: Column(
             children: [
               Container(
-                height: 55.0,
+                height: _size.width * 0.12,
                 child: Row(
                   children: [
                     Container(
-                      width: 55.0,
+                      width: _size.width * 0.12,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage(review.userAvatarImg))),
+                              image: AssetImage(review.author.avatar))),
                     ),
                     SizedBox(
                       width: 10.0,
@@ -940,15 +983,16 @@ createReviewWidget(Review review, Size _size) {
                         RichText(
                           text: TextSpan(children: [
                             TextSpan(
-                                text: review.userName,
+                                text: review.author.name,
                                 style: TextStyle(color: cPink)),
                             TextSpan(
-                                text: ' ${review.userRank}',
+                                text:
+                                    ' ${review.author.points.toStringAsFixed(0)}',
                                 style: TextStyle(color: Colors.grey[600]))
                           ]),
                         ),
                         Text(
-                          review.dateReview,
+                          review.date,
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                       ],
@@ -960,8 +1004,8 @@ createReviewWidget(Review review, Size _size) {
               Row(
                 children: [
                   Container(
-                    width: 55.0,
-                    height: 55.0,
+                    width: _size.width * 0.12,
+                    height: _size.width * 0.12,
                     padding: EdgeInsets.all(10.0),
                     child: Container(
                       decoration: BoxDecoration(
@@ -977,113 +1021,23 @@ createReviewWidget(Review review, Size _size) {
                   ),
                   const SizedBox(width: 10.0),
                   Expanded(
-                    child: Text(review.textReview),
+                    child: Text(review.text),
                   ),
                 ],
               ),
               const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  Container(
-                    width: 55.0,
-                    child: Center(
-                      child: Container(
-                        width: 55.0,
-                        height: 25.0,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: RateBadge(
-                          rate: 8.2,
-                          textColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.0),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/svg/restaurant_icons/restaurant.svg',
-                          width: 15.0,
-                          height: 15.0,
-                        ),
-                        SizedBox(width: 2.0),
-                        RateBadge(
-                          rate: review.service,
-                          textColor: Colors.green,
-                        ),
-                        SizedBox(width: _size.width * 0.02),
-                        SvgPicture.asset(
-                          'assets/svg/restaurant_icons/fork.svg',
-                          width: 15.0,
-                          height: 15.0,
-                        ),
-                        SizedBox(width: 2.0),
-                        RateBadge(
-                          rate: review.kitchen,
-                          textColor: Colors.green,
-                        ),
-                        SizedBox(width: _size.width * 0.02),
-                        SvgPicture.asset(
-                          'assets/svg/restaurant_icons/invoice.svg',
-                          width: 15.0,
-                          height: 15.0,
-                        ),
-                        SizedBox(width: 2.0),
-                        RateBadge(
-                          rate: review.priceQuality,
-                          textColor: Colors.green,
-                        ),
-                        SizedBox(width: _size.width * 0.02),
-                        SvgPicture.asset(
-                          'assets/svg/restaurant_icons/happiness.svg',
-                          width: 15.0,
-                          height: 15.0,
-                        ),
-                        SizedBox(width: 2.0),
-                        RateBadge(
-                          rate: review.ambiance,
-                          textColor: Colors.green,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              QualityRatingScale(
+                service: review.service,
+                kitchen: review.kitchen,
+                priceQualityRatio: review.priceQuality,
+                ambiance: review.ambiance,
               ),
               const SizedBox(height: 15.0),
               Visibility(
                 visible: review.response != null,
                 child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(left: 55.0 + 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 55.0,
-                        height: 26.0,
-                        decoration: BoxDecoration(
-                          color: Colors.orange[200],
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Ответ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5.0),
-                      Text(
-                        review.response != null ? review.response : '',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      )
-                    ],
-                  ),
-                ),
+                    padding: EdgeInsets.only(left: _size.width * 0.12 + 10.0),
+                    child: ManagerResponse(response: review.response ?? '')),
               ),
             ],
           ),
@@ -1114,6 +1068,169 @@ createReviewWidget(Review review, Size _size) {
       ],
     ),
   );
+}
+
+class ManagerResponse extends StatelessWidget {
+  const ManagerResponse({
+    Key key,
+    @required this.response,
+  }) : super(key: key);
+
+  final String response;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextBadge(
+          text: 'Ответ',
+          textColor: Colors.black,
+          backgroundColor: Colors.orange[200],
+        ),
+        SizedBox(height: 5.0),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: Text(
+            response,
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class TextBadge extends StatelessWidget {
+  const TextBadge({
+    Key key,
+    @required this.text,
+    @required this.textColor,
+    @required this.backgroundColor,
+  }) : super(key: key);
+
+  final String text;
+  final Color textColor;
+  final Color backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(size(context, 0.0065)),
+        child: Text(
+          text,
+          style: style4(context)
+              .copyWith(color: textColor, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+
+class QualityRatingScale extends StatelessWidget {
+  const QualityRatingScale({
+    Key key,
+    this.service,
+    this.kitchen,
+    this.priceQualityRatio,
+    this.ambiance,
+  }) : super(key: key);
+
+  final int service;
+  final int kitchen;
+  final int priceQualityRatio;
+  final int ambiance;
+
+  @override
+  Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+    int s = (service ?? 0) +
+        (kitchen ?? 0) +
+        (priceQualityRatio ?? 0) +
+        (ambiance ?? 0);
+    int k = (service == null ? 0 : 1) +
+        (kitchen == null ? 0 : 1) +
+        (priceQualityRatio == null ? 0 : 1) +
+        (ambiance == null ? 0 : 1);
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: size(context, 0.01),
+              vertical: size(context, 0.006),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: RateBadge(
+              rate: s / k,
+              textColor: Colors.white,
+            ),
+          ),
+          SizedBox(width: 10.0),
+          Container(
+            height: size(context, 0.03),
+            child: Row(
+              children: [
+                Visibility(
+                  visible: service != null,
+                  child: Row(
+                    children: [
+                      SizedBox(width: size(context, 0.03), child: cService),
+                      SizedBox(width: size(context, 0.003)),
+                      RateBadge(rate: service, textColor: Colors.green),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: kitchen != null,
+                  child: Row(
+                    children: [
+                      SizedBox(width: size(context, 0.01)),
+                      SizedBox(width: size(context, 0.023), child: cKitchen),
+                      SizedBox(width: size(context, 0.003)),
+                      RateBadge(rate: kitchen, textColor: Colors.green),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: priceQualityRatio != null,
+                  child: Row(
+                    children: [
+                      SizedBox(width: size(context, 0.01)),
+                      SizedBox(
+                          width: size(context, 0.023), child: cPriceQuality),
+                      SizedBox(width: size(context, 0.003)),
+                      RateBadge(
+                          rate: priceQualityRatio, textColor: Colors.green),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: ambiance != null,
+                  child: Row(
+                    children: [
+                      SizedBox(width: size(context, 0.01)),
+                      SizedBox(width: size(context, 0.023), child: cAmbiance),
+                      SizedBox(width: size(context, 0.003)),
+                      RateBadge(rate: ambiance, textColor: Colors.green),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 Marker buildCustomMarker({
@@ -1161,4 +1278,32 @@ Marker buildCustomMarker({
       ),
     ),
   );
+}
+
+Map<String, dynamic> getRank(int points) {
+  if (points >= 0 && points <= 1000) {
+    return {
+      'status': 'Новичёк ($points баллов) до',
+      'nextStatus': 'Юный герой (остался ${1001 - points} баллов)',
+    };
+  } else if (points >= 1001 && points <= 2000) {
+    return {
+      'status': 'Юный герой ($points баллов) до',
+      'nextStatus': 'Бывалый (остался ${2001 - points} баллов)',
+    };
+  } else if (points >= 2001 && points <= 3000) {
+    return {
+      'status': 'Бывалый ($points баллов) до',
+      'nextStatus': 'Знаток (остался ${3001 - points} баллов)',
+    };
+  } else if (points >= 3001 && points <= 4000) {
+    return {
+      'status': 'Знаток ($points баллов) до',
+      'nextStatus': 'Эксперт (остался ${4001 - points} баллов)',
+    };
+  }
+  return {
+    'status': 'Эксперт ($points баллов)',
+    'nextStatus': '',
+  };
 }

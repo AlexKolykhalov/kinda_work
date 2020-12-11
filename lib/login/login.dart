@@ -28,9 +28,9 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                LogoPart(size: _size),
-                EmailPasswordPart(size: _size),
-                RegistrationPart(size: _size),
+                LogoPart(),
+                EmailPasswordPart(),
+                RegistrationPart(),
               ],
             ),
           ),

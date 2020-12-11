@@ -39,7 +39,7 @@ class _PromotionPageState extends State<PromotionPage>
       child: Scaffold(
         appBar: CustomAppBar(
           title: 'Подробности акции',
-          actionIcon: Icon(Icons.favorite, color: cPink),
+          actions: [Icon(Icons.favorite, color: cPink)],
           bottom: ['Описание', 'Условия', 'Отзывы'],
           tabController: _tabController,
         ),
@@ -72,34 +72,6 @@ class _DescriptionState extends State<Description> {
     _isVisible = false;
   }
 
-  final List<Review> _reviews = [
-    Review(
-      userAvatarImg: 'assets/png/face.png',
-      userName: 'Иван',
-      userRank: 'Юный герой',
-      dateReview: '16.10.18',
-      textReview:
-          'Ну очень долго все готовится, еда не плоха, официант не спешит',
-      service: 10,
-      kitchen: 10,
-      priceQuality: 10,
-      ambiance: 10,
-      likes: 1,
-    ),
-    Review(
-      userAvatarImg: 'assets/png/face.png',
-      userName: 'Роман',
-      userRank: 'Просветленный',
-      dateReview: '12.10.18',
-      textReview: 'Так себе...',
-      service: 6,
-      kitchen: 5,
-      priceQuality: 9,
-      ambiance: 10,
-      likes: -1,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -116,7 +88,7 @@ class _DescriptionState extends State<Description> {
                       children: [
                         Column(children: [
                           CustomSlider(
-                            images: imagesMainPage,
+                            images: sliderImages,
                             height: constraints.maxHeight * 0.35,
                           ),
                           Container(
@@ -418,7 +390,7 @@ class _DescriptionState extends State<Description> {
                     padding: EdgeInsets.symmetric(
                         vertical: constraints.maxHeight * 0.02),
                     child: Column(
-                        children: getReviews(_reviews, constraints.biggest)),
+                        children: getReviews(reviews, constraints.biggest)),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(

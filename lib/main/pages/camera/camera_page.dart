@@ -143,9 +143,7 @@ class _CameraPageState extends State<CameraPage> {
               PageRouteBuilder(
                   transitionDuration: Duration(seconds: 3),
                   pageBuilder: (context, animation, secondaryAnimation) =>
-                      DiscountDetailsPage(
-                        size: widget.size,
-                      )));
+                      DiscountDetailsPage()));
         });
       }
     }
@@ -273,7 +271,7 @@ class _CameraPageState extends State<CameraPage> {
                           transitionDuration: Duration(seconds: 0),
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  DiscountCalculatorPage(size: widget.size),
+                                  DiscountCalculatorPage(),
                         ),
                       );
                     });

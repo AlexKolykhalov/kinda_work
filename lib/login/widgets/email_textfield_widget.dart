@@ -7,12 +7,10 @@ import 'package:kinda_work/login/BLoC/switcher_icon_cubit.dart';
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
     Key key,
-    @required this.size,
     @required this.emailPhoneController,
     @required this.showIcon,
   }) : super(key: key);
 
-  final Size size;
   final TextEditingController emailPhoneController;
   final bool showIcon;
 
@@ -27,7 +25,8 @@ class EmailTextField extends StatelessWidget {
         fillColor: Colors.white,
         filled: true,
         hintText: 'Email',
-        contentPadding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+        contentPadding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.05),
         suffixIcon: IconButton(
           onPressed: () {
             if (showIcon) {

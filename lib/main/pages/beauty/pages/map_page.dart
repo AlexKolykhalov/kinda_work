@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
-import 'package:kinda_work/info_element/promotion_page.dart';
-import 'package:kinda_work/repository.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/info_element/promotion_page.dart';
 import 'package:kinda_work/info_element/place_page.dart';
+import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/widgets.dart';
@@ -223,7 +223,7 @@ class _MapPageState extends State<MapPage> {
       child: Scaffold(
         appBar: CustomAppBar(
           title: 'Красота',
-          actionIcon: cSearchIcon,
+          actions: [cSearchIcon],
         ),
         body: FlutterMap(
             mapController: _mapController,

@@ -8,15 +8,14 @@ class PhoneTextField extends StatelessWidget {
   const PhoneTextField({
     Key key,
     @required this.emailPhoneController,
-    @required this.size,
   }) : super(key: key);
 
   final TextEditingController emailPhoneController;
-  final Size size;
 
   @override
   Widget build(BuildContext context) {
     //TODO make propper phone number fotmatter
+    Size _size = MediaQuery.of(context).size;
     return TextField(
       controller: emailPhoneController,
       keyboardType: TextInputType.phone,
@@ -25,9 +24,9 @@ class PhoneTextField extends StatelessWidget {
         border: OutlineInputBorder(),
         fillColor: Colors.white,
         filled: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+        contentPadding: EdgeInsets.symmetric(horizontal: _size.width * 0.05),
         prefixIcon: Container(
-          width: size.width * 0.15,
+          width: _size.width * 0.15,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

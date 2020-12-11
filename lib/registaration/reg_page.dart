@@ -42,9 +42,9 @@ class RegistrationPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    LogoPart(size: _size),
-                    RegistrationDataPart(size: _size),
-                    BottomTextPart(size: _size),
+                    LogoPart(),
+                    RegistrationDataPart(),
+                    BottomTextPart(),
                   ],
                 ),
               ),

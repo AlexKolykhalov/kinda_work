@@ -40,9 +40,9 @@ class RegistrationByEmailPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    LogoPart(size: _size),
+                    LogoPart(),
                     Spacer(flex: 3),
-                    RegistrationByEmailPart(size: _size),
+                    RegistrationByEmailPart(),
                     Spacer(flex: 3),
                   ],
                 ),

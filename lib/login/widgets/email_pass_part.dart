@@ -9,15 +9,16 @@ import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/widgets.dart';
 
 class EmailPasswordPart extends StatefulWidget {
-  const EmailPasswordPart({Key key, @required this.size}) : super(key: key);
+  const EmailPasswordPart({Key key}) : super(key: key);
 
-  final Size size;
+  //final Size size;
 
   @override
   _EmailPasswordPartState createState() => _EmailPasswordPartState();
 }
 
 class _EmailPasswordPartState extends State<EmailPasswordPart> {
+  Size _size;
   TextEditingController _emailPhoneController;
   TextEditingController _passwordController;
   bool _obscureText;
@@ -28,6 +29,12 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
     _emailPhoneController = TextEditingController();
     _passwordController = TextEditingController();
     _obscureText = true;
+  }
+
+  @override
+  void didChangeDependencies() {
+    _size = MediaQuery.of(context).size;
+    super.didChangeDependencies();
   }
 
   @override
@@ -43,26 +50,23 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: widget.size.height * 0.05),
+            padding: EdgeInsets.only(bottom: _size.height * 0.05),
             child: Text(
               'Вход в ваш аккаунт',
-              style: TextStyle(fontSize: widget.size.height * 0.03),
+              style: TextStyle(fontSize: _size.height * 0.03),
             ),
           ),
           BlocBuilder<SwitcherIconCubit, bool>(
             builder: (context, state) {
               return Padding(
-                padding: EdgeInsets.only(bottom: widget.size.height * 0.02),
+                padding: EdgeInsets.only(bottom: _size.height * 0.02),
                 child: Container(
-                  //height: widget.size.height * cHeight,
                   child: (state)
                       ? EmailTextField(
-                          size: widget.size,
                           emailPhoneController: _emailPhoneController,
                           showIcon: true,
                         )
                       : PhoneTextField(
-                          size: widget.size,
                           emailPhoneController: _emailPhoneController,
                         ),
                 ),
@@ -70,9 +74,8 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
             },
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: widget.size.height * 0.02),
+            padding: EdgeInsets.only(bottom: _size.height * 0.02),
             child: Container(
-              //height: widget.size.height * cHeight,
               child: TextField(
                 controller: _passwordController,
                 obscureText: _obscureText,
@@ -82,8 +85,8 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
                   fillColor: Colors.white,
                   filled: true,
                   hintText: 'Пароль',
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: widget.size.width * 0.05),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: _size.width * 0.05),
                   suffixIcon: IconButton(
                     onPressed: () => setState(() {
                       _obscureText = !_obscureText;
@@ -108,17 +111,16 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
                     MainPage(),
               ),
             ),
-            // size: widget.size,
             buttonText: 'Войти',
             buttonColor: cPink,
             buttonTextColor: Colors.white,
           ),
           Padding(
-            padding: EdgeInsets.only(top: widget.size.height * 0.05),
+            padding: EdgeInsets.only(top: _size.height * 0.05),
             child: Text(
               'Забыли пароль?',
-              style: TextStyle(
-                  color: Colors.grey, fontSize: widget.size.height * 0.025),
+              style:
+                  TextStyle(color: Colors.grey, fontSize: _size.height * 0.025),
             ),
           ),
         ],

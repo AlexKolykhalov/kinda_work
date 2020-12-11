@@ -5,21 +5,26 @@ import 'package:kinda_work/registaration/pages/registration_by_email_page.dart';
 import 'package:kinda_work/widgets.dart';
 
 class RegistrationBySmsPart extends StatefulWidget {
-  const RegistrationBySmsPart({Key key, @required this.size}) : super(key: key);
-
-  final Size size;
+  const RegistrationBySmsPart({Key key}) : super(key: key);
 
   @override
   _RegistrationBySmsPartState createState() => _RegistrationBySmsPartState();
 }
 
 class _RegistrationBySmsPartState extends State<RegistrationBySmsPart> {
+  Size _size;
   TextEditingController _smsController;
 
   @override
   void initState() {
     super.initState();
     _smsController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _size = MediaQuery.of(context).size;
+    super.didChangeDependencies();
   }
 
   @override
@@ -34,16 +39,15 @@ class _RegistrationBySmsPartState extends State<RegistrationBySmsPart> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: widget.size.height * 0.05),
+            padding: EdgeInsets.only(bottom: _size.height * 0.05),
             child: Text(
               'Регистрация',
-              style: TextStyle(fontSize: widget.size.height * 0.03),
+              style: TextStyle(fontSize: _size.height * 0.03),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: widget.size.height * 0.02),
+            padding: EdgeInsets.only(bottom: _size.height * 0.02),
             child: Container(
-              //height: widget.size.height * cHeight,
               child: TextField(
                 controller: _smsController,
                 keyboardType: TextInputType.number,
@@ -53,16 +57,21 @@ class _RegistrationBySmsPartState extends State<RegistrationBySmsPart> {
                   fillColor: Colors.white,
                   filled: true,
                   hintText: 'СМС код',
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: widget.size.width * 0.05),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: _size.width * 0.05),
                 ),
               ),
             ),
           ),
           CustomButton(
-            // onTap: RegistrationByEmailPage(),
-            onTap: null,
-            //size: widget.size,
+            onTap: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    RegistrationByEmailPage(),
+              ),
+            ),
             buttonText: 'Отправить код',
             buttonTextColor: Colors.white,
             buttonColor: cPink,

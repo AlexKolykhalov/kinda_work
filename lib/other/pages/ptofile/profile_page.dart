@@ -698,6 +698,9 @@ class ColumnElementProfileReviews extends StatelessWidget {
   final int kitchen;
   final int priceQuality;
   final int ambiance;
+  final String managerResponse;
+  final ReviewStatus reviewStatus;
+  final String moderatorResponse;
   final bool isVisible;
 
   @override
@@ -748,6 +751,7 @@ class ColumnElementProfileReviews extends StatelessWidget {
                   ambiance: ambiance,
                 ),
               ),
+              ManagerResponse(response: null)
             ],
           ),
         ),

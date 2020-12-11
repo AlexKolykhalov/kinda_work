@@ -51,6 +51,7 @@ class _PromotionsPageState extends State<PromotionsPage>
             'Спорт',
             'Авто',
           ],
+          isScrollable: true,
         ),
         body: TabBarView(
           controller: _tabController,

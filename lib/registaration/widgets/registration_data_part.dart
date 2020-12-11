@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/main/pages/discount/discount_calculator_page.dart';
 import 'package:kinda_work/registaration/pages/registration_by_sms_page.dart';
 import 'package:kinda_work/widgets.dart';
 
 class RegistrationDataPart extends StatefulWidget {
-  const RegistrationDataPart({Key key, @required this.size}) : super(key: key);
-
-  final Size size;
+  const RegistrationDataPart({Key key}) : super(key: key);
 
   @override
   _RegistrationDataPartState createState() => _RegistrationDataPartState();
 }
 
 class _RegistrationDataPartState extends State<RegistrationDataPart> {
+  Size _size;
   TextEditingController _phoneController;
 
   @override
   void initState() {
     super.initState();
     _phoneController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _size = MediaQuery.of(context).size;
+    super.didChangeDependencies();
   }
 
   @override
@@ -34,14 +40,14 @@ class _RegistrationDataPartState extends State<RegistrationDataPart> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: widget.size.height * 0.05),
+            padding: EdgeInsets.only(bottom: _size.height * 0.05),
             child: Text(
               'Регистрация',
-              style: TextStyle(fontSize: widget.size.height * 0.03),
+              style: TextStyle(fontSize: _size.height * 0.03),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: widget.size.height * 0.02),
+            padding: EdgeInsets.only(bottom: _size.height * 0.02),
             child: Container(
               //TODO make propper phone number fotmatter
               child: TextField(
@@ -52,11 +58,10 @@ class _RegistrationDataPartState extends State<RegistrationDataPart> {
                   border: OutlineInputBorder(),
                   fillColor: Colors.white,
                   filled: true,
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: widget.size.width * 0.05),
-                  prefix: Container(
-                    width: widget.size.width * 0.2,
-                    height: 48.0, //widget.size.height * cHeight,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: _size.width * 0.05),
+                  prefixIcon: Container(
+                    width: _size.width * 0.18,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -67,24 +72,26 @@ class _RegistrationDataPartState extends State<RegistrationDataPart> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Expanded(
-                          child: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.grey,
-                          ),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.grey,
                         ),
                       ],
                     ),
                   ),
-                  isCollapsed: true,
                 ),
               ),
             ),
           ),
           CustomButton(
-            // onTap: RegistrationBySmsPage(),
-            onTap: null,
-            // size: widget.size,
+            onTap: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    RegistrationBySmsPage(),
+              ),
+            ),
             buttonText: 'Получить СМС с кодом',
             buttonTextColor: Colors.white,
             buttonColor: cPink,

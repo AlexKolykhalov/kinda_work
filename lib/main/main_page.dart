@@ -93,7 +93,7 @@ class _MainPageState extends State<MainPage> {
                     padding: EdgeInsets.all(_size.width * cHorizont),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.0),
-                        child: CustomSlider(images: imagesMainPage)),
+                        child: CustomSlider(images: sliderImages)),
                   ),
                   FeaturesList(size: _size, currentIndex: 0),
                   //TODO do discription for this widget & widgets at all
@@ -188,7 +188,7 @@ class SearchResultPrices extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _customTitle('Menu/prices', size),
+        customTitle('Menu/prices', size),
         Container(
           height: (size.height * (0.42 + 0.02)) * prices.length,
           child: ListView.separated(
@@ -374,7 +374,7 @@ class SearchResultPromotions extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _customTitle('Promotions', size),
+        customTitle('Акции', size),
         Container(
           height: size.height * (0.16 + 0.02) * promotions.length,
           padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
@@ -486,7 +486,7 @@ class SearchResultCompanies extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _customTitle('Companies', size),
+        customTitle('Компании', size),
         Container(
           height: (size.height * 0.1 + 16.0) * companies.length,
           padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
@@ -518,7 +518,7 @@ class SearchResultCompanies extends StatelessWidget {
                               padding:
                                   EdgeInsets.only(bottom: size.height * 0.01),
                               child:
-                                  _customRichText(companies[index].name, size)),
+                                  customRichText(companies[index].name, size)),
                           Text(
                             companies[index].type,
                             style: TextStyle(
@@ -578,7 +578,7 @@ class SearchResultTypeOfCompanies extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _customTitle('Type of companies', size),
+        customTitle('Type of companies', size),
         Container(
           height: (size.height * 0.035 + 16.0) * typeCompanies.length,
           padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
@@ -589,7 +589,7 @@ class SearchResultTypeOfCompanies extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _customRichText(typeCompanies[index], size),
+                  customRichText(typeCompanies[index], size),
                   GestureDetector(
                     onTap: () => null,
                     child: Icon(Icons.chevron_right,
@@ -606,7 +606,7 @@ class SearchResultTypeOfCompanies extends StatelessWidget {
   }
 }
 
-_customRichText(String text, Size size) {
+customRichText(String text, Size size) {
   Map<String, String> result = {
     'normalText1': '',
     'boldText': '',
@@ -641,7 +641,7 @@ _customRichText(String text, Size size) {
   return widgetRichText;
 }
 
-_customTitle(String title, Size size) {
+customTitle(String title, Size size) {
   return Container(
     padding: EdgeInsets.symmetric(
       horizontal: size.width * cHorizont,

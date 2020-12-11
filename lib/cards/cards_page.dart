@@ -75,17 +75,15 @@ List<Widget> _getCards() {
   List<String> cards = ['P', 'L', 'A'];
   List<Widget> cardsWidget;
 
-    int k = 1;
+  int k = 1;
   for (var card in cards) {
-    if (k<3) {
-      Widget cardWidget = ;
-      row.add(cardWidget);
-      k+=1;
-    }else{
-
-      k=1;
+    if (k < 3) {
+      // Widget cardWidget = ;
+      // row.add(cardWidget);
+      k += 1;
+    } else {
+      k = 1;
     }
-    
   }
 
   return cardsWidget;

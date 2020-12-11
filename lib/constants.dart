@@ -9,6 +9,8 @@ const double cLoginPageVertical = 0.05;
 
 const double cHorizont = 0.05;
 const double cVertical = 0.025;
+const double hor = 0.02;
+const double vert = 0.025;
 
 //color
 const cGrey = Color(0xFFE0E0E0);

@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
+import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/widgets.dart';
 
 class PlacePage extends StatefulWidget {
@@ -91,48 +92,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     },
   ];
 
-  final List<Review> _reviews = [
-    Review(
-      userAvatarImg: 'assets/png/face.png',
-      userName: 'Иван',
-      userRank: 'Юный герой',
-      dateReview: '16.10.18',
-      textReview:
-          'Ну очень долго все готовится, еда не плоха, официант не спешит',
-      service: 10,
-      kitchen: 10,
-      priceQuality: 9,
-      ambiance: 10,
-      response:
-          'Иван, здравствуйте! Благодарим вас за обратную связь. Безумно стыдно за уровень сервиса, предоставленный вам.',
-      likes: -2,
-    ),
-    Review(
-      userAvatarImg: 'assets/png/face.png',
-      userName: 'Степан',
-      userRank: 'Новичек',
-      dateReview: '17.10.18',
-      textReview: 'Мне все понравилось!',
-      service: 10,
-      kitchen: 10,
-      priceQuality: 10,
-      ambiance: 10,
-      likes: 1,
-    ),
-    Review(
-      userAvatarImg: 'assets/png/face.png',
-      userName: 'Роман',
-      userRank: 'Просветленный',
-      dateReview: '12.10.18',
-      textReview: 'Так себе...',
-      service: 6,
-      kitchen: 5,
-      priceQuality: 9,
-      ambiance: 10,
-      response: 'Роман, здравствуйте! Мы все учтем.',
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -162,10 +121,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        //TODO растянуть по ширине для больших экранов
         appBar: CustomAppBar(
           title: 'Подробности места',
-          actionIcon: Icon(Icons.favorite_border_outlined, color: cPink),
+          actions: [Icon(Icons.favorite_border_outlined, color: cPink)],
           tabController: _tabController,
           bottom: [
             'Описание',
@@ -1151,7 +1109,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         buttonBorderColor: Colors.grey[600],
                       ),
                     ),
-                    Column(children: getReviews(_reviews, _size)),
+                    Column(children: getReviews(reviews, _size)),
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: _size.width * cHorizont,

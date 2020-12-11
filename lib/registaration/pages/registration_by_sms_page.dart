@@ -40,9 +40,9 @@ class RegistrationBySmsPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    LogoPart(size: _size),
+                    LogoPart(),
                     Spacer(flex: 3),
-                    RegistrationBySmsPart(size: _size),
+                    RegistrationBySmsPart(),
                     Spacer(flex: 3),
                   ],
                 ),
