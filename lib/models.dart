@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kinda_work/repository.dart';
 import 'package:latlong/latlong.dart';
 
 class InfoElement {
@@ -72,6 +73,8 @@ class Promotion {
     @required this.rate,
     @required this.newPrice,
     @required this.oldPrice,
+    this.type = '',
+    this.adress = '',
   });
 
   final String img;
@@ -80,6 +83,8 @@ class Promotion {
   final double rate;
   final int newPrice;
   final int oldPrice;
+  final String type;
+  final String adress;
 }
 
 class Company {
@@ -100,29 +105,52 @@ class Company {
 
 class Review {
   Review({
-    @required this.userAvatarImg,
-    @required this.userName,
-    @required this.userRank,
-    @required this.dateReview,
-    @required this.textReview,
-    @required this.service,
-    @required this.kitchen,
-    @required this.priceQuality,
-    @required this.ambiance,
+    @required this.date,
+    @required this.objectReview,
+    @required this.text,
+    @required this.author,
+    this.service,
+    this.kitchen,
+    this.priceQuality,
+    this.ambiance,
     this.likes = 0,
     this.response,
+    this.reviewStatus = ReviewStatus.moderation,
+    this.moderatorResponse,
   });
-  final String userAvatarImg;
-  final String userName;
-  final String userRank;
-  final String dateReview;
-  final String textReview;
+  final String date;
+  final dynamic objectReview;
+  final String text;
+  final User author;
   final int service;
   final int kitchen;
   final int priceQuality;
   final int ambiance;
   final int likes;
   final String response;
+  final ReviewStatus reviewStatus;
+  final String moderatorResponse;
+}
+
+class User {
+  User(
+      {this.avatar = 'assets/png/face.png',
+      @required this.name,
+      @required this.birthday,
+      this.about = '',
+      this.points = 0,
+      this.giftPoints = 0,
+      this.reviews = const [],
+      this.socialMediaAccounts = const []});
+
+  final String avatar;
+  final String name;
+  final String birthday;
+  final String about;
+  final int points;
+  final int giftPoints;
+  final List<Review> reviews;
+  final List socialMediaAccounts;
 }
 
 class InfoMarker {
