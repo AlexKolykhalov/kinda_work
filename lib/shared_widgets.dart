@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kinda_work/cards/cards_page.dart';
-import 'package:kinda_work/other/other_page.dart';
-import 'package:kinda_work/styles.dart';
 import 'package:latlong/latlong.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import 'package:kinda_work/cards/cards_page.dart';
 import 'package:kinda_work/catalog/catalog_page.dart';
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/login/BLoC/switcher_icon_cubit.dart';
+import 'package:kinda_work/other/other_page.dart';
+import 'package:kinda_work/styles.dart';
 import 'package:kinda_work/main/BLoC/bloc/search_result_bloc.dart';
 import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/models.dart';
@@ -29,7 +32,6 @@ class CustomButton extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback onTap;
-  // final Widget onTap;
   final String buttonText;
   final Color buttonTextColor;
   final bool isBoldButtonText;
@@ -42,7 +44,7 @@ class CustomButton extends StatelessWidget {
       // TODO maybe only push
       onTap: onTap,
       child: Container(
-        height: 48.0,
+        height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
         decoration: BoxDecoration(
             color: buttonColor,
             borderRadius: BorderRadius.circular(5.0),
@@ -50,7 +52,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             buttonText,
-            style: TextStyle(
+            style: style2(context).copyWith(
               color: buttonTextColor,
               fontWeight: (isBoldButtonText) ? FontWeight.bold : null,
             ),
@@ -69,6 +71,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.tabController,
     this.bottom = const [],
     this.isScrollable = false,
+    this.backgroundColor = Colors.white,
+    this.elevation = 4.0,
   }) : super(key: key);
 
   final String title;
@@ -76,6 +80,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController tabController;
   final List<String> bottom;
   final bool isScrollable;
+  final Color backgroundColor;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +89,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: TextStyle(color: Colors.black),
+        style: style1(context).copyWith(color: Colors.black),
       ),
       leading: FlatButton(
-        padding: EdgeInsets.all(13.0),
         onPressed: () => Navigator.pop(context),
-        child: cLeftArrow,
+        child: Container(width: size(context, 0.035), child: cLeftArrow),
       ),
       actions: actions,
-      // [
-      //   Visibility(
-      //     visible: actionIcon != null,
-      //     child: FlatButton(
-      //       padding: EdgeInsets.all(14.0),
-      //       onPressed: () => Navigator.pop(context),
-      //       child: actionIcon ?? Container(),
-      //     ),
-      //   ),
-      // ],
-      bottom: (bottom.isNotEmpty)
+      bottom: bottom.isNotEmpty
           ? CustomBottomAppBar(
               preferredSize: preferredSize,
               tabController: tabController,
@@ -109,13 +104,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               isScrollable: isScrollable,
             )
           : null,
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
+      elevation: elevation,
     );
   }
 
   @override
-  Size get preferredSize => (bottom.isNotEmpty)
-      ? Size.fromHeight(1.7 * AppBar().preferredSize.height)
+  Size get preferredSize => bottom.isNotEmpty
+      ? Size.fromHeight(AppBar().preferredSize.height * 1.7)
       : Size.fromHeight(AppBar().preferredSize.height * 0.85);
 }
 
@@ -123,13 +119,11 @@ class CustomAppBarWithSearch extends StatefulWidget
     implements PreferredSizeWidget {
   const CustomAppBarWithSearch({
     Key key,
-    @required this.size,
   }) : super(key: key);
 
-  final Size size;
-
   @override
-  Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
+  Size get preferredSize =>
+      Size.fromHeight(AppBar().preferredSize.height * 0.85);
 
   @override
   _CustomAppBarWithSearchState createState() => _CustomAppBarWithSearchState();
@@ -164,42 +158,44 @@ class _CustomAppBarWithSearchState extends State<CustomAppBarWithSearch> {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Container(
-        height: widget.size.height * 0.05,
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                onChanged: (value) {
-                  if (value.length > 3) {
-                    BlocProvider.of<SearchResultBloc>(context).add(
-                      SearchResultFetched(
-                          searchText: _textEditingController.text),
-                    );
-                  }
-                },
-                style: TextStyle(fontWeight: FontWeight.bold),
-                controller: _textEditingController,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: cSearchIcon,
-                    ),
-                    isCollapsed: true,
-                    hintText: 'Поиск',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    fillColor: Colors.grey[200],
-                    filled: true),
+      title: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: constraints.maxWidth * 0.1,
+                  child: TextField(
+                    onChanged: (value) {
+                      if (value.length > 3) {
+                        BlocProvider.of<SearchResultBloc>(context).add(
+                          SearchResultFetched(
+                              searchText: _textEditingController.text),
+                        );
+                      }
+                    },
+                    style:
+                        style3(context).copyWith(fontWeight: FontWeight.bold),
+                    controller: _textEditingController,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.all(constraints.maxWidth * 0.02),
+                          child: cSearchIcon,
+                        ),
+                        isCollapsed: true,
+                        hintText: 'Поиск',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(7.5),
+                          borderSide: BorderSide.none,
+                        ),
+                        fillColor: cGrey,
+                        filled: true),
+                  ),
+                ),
               ),
-            ),
-            Visibility(
-              visible: _isVisible,
-              child: Container(
-                width: widget.size.width * 0.2,
+              Visibility(
+                visible: _isVisible,
                 child: GestureDetector(
                   onTap: () {
                     _textEditingController.clear();
@@ -207,20 +203,19 @@ class _CustomAppBarWithSearchState extends State<CustomAppBarWithSearch> {
                       SearchResultCleared(),
                     );
                   },
-                  child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: constraints.maxWidth * 0.05),
                     child: Text(
                       'Отмена',
-                      style: TextStyle(
-                        color: cPink,
-                        fontSize: widget.size.height * 0.025,
-                      ),
+                      style: style3(context).copyWith(color: cPink),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
-        ),
+              )
+            ],
+          );
+        },
       ),
       backgroundColor: Colors.white,
     );
@@ -230,153 +225,171 @@ class _CustomAppBarWithSearchState extends State<CustomAppBarWithSearch> {
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
     Key key,
-    @required this.size,
     @required this.currentIndex,
   }) : super(key: key);
 
-  final Size size;
   final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
+    BoxConstraints _iconButtonConstraints = BoxConstraints(
+      minWidth: size(context, 0.04),
+      minHeight: size(context, 0.04),
+    );
+
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
-      selectedFontSize: 12.5,
-      unselectedFontSize: 12.5,
+      selectedFontSize: style4(context).fontSize,
+      unselectedFontSize: style4(context).fontSize,
       selectedItemColor: cPink,
       unselectedItemColor: cIndigo,
       showUnselectedLabels: true,
       items: [
         BottomNavigationBarItem(
           label: 'Главная',
-          icon: (currentIndex == 0)
-              ? IconButton(
-                  icon: SvgPicture.asset(
-                      'assets/svg/bottombar_icons/home_sel.svg'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 0),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          MainPage(),
-                    ),
-                  ),
-                )
-              : IconButton(
-                  icon: SvgPicture.asset('assets/svg/bottombar_icons/home.svg'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 0),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          MainPage(),
-                    ),
-                  ),
-                ),
+          activeIcon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/home_sel.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MainPage(),
+              ),
+            ),
+          ),
+          icon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/home.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MainPage(),
+              ),
+            ),
+          ),
         ),
         BottomNavigationBarItem(
           label: 'Каталог',
-          icon: (currentIndex == 1)
-              ? IconButton(
-                  icon: SvgPicture.asset(
-                      'assets/svg/bottombar_icons/catalog_sel.svg'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 0),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          CatalogPage(),
-                    ),
-                  ),
-                )
-              : IconButton(
-                  icon: SvgPicture.asset(
-                      'assets/svg/bottombar_icons/catalog.svg'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 0),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          CatalogPage(),
-                    ),
-                  ),
-                ),
+          activeIcon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon:
+                SvgPicture.asset('assets/svg/bottombar_icons/catalog_sel.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    CatalogPage(),
+              ),
+            ),
+          ),
+          icon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/catalog.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    CatalogPage(),
+              ),
+            ),
+          ),
         ),
         BottomNavigationBarItem(
           label: 'Акции',
-          icon: (currentIndex == 2)
-              ? IconButton(
-                  icon: SvgPicture.asset(
-                      'assets/svg/bottombar_icons/gift_sel.svg'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 0),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          PromotionsPage(),
-                    ),
-                  ),
-                )
-              : IconButton(
-                  icon: SvgPicture.asset('assets/svg/bottombar_icons/gift.svg'),
-                  onPressed: () => Navigator.push(
-                    context,
-                    // TODO why two same PageRouteBuilder ???
-                    PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 0),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          PromotionsPage(),
-                    ),
-                  ),
-                ),
+          activeIcon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/gift_sel.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    PromotionsPage(),
+              ),
+            ),
+          ),
+          // TODO refactoring with top element
+          icon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/gift.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              // TODO why two same PageRouteBuilder ???
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    PromotionsPage(),
+              ),
+            ),
+          ),
         ),
         BottomNavigationBarItem(
-            label: 'Карты',
-            icon: (currentIndex == 3)
-                ? IconButton(
-                    icon: SvgPicture.asset(
-                        'assets/svg/bottombar_icons/cards_sel.svg'),
-                    onPressed: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 0),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            CardsPage(),
-                      ),
-                    ),
-                  )
-                : IconButton(
-                    icon: SvgPicture.asset(
-                        'assets/svg/bottombar_icons/cards.svg'),
-                    onPressed: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 0),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            CardsPage(),
-                      ),
-                    ),
-                  )),
+          label: 'Карты',
+          activeIcon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/cards_sel.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    CardsPage(),
+              ),
+            ),
+          ),
+          icon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/cards.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    CardsPage(),
+              ),
+            ),
+          ),
+        ),
         BottomNavigationBarItem(
           label: 'Прочее',
-          icon: Stack(
-            children: [
-              (currentIndex == 4)
-                  ? IconButton(
-                      icon: SvgPicture.asset(
-                          'assets/svg/bottombar_icons/more_sel.svg'),
-                      onPressed: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: Duration(seconds: 0),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  OtherPage(),
-                        ),
-                      ),
-                    )
-                  : IconButton(
+          activeIcon: IconButton(
+            constraints: _iconButtonConstraints,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/svg/bottombar_icons/more_sel.svg'),
+            onPressed: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    OtherPage(),
+              ),
+            ),
+          ),
+          icon: Container(
+            width: double.infinity,
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      constraints: _iconButtonConstraints,
+                      padding: EdgeInsets.zero,
                       icon: SvgPicture.asset(
                           'assets/svg/bottombar_icons/more.svg'),
                       onPressed: () => Navigator.push(
@@ -389,20 +402,175 @@ class CustomBottomNavBar extends StatelessWidget {
                         ),
                       ),
                     ),
-              Positioned(
-                top: size.height * 0.015,
-                right: 0.0,
-                child: Container(
-                  width: size.height * 0.015,
-                  height: size.height * 0.015,
-                  decoration: BoxDecoration(
-                      color: cPink, borderRadius: BorderRadius.circular(50.0)),
-                ),
-              )
-            ],
+                    Positioned(
+                      top: constraints.maxWidth * 0.1,
+                      right: constraints.maxWidth * 0.23,
+                      child: Container(
+                        width: size(context, 0.01),
+                        height: size(context, 0.01),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: cPink,
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class CustomSlider extends StatefulWidget {
+  const CustomSlider({
+    Key key,
+    @required this.images,
+    this.height,
+  })  : assert(images.length == 4),
+        super(key: key);
+
+  final List<Image> images;
+  final double height;
+
+  @override
+  _CustomSliderState createState() => _CustomSliderState();
+}
+
+class _CustomSliderState extends State<CustomSlider> {
+  int _currentSlider;
+  Size _size;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSlider = 0;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _size = MediaQuery.of(context).size;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        CarouselSlider(
+          items: widget.images,
+          options: CarouselOptions(
+            scrollDirection: Axis.horizontal,
+            height: widget.height,
+            autoPlay: true,
+            viewportFraction: 1.0,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentSlider = index;
+              });
+            },
+          ),
+        ),
+        Positioned(
+          bottom: _size.height * 0.02,
+          left: _size.width / 3,
+          child: Container(
+            width: _size.width * 0.25,
+            height: _size.height * 0.025,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _currentSlider == 0 ? FilledCircle() : UnfilledCircle(),
+                _currentSlider == 1 ? FilledCircle() : UnfilledCircle(),
+                _currentSlider == 2 ? FilledCircle() : UnfilledCircle(),
+                _currentSlider == 3 ? FilledCircle() : UnfilledCircle(),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class FilledCircle extends StatelessWidget {
+  const FilledCircle({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size(context, 0.02),
+      height: size(context, 0.02),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class UnfilledCircle extends StatelessWidget {
+  const UnfilledCircle({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size(context, 0.015),
+      height: size(context, 0.015),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(width: 2, color: Colors.white),
+        color: Colors.transparent,
+      ),
+    );
+  }
+}
+
+class CustomGridViewTitle extends StatelessWidget {
+  const CustomGridViewTitle({
+    Key key,
+    @required this.title,
+    @required this.textTotalAmount,
+  }) : super(key: key);
+
+  final String title;
+  final String textTotalAmount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: size(context, 0.02)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Text(
+              title,
+              style: style2(context).copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: size(context, hor)),
+            Text(
+              textTotalAmount,
+              style: style4(context).copyWith(color: Colors.grey[600]),
+            ),
+          ]),
+          Text(
+            'Все',
+            style: style2(context).copyWith(
+              color: cPink,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -487,6 +655,10 @@ class CustomRedRightArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      constraints: BoxConstraints(
+        minWidth: size(context, 0.055),
+        minHeight: size(context, 0.055),
+      ),
       padding: EdgeInsets.zero,
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
@@ -602,6 +774,37 @@ class DiscountBadge extends StatelessWidget {
             fontSize: cConstantWidth * scaleBoltText,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class TextBadge extends StatelessWidget {
+  const TextBadge({
+    Key key,
+    @required this.text,
+    @required this.textColor,
+    @required this.backgroundColor,
+  }) : super(key: key);
+
+  final String text;
+  final Color textColor;
+  final Color backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(size(context, 0.0065)),
+        child: Text(
+          text,
+          style: style4(context)
+              .copyWith(color: textColor, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -1034,10 +1237,12 @@ createReviewWidget(Review review, Size _size) {
               ),
               const SizedBox(height: 15.0),
               Visibility(
-                visible: review.response != null,
+                visible: review.managerResponse != null,
                 child: Container(
-                    padding: EdgeInsets.only(left: _size.width * 0.12 + 10.0),
-                    child: ManagerResponse(response: review.response ?? '')),
+                  padding: EdgeInsets.only(left: _size.width * 0.12 + 10.0),
+                  child:
+                      ManagerResponse(response: review.managerResponse ?? ''),
+                ),
               ),
             ],
           ),
@@ -1093,41 +1298,10 @@ class ManagerResponse extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: Text(
             response,
-            style: TextStyle(fontStyle: FontStyle.italic),
+            style: style4(context).copyWith(fontStyle: FontStyle.italic),
           ),
         )
       ],
-    );
-  }
-}
-
-class TextBadge extends StatelessWidget {
-  const TextBadge({
-    Key key,
-    @required this.text,
-    @required this.textColor,
-    @required this.backgroundColor,
-  }) : super(key: key);
-
-  final String text;
-  final Color textColor;
-  final Color backgroundColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(size(context, 0.0065)),
-        child: Text(
-          text,
-          style: style4(context)
-              .copyWith(color: textColor, fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 }
@@ -1148,7 +1322,6 @@ class QualityRatingScale extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     int s = (service ?? 0) +
         (kitchen ?? 0) +
         (priceQualityRatio ?? 0) +
@@ -1157,78 +1330,89 @@ class QualityRatingScale extends StatelessWidget {
         (kitchen == null ? 0 : 1) +
         (priceQualityRatio == null ? 0 : 1) +
         (ambiance == null ? 0 : 1);
-    return Container(
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, 0.01),
-              vertical: size(context, 0.006),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: RateBadge(
-              rate: s / k,
-              textColor: Colors.white,
-            ),
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: size(context, 0.01),
+            vertical: size(context, 0.006),
           ),
-          SizedBox(width: 10.0),
-          Container(
-            height: size(context, 0.03),
-            child: Row(
-              children: [
-                Visibility(
-                  visible: service != null,
-                  child: Row(
-                    children: [
-                      SizedBox(width: size(context, 0.03), child: cService),
-                      SizedBox(width: size(context, 0.003)),
-                      RateBadge(rate: service, textColor: Colors.green),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: kitchen != null,
-                  child: Row(
-                    children: [
-                      SizedBox(width: size(context, 0.01)),
-                      SizedBox(width: size(context, 0.023), child: cKitchen),
-                      SizedBox(width: size(context, 0.003)),
-                      RateBadge(rate: kitchen, textColor: Colors.green),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: priceQualityRatio != null,
-                  child: Row(
-                    children: [
-                      SizedBox(width: size(context, 0.01)),
-                      SizedBox(
-                          width: size(context, 0.023), child: cPriceQuality),
-                      SizedBox(width: size(context, 0.003)),
-                      RateBadge(
-                          rate: priceQualityRatio, textColor: Colors.green),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: ambiance != null,
-                  child: Row(
-                    children: [
-                      SizedBox(width: size(context, 0.01)),
-                      SizedBox(width: size(context, 0.023), child: cAmbiance),
-                      SizedBox(width: size(context, 0.003)),
-                      RateBadge(rate: ambiance, textColor: Colors.green),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(15.0),
           ),
-        ],
-      ),
+          child: RateBadge(
+            rate: s / k,
+            textColor: Colors.white,
+          ),
+        ),
+        SizedBox(width: 10.0),
+        Container(
+          height: size(context, 0.03),
+          child: Row(
+            children: [
+              Visibility(
+                visible: service != null,
+                child: Row(
+                  children: [
+                    SizedBox(width: size(context, 0.03), child: cService),
+                    SizedBox(width: size(context, 0.003)),
+                    RateBadge(rate: service, textColor: Colors.green),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: kitchen != null,
+                child: Row(
+                  children: [
+                    SizedBox(width: size(context, 0.01)),
+                    SizedBox(width: size(context, 0.023), child: cKitchen),
+                    SizedBox(width: size(context, 0.003)),
+                    RateBadge(rate: kitchen, textColor: Colors.green),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: priceQualityRatio != null,
+                child: Row(
+                  children: [
+                    SizedBox(width: size(context, 0.01)),
+                    SizedBox(width: size(context, 0.023), child: cPriceQuality),
+                    SizedBox(width: size(context, 0.003)),
+                    RateBadge(rate: priceQualityRatio, textColor: Colors.green),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: ambiance != null,
+                child: Row(
+                  children: [
+                    SizedBox(width: size(context, 0.01)),
+                    SizedBox(width: size(context, 0.023), child: cAmbiance),
+                    SizedBox(width: size(context, 0.003)),
+                    RateBadge(rate: ambiance, textColor: Colors.green),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// TODO нужен ли?
+class CustomDivider extends StatelessWidget {
+  const CustomDivider({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      indent: size(context, hor),
+      thickness: 1.0,
     );
   }
 }
@@ -1306,4 +1490,307 @@ Map<String, dynamic> getRank(int points) {
     'status': 'Эксперт ($points баллов)',
     'nextStatus': '',
   };
+}
+
+class EmailTextField extends StatefulWidget {
+  const EmailTextField({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _EmailTextFieldState createState() => _EmailTextFieldState();
+}
+
+class _EmailTextFieldState extends State<EmailTextField> {
+  final _controller = TextEditingController();
+  final bool _showIcon = true;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              TextField(
+                controller: _controller,
+                keyboardType: TextInputType.emailAddress,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: 'Email',
+                  hintStyle: style2(context),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth * 0.05,
+                  ),
+                ),
+              ),
+              IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onPressed: () {
+                  if (_showIcon) {
+                    _controller.clear();
+                    BlocProvider.of<SwitcherIconCubit>(context).changed();
+                  }
+                },
+                padding: EdgeInsets.zero,
+                iconSize: constraints.maxHeight * 0.5,
+                icon: _showIcon ? Icon(Icons.phone, color: cPink) : Icon(null),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PhoneTextField extends StatefulWidget {
+  const PhoneTextField({Key key}) : super(key: key);
+
+  @override
+  _PhoneTextFieldState createState() => _PhoneTextFieldState();
+}
+
+class _PhoneTextFieldState extends State<PhoneTextField> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //TODO make propper phone number fotmatter
+    return Container(
+      height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              TextField(
+                controller: _controller,
+                keyboardType: TextInputType.phone,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth * 0.05,
+                  ),
+                  prefixIcon: Container(
+                    width: constraints.maxWidth * 0.3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '+375',
+                          style: style2(context)
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.grey,
+                          size: constraints.maxHeight * 0.6,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onPressed: () {
+                  _controller.clear();
+                  BlocProvider.of<SwitcherIconCubit>(context).changed();
+                },
+                icon: Icon(Icons.email, color: cPink),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PasswordTextField extends StatefulWidget {
+  const PasswordTextField({Key key}) : super(key: key);
+
+  @override
+  _PasswordTextFieldState createState() => _PasswordTextFieldState();
+}
+
+class _PasswordTextFieldState extends State<PasswordTextField> {
+  final _controller = TextEditingController();
+  bool _obscureText = false;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              TextField(
+                controller: _controller,
+                obscureText: _obscureText,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: 'Пароль',
+                  hintStyle: style2(context),
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal: constraints.maxWidth * 0.05),
+                ),
+              ),
+              IconButton(
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onPressed: () => setState(() {
+                  _obscureText = !_obscureText;
+                }),
+                padding: EdgeInsets.zero,
+                iconSize: constraints.maxHeight * 0.5,
+                icon: Icon(
+                  Icons.remove_red_eye,
+                  color: _obscureText ? Colors.grey : cPink,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CustomTextField extends StatefulWidget {
+  const CustomTextField({
+    Key key,
+    this.text,
+    this.hintText,
+    this.textInputType = TextInputType.text,
+    this.isEnabled = true,
+    this.isMultiLines = false,
+    this.popupMenuItems = const [],
+  }) : super(key: key);
+
+  final TextInputType textInputType;
+  final String text;
+  final String hintText;
+  final bool isEnabled;
+  final List<dynamic> popupMenuItems;
+  final bool isMultiLines;
+
+  @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  TextEditingController _controller;
+  double _height;
+
+  @override
+  void initState() {
+    _controller = TextEditingController(text: widget.text);
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (widget.isMultiLines) {
+      _height = null;
+    } else {
+      _height = size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075);
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: _height,
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              TextField(
+                controller: _controller,
+                keyboardType: widget.textInputType,
+                textAlignVertical: TextAlignVertical.center,
+                minLines: widget.isMultiLines ? 6 : 1,
+                maxLines: widget.isMultiLines ? 6 : 1,
+                style: TextStyle(
+                  color: widget.isEnabled ? Colors.black : Colors.grey[600],
+                ),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  enabled: widget.isEnabled,
+                  fillColor: Colors.white,
+                  filled: widget.isEnabled ?? false,
+                  hintText: widget.hintText,
+                  hintStyle: style2(context),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth * 0.05,
+                    vertical: widget.isMultiLines ? 5.0 : 0.0,
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: widget.popupMenuItems.isNotEmpty,
+                child: PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: cPink,
+                  ),
+                  onSelected: (String val) {
+                    _controller.text = val;
+                  },
+                  itemBuilder: (context) => widget.popupMenuItems
+                      .map<PopupMenuItem<String>>((dynamic val) =>
+                          PopupMenuItem(child: Text(val), value: val))
+                      .toList(),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

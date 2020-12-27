@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/models.dart';
-import 'package:kinda_work/other/pages/ptofile/edit_profile/edit_profile_page.dart';
-import 'package:kinda_work/other/pages/ptofile/edit_profile/fillout_profile.dart';
+import 'package:kinda_work/other/pages/profile/edit_profile/edit_profile_page.dart';
+import 'package:kinda_work/other/pages/profile/edit_profile/fillout_profile.dart';
+import 'package:kinda_work/other/pages/review_page.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/styles.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -39,8 +40,13 @@ class _ProfilePageState extends State<ProfilePage>
           actions: [
             FlatButton(
               onPressed: () => null,
-              minWidth: 13.0,
-              child: Icon(Icons.exit_to_app, color: cPink),
+              minWidth: size(context, 0.07),
+              padding: EdgeInsets.zero,
+              child: Icon(
+                Icons.exit_to_app,
+                color: cPink,
+                size: size(context, 0.035),
+              ),
             ),
             FlatButton(
               onPressed: () => Navigator.push(
@@ -50,8 +56,13 @@ class _ProfilePageState extends State<ProfilePage>
                       EditProfilePage(),
                 ),
               ),
-              minWidth: 13.0,
-              child: Icon(Icons.edit_outlined, color: cPink),
+              minWidth: size(context, 0.07),
+              padding: EdgeInsets.zero,
+              child: Icon(
+                Icons.edit_outlined,
+                color: cPink,
+                size: size(context, 0.035),
+              ),
             ),
           ],
           tabController: _tabController,
@@ -406,18 +417,6 @@ class WhereIWas extends StatelessWidget {
           Column(
             children: _getPlacesColumnElements(whereIWas),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, hor),
-              vertical: size(context, vert),
-            ),
-            child: CustomButton(
-              onTap: null,
-              buttonText: 'Оставить отзыв +110 баллов',
-              buttonColor: cPink,
-              buttonTextColor: Colors.white,
-            ),
-          ),
           Divider(thickness: 1.0),
           Container(
             padding: EdgeInsets.symmetric(
@@ -442,34 +441,155 @@ class WhereIWas extends StatelessWidget {
   }
 }
 
+List<Widget> _getWhereICouldBeElements(Map elements) {
+  return elements['places'].map<Widget>((place) {
+    // TODO think about it
+    return Builder(
+      builder: (context) => Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+            child: Column(
+              children: [
+                ColumnElementGeneral(
+                  img: place['company'].img,
+                  type: place['company'].type,
+                  name: place['company'].name,
+                  adress: place['company'].adress,
+                  visitTime: place['visit_time'],
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: size(context, vert / 2)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          onTap: null,
+                          buttonText: 'Я здесь не был',
+                          buttonColor: cGrey,
+                          buttonBorderColor: Colors.grey[600],
+                          buttonTextColor: Colors.black,
+                        ),
+                      ),
+                      SizedBox(width: size(context, hor)),
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () => Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      ReviewPage(),
+                            ),
+                          ),
+                          buttonText: 'Оставить отзыв',
+                          buttonColor: cPink,
+                          buttonTextColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: elements['places'].indexOf(place) <
+                elements['places'].length - 1,
+            child: CustomDivider(),
+          ),
+        ],
+      ),
+    );
+  }).toList();
+}
+
 List<Widget> _getPlacesColumnElements(Map elements) {
   return elements['places'].map<Widget>((place) {
-    bool _isVisible =
-        elements['places'].indexOf(place) < elements['places'].length - 1;
-    return ColumnElementGeneral(
-      img: place['company'].img,
-      type: place['company'].type,
-      name: place['company'].name,
-      adress: place['company'].adress,
-      visitTime: place['visit_time'],
-      discountMoney: place['discount_money'],
-      discountPoints: place['discount_points'],
-      isVisible: _isVisible,
+    return Builder(
+      builder: (context) => Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+            child: Column(
+              children: [
+                ColumnElementGeneral(
+                  img: place['company'].img,
+                  type: place['company'].type,
+                  name: place['company'].name,
+                  adress: place['company'].adress,
+                  visitTime: place['visit_time'],
+                  discountMoney: place['discount_money'],
+                  discountPoints: place['discount_points'],
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: size(context, vert / 2)),
+                  child: CustomButton(
+                    onTap: () => Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            ReviewPage(),
+                      ),
+                    ),
+                    buttonText: 'Оставить отзыв +110 баллов',
+                    buttonColor: cPink,
+                    buttonTextColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: elements['places'].indexOf(place) <
+                elements['places'].length - 1,
+            child: CustomDivider(),
+          ),
+        ],
+      ),
     );
   }).toList();
 }
 
 List<Widget> _getPromotionsColumnElements(Map elements) {
   return elements['promotions'].map<Widget>((promotion) {
-    bool _isVisible = elements['promotions'].indexOf(promotion) <
-        elements['promotions'].length - 1;
-    return ColumnElementGeneral(
-      img: promotion['promotion'].img,
-      type: promotion['promotion'].type,
-      name: promotion['promotion'].discription,
-      adress: promotion['promotion'].adress,
-      visitTime: promotion['visit_time'],
-      isVisible: _isVisible,
+    return Builder(
+      builder: (context) => Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+            child: Column(
+              children: [
+                ColumnElementGeneral(
+                  img: promotion['promotion'].img,
+                  type: promotion['promotion'].type,
+                  name: promotion['promotion'].discription,
+                  adress: promotion['promotion'].adress,
+                  visitTime: promotion['visit_time'],
+                  showArrow: false,
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: size(context, vert / 2)),
+                  child: CustomButton(
+                    onTap: null,
+                    buttonText: 'Оставить отзыв +55 баллов',
+                    buttonColor: cPink,
+                    buttonTextColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: elements['promotions'].indexOf(promotion) <
+                elements['promotions'].length - 1,
+            child: CustomDivider(),
+          ),
+        ],
+      ),
     );
   }).toList();
 }
@@ -511,6 +631,7 @@ class ProfileReviews extends StatelessWidget {
               ),
             ),
           ),
+          Column(children: _getPromotionsReviews(reviews)),
         ],
       ),
     );
@@ -527,22 +648,40 @@ _getPlacesReviews(List reviews) {
 
     return ColumnElementProfileReviews(
       type: review.objectReview.type,
-      name: review.objectReview is Company
-          ? review.objectReview.name
-          : review.objectReview.discription,
+      name: review.objectReview.name,
       text: review.text,
       service: review.service,
       kitchen: review.kitchen,
       priceQuality: review.priceQuality,
       ambiance: review.ambiance,
+      managerResponse: review.managerResponse,
+      reviewStatus: review.reviewStatus,
+      reviewPoints: review.reviewPoints,
+      moderatorResponse: review.moderatorResponse,
       isVisible: _isVisible,
     );
   }).toList();
 }
 
 _getPromotionsReviews(List reviews) {
-  // _promotionsReviews =
-  // return ColumnElementProfileReviews();
+  List _promotionsReviews =
+      reviews.where((element) => element.objectReview is Promotion).toList();
+  return _promotionsReviews.map((review) {
+    bool _isVisible =
+        _promotionsReviews.indexOf(review) < _promotionsReviews.length - 1;
+
+    return ColumnElementProfileReviews(
+      type: review.objectReview.type,
+      name: review.objectReview.discription,
+      text: review.text,
+      promotionRate: review.objectReview.rate,
+      managerResponse: review.managerResponse,
+      reviewStatus: review.reviewStatus,
+      reviewPoints: review.reviewPoints,
+      moderatorResponse: review.moderatorResponse,
+      isVisible: _isVisible,
+    );
+  }).toList();
 }
 
 class Impressions extends StatelessWidget {
@@ -550,7 +689,48 @@ class Impressions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: size(context, vert),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: size(context, hor),
+              ),
+              child: Text(
+                'Ниже указаны заведения, в которых вы были, но не пользовались скидкой на посещение или акцией данных заведений. Вы все равно можете оставить отзыв об этом посещении.',
+                style: style4(context).copyWith(color: Colors.grey[600]),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size(context, hor),
+                    vertical: size(context, vert),
+                  ),
+                  child: Text(
+                    'Вы могли посетить',
+                    style: style3(context).copyWith(
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Column(
+                  children: _getWhereICouldBeElements(whereIWas),
+                ),
+                Divider(thickness: 1.0),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -560,11 +740,11 @@ class ColumnElementGeneral extends StatelessWidget {
     @required this.img,
     @required this.type,
     @required this.name,
-    @required this.adress,
     @required this.visitTime,
-    @required this.isVisible,
+    this.adress,
     this.discountMoney,
     this.discountPoints,
+    this.showArrow = true,
   }) : super(key: key);
 
   final String img;
@@ -574,120 +754,116 @@ class ColumnElementGeneral extends StatelessWidget {
   final String visitTime;
   final int discountMoney;
   final int discountPoints;
-  final bool isVisible;
+  final bool showArrow;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: size(context, 0.065),
-                height: size(context, 0.065),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(img),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: size(context, 0.065),
+              height: size(context, 0.065),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(img),
+                ),
+              ),
+            ),
+            SizedBox(width: size(context, 0.015)),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: size(context, 0.008)),
+                    child: Text(
+                      type,
+                      style: style4(context).copyWith(color: Colors.grey[600]),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(width: size(context, 0.015)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: size(context, 0.008)),
-                      child: Text(
-                        type,
-                        style:
-                            style4(context).copyWith(color: Colors.grey[600]),
-                      ),
+                  Text(
+                    name,
+                    style: style2(context).copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      name,
-                      style: style2(context).copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: size(context, 0.008)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            adress,
+                  ),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: size(context, 0.008)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                          visible: adress != null,
+                          child: Text(
+                            adress ?? '',
                             style: style4(context),
                           ),
-                          Text(
-                            visitTime,
-                            style: style4(context),
-                          ),
-                          Visibility(
-                            visible:
-                                discountMoney != null && discountPoints != null,
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '${discountMoney.toString()} р. ',
-                                    style: style4(context).copyWith(
-                                      color: Colors.black,
-                                    ),
+                        ),
+                        Text(
+                          visitTime,
+                          style: style4(context),
+                        ),
+                        Visibility(
+                          visible:
+                              discountMoney != null && discountPoints != null,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${discountMoney.toString()} р. ',
+                                  style: style4(context).copyWith(
+                                    color: Colors.black,
                                   ),
-                                  TextSpan(
-                                    text:
-                                        '(${discountPoints.toString()} баллов)',
-                                    style: style4(context).copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                ),
+                                TextSpan(
+                                  text: '(${discountPoints.toString()} баллов)',
+                                  style: style4(context).copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: discountMoney != null && discountPoints != null,
-                child: CustomRedRightArrow(onPressed: () => null),
-              )
-            ],
-          ),
-        ),
-        Visibility(
-          visible: isVisible,
-          child: Divider(
-            indent: size(context, hor),
-            thickness: 1.0,
-          ),
+            ),
+            Visibility(
+              visible: showArrow,
+              child: CustomRedRightArrow(onPressed: () => null),
+            )
+          ],
         ),
       ],
     );
   }
 }
 
-class ColumnElementProfileReviews extends StatelessWidget {
+class ColumnElementProfileReviews extends StatefulWidget {
   const ColumnElementProfileReviews({
     Key key,
     @required this.type,
     @required this.name,
     @required this.text,
-    @required this.service,
-    @required this.kitchen,
-    @required this.priceQuality,
-    @required this.ambiance,
+    this.service,
+    this.kitchen,
+    this.priceQuality,
+    this.ambiance,
+    this.promotionRate,
+    this.managerResponse,
+    @required this.reviewStatus,
+    this.reviewPoints,
+    this.moderatorResponse,
     @required this.isVisible,
   }) : super(key: key);
 
@@ -698,10 +874,44 @@ class ColumnElementProfileReviews extends StatelessWidget {
   final int kitchen;
   final int priceQuality;
   final int ambiance;
+  final double promotionRate;
   final String managerResponse;
   final ReviewStatus reviewStatus;
+  final int reviewPoints;
   final String moderatorResponse;
   final bool isVisible;
+
+  @override
+  _ColumnElementProfileReviewsState createState() =>
+      _ColumnElementProfileReviewsState();
+}
+
+class _ColumnElementProfileReviewsState
+    extends State<ColumnElementProfileReviews> {
+  Widget _widgetTextBadge;
+
+  @override
+  void didChangeDependencies() {
+    if (widget.reviewStatus == ReviewStatus.moderation) {
+      _widgetTextBadge = TextBadge(
+        text: 'Модерация',
+        textColor: Colors.white,
+        backgroundColor: Colors.black.withOpacity(0.75),
+      );
+    }
+    if (widget.reviewStatus == ReviewStatus.apply) {
+      _widgetTextBadge = TextBadge(
+        text: '${widget.reviewPoints} баллов',
+        textColor: Colors.white,
+        backgroundColor: cPink,
+      );
+    }
+    if (widget.reviewStatus == ReviewStatus.deny) {
+      _widgetTextBadge = Container();
+    }
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -716,20 +926,16 @@ class ColumnElementProfileReviews extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    type,
+                    widget.type,
                     style: style4(context).copyWith(
                       color: Colors.grey[600],
                     ),
                   ),
-                  TextBadge(
-                    text: 'Модерация',
-                    textColor: Colors.white,
-                    backgroundColor: Colors.black.withOpacity(0.75),
-                  ),
+                  _widgetTextBadge,
                 ],
               ),
               Text(
-                name,
+                widget.name,
                 style: style1(context).copyWith(fontWeight: FontWeight.bold),
               ),
               Padding(
@@ -741,22 +947,64 @@ class ColumnElementProfileReviews extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(text, style: style2(context)),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size(context, vert)),
-                child: QualityRatingScale(
-                  service: service,
-                  kitchen: kitchen,
-                  priceQualityRatio: priceQuality,
-                  ambiance: ambiance,
-                ),
-              ),
-              ManagerResponse(response: null)
+              Text(widget.text, style: style2(context)),
+              widget.promotionRate != null
+                  ? Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: size(context, vert)),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size(context, 0.01),
+                            vertical: size(context, 0.006),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: RateBadge(
+                            rate: widget.promotionRate,
+                            textColor: Colors.white,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: size(context, vert)),
+                      child: QualityRatingScale(
+                        service: widget.service,
+                        kitchen: widget.kitchen,
+                        priceQualityRatio: widget.priceQuality,
+                        ambiance: widget.ambiance,
+                      ),
+                    ),
+              widget.managerResponse != null
+                  ? ManagerResponse(response: widget.managerResponse)
+                  : Container(),
+              widget.moderatorResponse != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Отказано в доступе',
+                          style: style3(context).copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: cPink,
+                          ),
+                        ),
+                        Text(
+                          widget.moderatorResponse,
+                          style: style4(context),
+                        ),
+                      ],
+                    )
+                  : Container()
             ],
           ),
         ),
         Visibility(
-          visible: isVisible,
+          visible: widget.isVisible,
           child: Divider(
             indent: size(context, hor),
             thickness: 1.0,
