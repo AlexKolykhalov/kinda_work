@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/bottom_buttons.dart';
-import 'package:kinda_work/main/widgets/custom_grid.dart';
-import 'package:kinda_work/models.dart';
 import 'package:kinda_work/promo/BLoC/horizontal_listview_switcher_cubit.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class Beauty extends StatelessWidget {
   const Beauty({
@@ -141,8 +139,7 @@ class Beauty extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar:
-            CustomBottomNavBar(size: _size, currentIndex: currentIndex),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: currentIndex),
       ),
     );
   }

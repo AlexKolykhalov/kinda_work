@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:kinda_work/main/pages/promotion/promotion_conditions.dart';
-import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/widgets/store_promotions_slider.dart';
+import 'package:kinda_work/main/pages/promotion/promotion_conditions.dart';
+import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class PromotionPage extends StatefulWidget {
   const PromotionPage({Key key}) : super(key: key);
@@ -609,7 +608,6 @@ class _DescriptionState extends State<Description> {
                     padding: EdgeInsets.symmetric(
                         horizontal: constraints.maxWidth * cHorizont),
                     child: CustomGridViewTitle(
-                      size: constraints.biggest,
                       title: 'Другие акции',
                       textTotalAmount: '',
                     ),

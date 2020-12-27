@@ -4,6 +4,7 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/login/widgets/email_pass_part.dart';
 import 'package:kinda_work/login/widgets/logo_part.dart';
 import 'package:kinda_work/login/widgets/registration_part.dart';
+import 'package:kinda_work/styles.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key key}) : super(key: key);
@@ -23,13 +24,14 @@ class LoginPage extends StatelessWidget {
             height: _size.height - MediaQuery.of(context).padding.top,
             padding: EdgeInsets.symmetric(
               horizontal: _size.width * cLoginPageHorizontal,
-              vertical: _size.height * cLoginPageVertical,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                SizedBox(height: AppBar().preferredSize.height * 0.85),
                 LogoPart(),
+                SizedBox(height: size(context, 0.05)),
                 EmailPasswordPart(),
+                Expanded(child: Container()),
                 RegistrationPart(),
               ],
             ),

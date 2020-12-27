@@ -4,7 +4,7 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/bottom_buttons.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class RestaurantsCafe extends StatelessWidget {
   const RestaurantsCafe({
@@ -25,7 +25,6 @@ class RestaurantsCafe extends StatelessWidget {
             children: [
               SizedBox(height: _size.height * 0.03),
               CustomGridViewTitle(
-                size: _size,
                 title: 'Популярные места',
                 textTotalAmount: '5394 из 15600',
               ),
@@ -41,7 +40,6 @@ class RestaurantsCafe extends StatelessWidget {
                 buttonTextColor: cIndigo,
               ),
               CustomGridViewTitle(
-                size: _size,
                 title: 'Популярные акции',
                 textTotalAmount: '5090',
               ),
@@ -60,8 +58,7 @@ class RestaurantsCafe extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar:
-            CustomBottomNavBar(size: _size, currentIndex: currentIndex),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: currentIndex),
       ),
     );
   }

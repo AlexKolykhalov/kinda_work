@@ -6,10 +6,10 @@ import 'package:kinda_work/main/BLoC/bloc/search_result_bloc.dart';
 import 'package:kinda_work/main/widgets/bottom_buttons.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/main/widgets/features_list.dart';
-import 'package:kinda_work/main/widgets/store_promotions_slider.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key key}) : super(key: key);
@@ -24,11 +24,11 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     // TODO look at this
-    _customGridViewPlaces = CustomGridView(
-      size: Size(414, 240),
-      childAspectRatio: cRatioSmallSize,
-      infoElements: popularPlaces,
-    );
+    // _customGridViewPlaces = CustomGridView(
+    //   size: Size(414, 240),
+    //   childAspectRatio: cRatioSmallSize,
+    //   infoElements: popularPlaces,
+    // );
   }
 
   @override
@@ -50,7 +50,7 @@ class _MainPageState extends State<MainPage> {
         child: BlocProvider(
       create: (context) => SearchResultBloc(),
       child: Scaffold(
-        appBar: CustomAppBarWithSearch(size: _size),
+        appBar: CustomAppBarWithSearch(),
         body: BlocBuilder<SearchResultBloc, SearchResultState>(
           builder: (context, state) {
             if (state is SearchResultLoadInProgress) {
@@ -88,7 +88,6 @@ class _MainPageState extends State<MainPage> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  // TODO remove to Widgets.dart
                   Padding(
                     padding: EdgeInsets.all(_size.width * cHorizont),
                     child: ClipRRect(
@@ -99,21 +98,20 @@ class _MainPageState extends State<MainPage> {
                   //TODO do discription for this widget & widgets at all
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: _size.width * cHorizont,
+                      horizontal: size(context, hor),
                     ),
                     child: Column(
                       children: [
                         CustomGridViewTitle(
-                          size: _size,
                           title: 'Популярные места',
                           textTotalAmount: '5369 из 15600',
                         ),
-                        _customGridViewPlaces,
-                        // CustomGridView(
-                        //   size: _size,
-                        //   childAspectRatio: cRatioSmallSize,
-                        //   infoElements: popularPlaces,
-                        // ),
+                        // _customGridViewPlaces,
+                        CustomGridView(
+                          size: Size(414, 240),
+                          childAspectRatio: cRatioSmallSize,
+                          infoElements: popularPlaces,
+                        ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                             0.0,
@@ -130,7 +128,6 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ),
                         CustomGridViewTitle(
-                          size: _size,
                           title: 'Популярные акции',
                           textTotalAmount: '5090',
                         ),
@@ -167,7 +164,7 @@ class _MainPageState extends State<MainPage> {
             );
           },
         ),
-        bottomNavigationBar: CustomBottomNavBar(size: _size, currentIndex: 0),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: 0),
       ),
     ));
   }

@@ -114,8 +114,9 @@ class Review {
     this.priceQuality,
     this.ambiance,
     this.likes = 0,
-    this.response,
+    this.managerResponse,
     this.reviewStatus = ReviewStatus.moderation,
+    this.reviewPoints,
     this.moderatorResponse,
   });
   final String date;
@@ -127,8 +128,9 @@ class Review {
   final int priceQuality;
   final int ambiance;
   final int likes;
-  final String response;
+  final String managerResponse;
   final ReviewStatus reviewStatus;
+  final int reviewPoints;
   final String moderatorResponse;
 }
 

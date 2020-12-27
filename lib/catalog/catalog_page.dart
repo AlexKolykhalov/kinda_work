@@ -5,7 +5,7 @@ import 'package:kinda_work/main/widgets/bottom_buttons.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/main/widgets/features_list.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class CatalogPage extends StatelessWidget {
   const CatalogPage({Key key}) : super(key: key);
@@ -30,7 +30,6 @@ class CatalogPage extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomGridViewTitle(
-                      size: _size,
                       title: 'Рестораны и кафе',
                       textTotalAmount: '127 из 45090',
                     ),
@@ -55,7 +54,6 @@ class CatalogPage extends StatelessWidget {
                       ),
                     ),
                     CustomGridViewTitle(
-                      size: _size,
                       title: 'Красота',
                       textTotalAmount: '127 из 34567',
                     ),
@@ -80,7 +78,6 @@ class CatalogPage extends StatelessWidget {
                       ),
                     ),
                     CustomGridViewTitle(
-                      size: _size,
                       title: 'Развлечения',
                       textTotalAmount: '127 из 56789',
                     ),
@@ -105,7 +102,6 @@ class CatalogPage extends StatelessWidget {
                       ),
                     ),
                     CustomGridViewTitle(
-                      size: _size,
                       title: 'Авто и мото',
                       textTotalAmount: '127 из 1234',
                     ),
@@ -139,7 +135,7 @@ class CatalogPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavBar(size: _size, currentIndex: 1),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: 1),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kinda_work/constants.dart';
 
 import 'package:kinda_work/registaration/reg_page.dart';
+import 'package:kinda_work/styles.dart';
 
 class RegistrationPart extends StatelessWidget {
   const RegistrationPart({Key key}) : super(key: key);
@@ -8,11 +10,10 @@ class RegistrationPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: size(context, cLoginPageVertical)),
       child: Column(
         children: [
-          Text('Еще не зарегистрировались?',
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.025)),
+          Text('Еще не зарегистрировались?', style: style2(context)),
           GestureDetector(
             onTap: () => Navigator.push(
               context,
@@ -24,9 +25,7 @@ class RegistrationPart extends StatelessWidget {
             ),
             child: Text(
               'Зарегистрироваться',
-              style: TextStyle(
-                  color: Colors.pink,
-                  fontSize: MediaQuery.of(context).size.height * 0.025),
+              style: style2(context).copyWith(color: cPink),
             ),
           ),
         ],

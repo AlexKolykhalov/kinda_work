@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kinda_work/main/pages/beauty/pages/map_page.dart';
 import 'package:kinda_work/main/pages/camera/camera_page.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/constants.dart';
 
 class BottomButtons extends StatelessWidget {

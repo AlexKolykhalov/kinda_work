@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/widgets.dart';
+
+import 'package:kinda_work/shared_widgets.dart';
 
 class CardsPage extends StatelessWidget {
   const CardsPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    // Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         // TODO look at back arrow
@@ -16,7 +15,7 @@ class CardsPage extends StatelessWidget {
         body: Column(
           children: [
             Text('Все карты'),
-            Column(children: _getCards()),
+            // Column(children: _getCards()),
           ],
         ),
         // body: Stack(
@@ -65,26 +64,26 @@ class CardsPage extends StatelessWidget {
         //     )
         //   ],
         // ),
-        bottomNavigationBar: CustomBottomNavBar(size: _size, currentIndex: 3),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: 3),
       ),
     );
   }
 }
 
-List<Widget> _getCards() {
-  List<String> cards = ['P', 'L', 'A'];
-  List<Widget> cardsWidget;
+// List<Widget> _getCards() {
+//   // List<String> cards = ['P', 'L', 'A'];
+//   // List<Widget> cardsWidget;
 
-  int k = 1;
-  for (var card in cards) {
-    if (k < 3) {
-      // Widget cardWidget = ;
-      // row.add(cardWidget);
-      k += 1;
-    } else {
-      k = 1;
-    }
-  }
+//   // int k = 1;
+//   // for (var card in cards) {
+//   //   if (k < 3) {
+//   //     // Widget cardWidget = ;
+//   //     // row.add(cardWidget);
+//   //     k += 1;
+//   //   } else {
+//   //     k = 1;
+//   //   }
+//   // }
 
-  return cardsWidget;
-}
+//   return cardsWidget;
+// }

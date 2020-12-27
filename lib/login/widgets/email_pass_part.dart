@@ -3,46 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/login/BLoC/switcher_icon_cubit.dart';
-import 'package:kinda_work/login/widgets/email_textfield_widget.dart';
-import 'package:kinda_work/login/widgets/phone_textfield_widget.dart';
 import 'package:kinda_work/main/main_page.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
-class EmailPasswordPart extends StatefulWidget {
+class EmailPasswordPart extends StatelessWidget {
   const EmailPasswordPart({Key key}) : super(key: key);
-
-  //final Size size;
-
-  @override
-  _EmailPasswordPartState createState() => _EmailPasswordPartState();
-}
-
-class _EmailPasswordPartState extends State<EmailPasswordPart> {
-  Size _size;
-  TextEditingController _emailPhoneController;
-  TextEditingController _passwordController;
-  bool _obscureText;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailPhoneController = TextEditingController();
-    _passwordController = TextEditingController();
-    _obscureText = true;
-  }
-
-  @override
-  void didChangeDependencies() {
-    _size = MediaQuery.of(context).size;
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _emailPhoneController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,56 +16,22 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: _size.height * 0.05),
-            child: Text(
-              'Вход в ваш аккаунт',
-              style: TextStyle(fontSize: _size.height * 0.03),
-            ),
+            padding: EdgeInsets.only(bottom: size(context, 0.05)),
+            child: Text('Вход в ваш аккаунт', style: style1(context)),
           ),
           BlocBuilder<SwitcherIconCubit, bool>(
             builder: (context, state) {
               return Padding(
-                padding: EdgeInsets.only(bottom: _size.height * 0.02),
+                padding: EdgeInsets.only(bottom: size(context, 0.02)),
                 child: Container(
-                  child: (state)
-                      ? EmailTextField(
-                          emailPhoneController: _emailPhoneController,
-                          showIcon: true,
-                        )
-                      : PhoneTextField(
-                          emailPhoneController: _emailPhoneController,
-                        ),
+                  child: state ? EmailTextField() : PhoneTextField(),
                 ),
               );
             },
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: _size.height * 0.02),
-            child: Container(
-              child: TextField(
-                controller: _passwordController,
-                obscureText: _obscureText,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: 'Пароль',
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: _size.width * 0.05),
-                  suffixIcon: IconButton(
-                    onPressed: () => setState(() {
-                      _obscureText = !_obscureText;
-                    }),
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: (_obscureText) ? Colors.grey : cPink,
-                    ),
-                  ),
-                  isCollapsed: true,
-                ),
-              ),
-            ),
+            padding: EdgeInsets.only(bottom: size(context, 0.02)),
+            child: PasswordTextField(),
           ),
           //TODO LogIN
           CustomButton(
@@ -116,11 +48,10 @@ class _EmailPasswordPartState extends State<EmailPasswordPart> {
             buttonTextColor: Colors.white,
           ),
           Padding(
-            padding: EdgeInsets.only(top: _size.height * 0.05),
+            padding: EdgeInsets.only(top: size(context, 0.05)),
             child: Text(
               'Забыли пароль?',
-              style:
-                  TextStyle(color: Colors.grey, fontSize: _size.height * 0.025),
+              style: style2(context).copyWith(color: Colors.grey[600]),
             ),
           ),
         ],

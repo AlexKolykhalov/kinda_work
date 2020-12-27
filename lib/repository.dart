@@ -414,6 +414,14 @@ Company tochka = Company(
   rate: 3.5,
 );
 
+Company sherlock = Company(
+  img: 'assets/png/grid/3.png',
+  name: 'Шерлок',
+  type: 'Кофейня',
+  adress: 'г. Минск, ул. Петрова, 5',
+  rate: 5.8,
+);
+
 Promotion promo = Promotion(
   img: 'assets/png/grid/1.png',
   discount: 35,
@@ -437,9 +445,10 @@ List<Review> reviews = [
     priceQuality: 10,
     ambiance: 10,
     likes: 1,
-    response:
+    managerResponse:
         'Иван, здравствуйте! Благодарим вас за обратную связь. Безумно стыдно за уровень сервиса, предоставленный вам.',
     reviewStatus: ReviewStatus.apply,
+    reviewPoints: 110,
   ),
   Review(
     date: '12.10.18',
@@ -453,6 +462,19 @@ List<Review> reviews = [
     likes: -1,
   ),
   Review(
+      date: '12.10.18',
+      objectReview: sherlock,
+      text: 'Так себе...',
+      author: user1,
+      service: 6,
+      kitchen: 5,
+      priceQuality: 9,
+      ambiance: 10,
+      likes: -1,
+      reviewStatus: ReviewStatus.deny,
+      moderatorResponse:
+          'Отзыв был не опубликован, так как у модератора возникли мотивированные сомнения, по всем вопросам просим обращать по адресу zabava@mail.com'),
+  Review(
     date: '12.10.18',
     objectReview: promo,
     text: 'Было неплохо, но могла быть лучше...',
@@ -462,6 +484,8 @@ List<Review> reviews = [
     priceQuality: 9,
     ambiance: 10,
     likes: -1,
+    reviewStatus: ReviewStatus.apply,
+    reviewPoints: 55,
   ),
 ];
 

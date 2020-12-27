@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/models.dart';
 
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/constants.dart';
 
 class CustomGridView extends StatelessWidget {
@@ -60,53 +60,28 @@ class CustomGridView extends StatelessWidget {
   }
 }
 
-class CustomGridViewTitle extends StatelessWidget {
-  const CustomGridViewTitle({
-    Key key,
-    @required this.size,
-    @required this.title,
-    @required this.textTotalAmount,
-  }) : super(key: key);
+class CustomGridView1 extends StatelessWidget {
+  const CustomGridView1({Key key}) : super(key: key);
 
-  final Size size;
-  final String title;
-  final String textTotalAmount;
+  _getGrid({List<dynamic> children}) {
+    int k = 1;
+    List<Widget> _row;
+    List<Widget> _column;
+
+    for (var child in children) {
+      _row.add(CustomGridViewElement(infoElement: child));
+      if (k == 2) {
+        Widget row1 = Row(children: _row);
+        _column.add(row1);
+        k = 1;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: size.height * 0.04,
-      margin: EdgeInsets.only(bottom: size.height * 0.025),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            width: size.width * 0.7,
-            child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: size.height * 0.025,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: size.width * 0.04),
-              Text(
-                textTotalAmount,
-                style: TextStyle(
-                  fontSize: size.height * 0.02,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ]),
-          ),
-          Text(
-            'Все',
-            style: TextStyle(color: cPink, fontSize: size.height * 0.025),
-          )
-        ],
-      ),
+    return Column(
+      children: _getGrid(children: []),
     );
   }
 }
