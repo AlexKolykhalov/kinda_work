@@ -9,7 +9,7 @@ import 'package:kinda_work/info_element/place_page.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 enum zoomButtonsType { zoomIn, zoomOut, center }
 

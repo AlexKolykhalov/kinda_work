@@ -6,10 +6,11 @@ import 'package:kinda_work/other/pages/add_company_page.dart';
 import 'package:kinda_work/other/pages/booking_page.dart';
 import 'package:kinda_work/other/pages/favorites_page.dart';
 import 'package:kinda_work/other/pages/offer_page.dart';
-import 'package:kinda_work/other/pages/ptofile/profile_page.dart';
+import 'package:kinda_work/other/pages/profile/profile_page.dart';
 import 'package:kinda_work/other/pages/users_page.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/styles.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class OtherPage extends StatelessWidget {
   const OtherPage({Key key}) : super(key: key);
@@ -55,7 +56,7 @@ class OtherPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavBar(size: _size, currentIndex: 4),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: 4),
       ),
     );
   }
@@ -66,11 +67,11 @@ class TopPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    // Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -80,17 +81,12 @@ class TopPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Профиль',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -99,20 +95,16 @@ class TopPart extends StatelessWidget {
                         ProfilePage(),
                   ),
                 ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
-                ),
               ),
             ],
           ),
         ),
         Divider(
           thickness: 1.0,
-          indent: _size.width * cHorizont,
+          indent: size(context, hor),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -122,17 +114,12 @@ class TopPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Избранное',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -141,17 +128,13 @@ class TopPart extends StatelessWidget {
                         FavoritesPage(),
                   ),
                 ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
-                ),
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: _size.width * cHorizont),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -161,10 +144,8 @@ class TopPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Регион',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -172,12 +153,9 @@ class TopPart extends StatelessWidget {
                 children: [
                   Text(
                     'Минск',
-                    style: TextStyle(fontSize: 16.0),
+                    style: style2(context),
                   ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
+                  CustomRedRightArrow(
                     onPressed: () => Navigator.push(
                       context,
                       PageRouteBuilder(
@@ -186,19 +164,15 @@ class TopPart extends StatelessWidget {
                             FavoritesPage(),
                       ),
                     ),
-                    icon: Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(Icons.keyboard_arrow_right, color: cPink),
-                    ),
                   ),
                 ],
               )
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: _size.width * cHorizont),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -208,17 +182,12 @@ class TopPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Как это работает',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -226,10 +195,6 @@ class TopPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         FavoritesPage(),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],
@@ -260,10 +225,9 @@ class BusinessPart extends StatelessWidget {
           ),
           child: Text(
             'Бизнес',
-            style: TextStyle(
+            style: style3(context).copyWith(
               color: Colors.grey[600],
               fontWeight: FontWeight.bold,
-              fontSize: 14.0,
             ),
           ),
         ),
@@ -276,17 +240,12 @@ class BusinessPart extends StatelessWidget {
                 children: [
                   Text(
                     'История посещений',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -294,10 +253,6 @@ class BusinessPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         VisitHistoryPage(historyVisits: historyVisitsManyUsers),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],
@@ -313,17 +268,12 @@ class BusinessPart extends StatelessWidget {
                 children: [
                   Text(
                     'Пользователи',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -331,10 +281,6 @@ class BusinessPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         UsersPage(),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],
@@ -353,10 +299,8 @@ class BusinessPart extends StatelessWidget {
                 children: [
                   Text(
                     'Бронирование',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -369,10 +313,7 @@ class BusinessPart extends StatelessWidget {
                         color: cPink,
                         borderRadius: BorderRadius.circular(50.0)),
                   ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
+                  CustomRedRightArrow(
                     onPressed: () => Navigator.push(
                       context,
                       PageRouteBuilder(
@@ -380,10 +321,6 @@ class BusinessPart extends StatelessWidget {
                         pageBuilder: (context, animation, secondaryAnimation) =>
                             BookingPage(),
                       ),
-                    ),
-                    icon: Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(Icons.keyboard_arrow_right, color: cPink),
                     ),
                   ),
                 ],
@@ -404,18 +341,12 @@ class BusinessPart extends StatelessWidget {
                 children: [
                   Text(
                     'Калькулятор скидки',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              // TODO refactoring
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -423,10 +354,6 @@ class BusinessPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         DiscountCalculatorPage(),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],
@@ -456,17 +383,12 @@ class BottomPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Обратная связь',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -474,10 +396,6 @@ class BottomPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         FavoritesPage(),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],
@@ -498,17 +416,12 @@ class BottomPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Оферта',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -516,10 +429,6 @@ class BottomPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         OfferPage(),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],
@@ -540,17 +449,12 @@ class BottomPart extends StatelessWidget {
                   SizedBox(width: 10.0),
                   Text(
                     'Конфиденциальность',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
+                    style:
+                        style2(context).copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -558,10 +462,6 @@ class BottomPart extends StatelessWidget {
                     pageBuilder: (context, animation, secondaryAnimation) =>
                         FavoritesPage(),
                   ),
-                ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
                 ),
               ),
             ],

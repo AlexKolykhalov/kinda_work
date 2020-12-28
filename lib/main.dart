@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: cGrey,
+        // dividerTheme: DividerThemeData(),
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
       home: MultiBlocProvider(

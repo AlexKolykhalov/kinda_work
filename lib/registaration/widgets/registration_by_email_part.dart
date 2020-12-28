@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/registaration/pages/registration_by_sms_page.dart';
+import 'package:kinda_work/other/pages/profile/edit_profile/edit_profile_page.dart';
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
-class RegistrationDataPart extends StatelessWidget {
-  const RegistrationDataPart({Key key}) : super(key: key);
+class RegistrationByEmailPart extends StatelessWidget {
+  const RegistrationByEmailPart({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +19,11 @@ class RegistrationDataPart extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(bottom: size(context, 0.02)),
-            child: Container(
-                // TODO refactoring with phoneTextFieldWidget
-                //TODO make propper phone number fotmatter
-                child: PhoneTextField()),
+            child: EmailTextField(),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: size(context, 0.02)),
+            child: PasswordTextField(),
           ),
           CustomButton(
             onTap: () => Navigator.push(
@@ -30,10 +31,10 @@ class RegistrationDataPart extends StatelessWidget {
               PageRouteBuilder(
                 transitionDuration: Duration(seconds: 0),
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    RegistrationBySmsPage(),
+                    EditProfilePage(),
               ),
             ),
-            buttonText: 'Получить СМС с кодом',
+            buttonText: 'Зарегистрироваться',
             buttonTextColor: Colors.white,
             buttonColor: cPink,
           ),

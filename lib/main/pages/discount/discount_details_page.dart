@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/main/pages/discount/discount_conditions.dart';
 import 'package:kinda_work/main/pages/discount/thanks_page.dart';
 import 'package:kinda_work/main/pages/discount/visit_history_page.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class DiscountDetailsPage extends StatefulWidget {
   const DiscountDetailsPage({Key key}) : super(key: key);

@@ -8,18 +8,15 @@ class FillOutProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FillScale(value: 30),
           Padding(
-            padding: EdgeInsets.fromLTRB(
-              _size.width * cHorizont,
-              _size.height * 0.025,
-              _size.width * cHorizont,
-              _size.height * 0.025,
+            padding: EdgeInsets.symmetric(
+              horizontal: size(context, hor),
+              vertical: size(context, vert),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,22 +39,32 @@ class FillOutProfile extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
-            child: Column(children: [
-              SocialNetworkAccountStatus(
+          Column(children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: size(context, hor),
+              ),
+              child: SocialNetworkAccountStatus(
                 imgPath: 'assets/png/facebook.png',
                 name: 'Facebook',
                 isConnected: false,
               ),
-              Divider(color: Colors.grey[600]),
-              SocialNetworkAccountStatus(
+            ),
+            Divider(
+                thickness: 1.0,
+                indent: size(context, hor),
+                color: Colors.grey[600]),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: size(context, hor),
+              ),
+              child: SocialNetworkAccountStatus(
                 imgPath: 'assets/png/vk.png',
                 name: 'ВКонтакте',
                 isConnected: true,
               ),
-            ]),
-          )
+            ),
+          ])
         ],
       ),
     );
@@ -123,15 +130,14 @@ class FillScale extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           margin: EdgeInsets.only(
-            bottom: _size.height * 0.02,
+            bottom: size(context, 0.02),
           ),
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Text(
             'Заполнение профиля (баллы)',
             style: style3(context).copyWith(
@@ -141,20 +147,20 @@ class FillScale extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Stack(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(3.0),
                 child: LinearProgressIndicator(
                   value: value / 120,
-                  minHeight: _size.height * 0.03,
+                  minHeight: size(context, 0.03),
                   backgroundColor: cGrey,
                   valueColor: const AlwaysStoppedAnimation(cPink),
                 ),
               ),
               Container(
-                height: _size.height * 0.03,
+                height: size(context, 0.03),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3.0),
                   border: Border.all(color: Colors.grey[600]),
@@ -177,7 +183,7 @@ class FillScale extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * 0.02),
+          padding: EdgeInsets.symmetric(horizontal: size(context, 0.003)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -206,7 +212,7 @@ class ScaleElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-        height: MediaQuery.of(context).size.height * 0.015,
+        height: size(context, 0.015),
         child: Text(
           '|',
           style: TextStyle(color: Colors.grey[600]),
@@ -214,7 +220,7 @@ class ScaleElement extends StatelessWidget {
       ),
       Container(
         width: MediaQuery.of(context).size.width * 0.07,
-        height: MediaQuery.of(context).size.height * 0.019,
+        height: size(context, 0.019),
         child: Center(
           child: LayoutBuilder(
             builder: (context, constraints) => Text(

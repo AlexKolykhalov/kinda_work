@@ -3,24 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Size
-size(BuildContext context, double value) {
+double size(BuildContext context, double value) {
+  print('SIZE');
   return MediaQuery.of(context).size.height * value;
 }
 
 // TextStyle
-style1(BuildContext context) {
+TextStyle style1(BuildContext context) {
   return TextStyle(fontSize: size(context, 0.03));
 }
 
-style2(BuildContext context) {
+TextStyle style2(BuildContext context) {
   return TextStyle(fontSize: size(context, 0.023));
 }
 
-style3(BuildContext context) {
+TextStyle style3(BuildContext context) {
   return TextStyle(fontSize: size(context, 0.02));
 }
 
-style4(BuildContext context) {
+TextStyle style4(BuildContext context) {
   return TextStyle(fontSize: size(context, 0.018));
 }
 

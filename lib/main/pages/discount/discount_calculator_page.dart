@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/main/pages/discount/discount_details_page.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class DiscountCalculatorPage extends StatefulWidget {
   const DiscountCalculatorPage({Key key}) : super(key: key);

@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/bottom_buttons.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
-import 'package:kinda_work/models.dart';
 import 'package:kinda_work/promo/BLoC/horizontal_listview_switcher_cubit.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class PromotionsPage extends StatefulWidget {
   const PromotionsPage({Key key}) : super(key: key);
@@ -121,7 +120,7 @@ class _PromotionsPageState extends State<PromotionsPage>
             Container(),
           ],
         ),
-        bottomNavigationBar: CustomBottomNavBar(size: _size, currentIndex: 2),
+        bottomNavigationBar: CustomBottomNavBar(currentIndex: 2),
       ),
     );
   }

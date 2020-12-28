@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/pages/discount/thanks_page.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class AddCompanyPage extends StatelessWidget {
   const AddCompanyPage({Key key}) : super(key: key);

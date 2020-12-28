@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key key}) : super(key: key);

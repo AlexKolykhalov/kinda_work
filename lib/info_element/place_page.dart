@@ -7,7 +7,7 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class PlacePage extends StatefulWidget {
   const PlacePage({Key key}) : super(key: key);
@@ -145,7 +145,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         padding: EdgeInsets.symmetric(
                             horizontal: _size.width * cHorizont),
                         child: CustomGridViewTitle(
-                          size: _size,
                           title: 'Часто просматривают',
                           textTotalAmount: '',
                         ),
@@ -844,7 +843,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         padding: EdgeInsets.symmetric(
                             horizontal: _size.width * cHorizont),
                         child: CustomGridViewTitle(
-                          size: _size,
                           title: 'Акции заведения',
                           textTotalAmount: '',
                         ),
@@ -880,7 +878,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         padding: EdgeInsets.symmetric(
                             horizontal: _size.width * cHorizont),
                         child: CustomGridViewTitle(
-                          size: _size,
                           title: 'Часто просматривают',
                           textTotalAmount: '',
                         ),

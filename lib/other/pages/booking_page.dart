@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/booking_page_details.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class BookingPage extends StatelessWidget {
   const BookingPage({Key key}) : super(key: key);

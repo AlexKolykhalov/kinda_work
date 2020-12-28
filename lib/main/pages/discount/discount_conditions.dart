@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/widgets.dart';
+import 'package:kinda_work/shared_widgets.dart';
 
 class DiscountConditionsPage extends StatelessWidget {
   const DiscountConditionsPage({
