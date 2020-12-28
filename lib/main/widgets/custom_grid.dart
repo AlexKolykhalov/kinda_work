@@ -61,27 +61,68 @@ class CustomGridView extends StatelessWidget {
 }
 
 class CustomGridView1 extends StatelessWidget {
-  const CustomGridView1({Key key}) : super(key: key);
+  const CustomGridView1({
+    Key key,
+    @required this.infoElements,
+    @required this.crossAxisCount,
+    @required this.mainAxisSpacing,
+    @required this.crossAxisSpacing,
+  }) : super(key: key);
 
-  _getGrid({List<dynamic> children}) {
-    int k = 1;
-    List<Widget> _row;
-    List<Widget> _column;
+  final List<InfoElement> infoElements;
+  final int crossAxisCount;
+  final double mainAxisSpacing;
+  final double crossAxisSpacing;
 
-    for (var child in children) {
-      _row.add(CustomGridViewElement(infoElement: child));
-      if (k == 2) {
-        Widget row1 = Row(children: _row);
-        _column.add(row1);
-        k = 1;
+  Widget _getGrid({
+    BoxConstraints constraints,
+  }) {
+    int _k = 0; // count of children in row
+    int _r = 0; // count of rows
+    List<Widget> _rowChildren = [];
+    List<Widget> _columnChildren = [];
+
+    for (var element in infoElements) {
+      _rowChildren.add(Container(
+        width: (constraints.maxWidth - crossAxisSpacing) / crossAxisCount,
+        height:
+            (constraints.maxWidth - crossAxisSpacing) / crossAxisCount * 1.1,
+        child: CustomGridViewElement(infoElement: element),
+      ));
+      _k++; // add child in Row
+      if (_k == crossAxisCount) {
+        _r++; //add row element in Column
+        _columnChildren.add(
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: _rowChildren,
+              ),
+              SizedBox(
+                  height: infoElements.length ~/ crossAxisCount == _r
+                      ? 0.0
+                      : mainAxisSpacing),
+            ],
+          ),
+        );
+        _rowChildren = [];
+        _k = 0;
       }
     }
+    return Column(
+      children: _columnChildren,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: _getGrid(children: []),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return _getGrid(
+          constraints: constraints,
+        );
+      },
     );
   }
 }
@@ -112,68 +153,72 @@ class CustomGridViewElement extends StatelessWidget {
                 infoElement.rate,
                 infoElement.countMessages,
               );
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10.0),
-          child: Container(
-            child: Column(children: [
-              Container(
-                height: cConstantWidth * 0.67,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(infoElement.img),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Container(
+                child: Column(children: [
+                  Container(
+                    height: cConstantWidth * 0.67,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(infoElement.img),
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _widgets,
+                      ),
+                    ),
+                  ),
+                ]),
               ),
-              Expanded(
+            ),
+            Visibility(
+              visible: infoElement.isFavoriteVisible,
+              child: Positioned(
+                top: 5.0,
+                right: 5.0,
                 child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _widgets,
+                  width: cConstantWidth * 0.14,
+                  height: cConstantWidth * 0.14,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
                   ),
-                ),
-              ),
-            ]),
-          ),
-        ),
-        Visibility(
-          visible: infoElement.isFavoriteVisible,
-          child: Positioned(
-            top: 5.0,
-            right: 5.0,
-            child: Container(
-              width: cConstantWidth * 0.14,
-              height: cConstantWidth * 0.14,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: Center(
-                child: Icon(
-                  (infoElement.isFavorite)
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  color: cPink,
-                  size: cConstantWidth * 0.1,
+                  child: Center(
+                    child: Icon(
+                      (infoElement.isFavorite)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: cPink,
+                      size: cConstantWidth * 0.1,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-        Visibility(
-          visible: infoElement.isDiscountVisible,
-          child: Positioned(
-            top: cConstantWidth * 0.58,
-            left: 8.0,
-            child: DiscountBadge(discount: infoElement.discount),
-          ),
-        ),
-      ],
+            Visibility(
+              visible: infoElement.isDiscountVisible,
+              child: Positioned(
+                top: cConstantWidth * 0.58,
+                left: 8.0,
+                child: DiscountBadge(discount: infoElement.discount),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
