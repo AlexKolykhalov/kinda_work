@@ -2,36 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:latlong/latlong.dart';
 
-class InfoElement {
-  InfoElement({
-    @required this.isLargeGridElement,
-    @required this.isDiscountVisible,
-    @required this.isFavoriteVisible,
-    @required this.img,
-    @required this.rate,
-    this.isFavorite = false,
-    this.lightText = '',
-    this.boltText = '',
-    this.countMessages = 0,
-    this.discount = 0,
-    this.newPrice,
-    this.oldPrice,
-  });
-
-  final bool isLargeGridElement;
-  final bool isDiscountVisible;
-  final bool isFavoriteVisible;
-  final bool isFavorite;
-  final String img;
-  final String lightText;
-  final String boltText;
-  final num newPrice;
-  final num oldPrice;
-  final double rate;
-  final int countMessages;
-  final int discount;
-}
-
 //search
 class Price {
   Price({
@@ -63,6 +33,32 @@ class Menu {
   final String name;
   final int newPrice;
   final int oldPrice;
+}
+
+class InfoElement {
+  InfoElement({
+    @required this.isLargeGridElement,
+    @required this.img,
+    @required this.rate,
+    this.favoriteSelected = false,
+    this.lightText = '',
+    this.boltText = '',
+    this.countMessages = 0,
+    this.discount = 0,
+    this.newPrice,
+    this.oldPrice,
+  });
+
+  final bool isLargeGridElement;
+  final bool favoriteSelected;
+  final String img;
+  final String lightText;
+  final String boltText;
+  final num newPrice;
+  final num oldPrice;
+  final double rate;
+  final int countMessages;
+  final int discount;
 }
 
 class Promotion {

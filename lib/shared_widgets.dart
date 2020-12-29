@@ -23,6 +23,8 @@ import 'package:kinda_work/promo/widgets/custom_bottom_appbar.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     Key key,
+    this.padding,
+    this.margin,
     @required this.onTap,
     @required this.buttonText,
     @required this.buttonColor,
@@ -32,6 +34,8 @@ class CustomButton extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback onTap;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
   final String buttonText;
   final Color buttonTextColor;
   final bool isBoldButtonText;
@@ -45,6 +49,8 @@ class CustomButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+        padding: padding,
+        margin: margin,
         decoration: BoxDecoration(
             color: buttonColor,
             borderRadius: BorderRadius.circular(5.0),
@@ -536,15 +542,20 @@ class CustomGridViewTitle extends StatelessWidget {
     Key key,
     @required this.title,
     @required this.textTotalAmount,
+    this.padding,
+    this.margin,
   }) : super(key: key);
 
   final String title;
   final String textTotalAmount;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: size(context, 0.02)),
+      padding: padding,
+      margin: margin,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -751,28 +762,69 @@ class MessagesBadge extends StatelessWidget {
   }
 }
 
+class FavoriteBadge extends StatelessWidget {
+  const FavoriteBadge({
+    Key key,
+    this.visible = true,
+    this.favorite = true,
+  }) : super(key: key);
+
+  final bool visible;
+  final bool favorite;
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: visible,
+      child: Container(
+        width: size(context, 0.03),
+        height: size(context, 0.03),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+        ),
+        child: Center(
+          child: Icon(
+            favorite ? Icons.favorite : Icons.favorite_border,
+            color: cPink,
+            size: size(context, 0.02),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class DiscountBadge extends StatelessWidget {
-  const DiscountBadge({Key key, @required this.discount}) : super(key: key);
+  const DiscountBadge({
+    Key key,
+    @required this.discount,
+    this.visible = true,
+  }) : super(key: key);
 
   final int discount;
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {
     //print('-->DiscountBadge');
-    return Container(
-      width: cConstantWidth * 0.3,
-      height: cConstantWidth * 0.15,
-      decoration: BoxDecoration(
-        color: cPink,
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Center(
-        child: Text(
-          '-${discount.toString()}%',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: cConstantWidth * scaleBoltText,
-            fontWeight: FontWeight.bold,
+    return Visibility(
+      visible: visible,
+      child: Container(
+        width: cConstantWidth * 0.3,
+        height: cConstantWidth * 0.15,
+        decoration: BoxDecoration(
+          color: cPink,
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        child: Center(
+          child: Text(
+            '-${discount.toString()}%',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: cConstantWidth * scaleBoltText,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

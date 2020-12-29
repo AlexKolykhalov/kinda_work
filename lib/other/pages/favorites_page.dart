@@ -74,8 +74,9 @@ class All extends StatelessWidget {
           CustomGridView(
             size: _size,
             childAspectRatio: cRatioSmallSize,
-            infoElements:
-                popularPlaces.where((element) => element.isFavorite).toList(),
+            infoElements: popularPlaces
+                .where((element) => element.favoriteSelected)
+                .toList(),
           ),
           SizedBox(height: 25.0),
           Text(
@@ -90,7 +91,7 @@ class All extends StatelessWidget {
             size: _size,
             childAspectRatio: cRatioMediumSize,
             infoElements: popularPromotions
-                .where((element) => element.isFavorite)
+                .where((element) => element.favoriteSelected)
                 .toList(),
           ),
         ],

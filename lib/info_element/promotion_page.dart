@@ -623,11 +623,9 @@ class _DescriptionState extends State<Description> {
                         child: CustomGridViewElement(
                             infoElement: InfoElement(
                           isLargeGridElement: false,
-                          isDiscountVisible: true,
                           discount: 50,
                           oldPrice: 10500,
                           newPrice: 8500,
-                          isFavoriteVisible: true,
                           countMessages: 25,
                           lightText: 'Массажный салон',
                           img: 'assets/png/grid/2.png',

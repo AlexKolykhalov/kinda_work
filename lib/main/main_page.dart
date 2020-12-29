@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,41 +13,13 @@ import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   const MainPage({Key key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  Widget _customGridViewPlaces;
-  @override
-  void initState() {
-    super.initState();
-    // TODO look at this
-    // _customGridViewPlaces = CustomGridView(
-    //   size: Size(414, 240),
-    //   childAspectRatio: cRatioSmallSize,
-    //   infoElements: popularPlaces,
-    // );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     print('-->MainPage');
-    // TODO look at this
-    var _customGridViewPromo = CustomGridView(
-      size: _size,
-      childAspectRatio: cRatioMediumSize,
-      infoElements: popularPromotions,
-    );
     return SafeArea(
         child: BlocProvider(
       create: (context) => SearchResultBloc(),
@@ -106,57 +80,43 @@ class _MainPageState extends State<MainPage> {
                           title: 'Популярные места',
                           textTotalAmount: '5369 из 15600',
                         ),
-                        // _customGridViewPlaces,
                         CustomGridView1(
+                          padding: EdgeInsets.symmetric(
+                              vertical: size(context, 0.03)),
                           infoElements: popularPlaces,
                           crossAxisCount: 2,
                           mainAxisSpacing: size(context, 0.02),
                           crossAxisSpacing: size(context, 0.02),
                         ),
-                        // CustomGridView(
-                        //   size: Size(414, 240),
-                        //   childAspectRatio: cRatioSmallSize,
-                        //   infoElements: popularPlaces,
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(
-                            0.0,
-                            _size.height * 0.03,
-                            0.0,
-                            _size.height * 0.06,
-                          ),
-                          child: CustomButton(
-                            onTap: null,
-                            buttonText: 'Смотреть все предложения',
-                            buttonColor: cGrey,
-                            buttonTextColor: cIndigo,
-                            buttonBorderColor: cIndigo,
-                          ),
+                        CustomButton(
+                          margin: EdgeInsets.symmetric(
+                              vertical: size(context, vert)),
+                          onTap: null,
+                          buttonText: 'Смотреть все предложения',
+                          buttonColor: cGrey,
+                          buttonTextColor: cIndigo,
+                          buttonBorderColor: cIndigo,
                         ),
                         CustomGridViewTitle(
                           title: 'Популярные акции',
                           textTotalAmount: '5090',
                         ),
-                        _customGridViewPromo,
-                        // CustomGridView(
-                        //   size: _size,
-                        //   childAspectRatio: cRatioMediumSize,
-                        //   infoElements: popularPromotions,
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(
-                            0.0,
-                            _size.height * 0.03,
-                            0.0,
-                            _size.height * 0.06,
-                          ),
-                          child: CustomButton(
-                            onTap: null,
-                            buttonText: 'Смотреть все предложения',
-                            buttonColor: cGrey,
-                            buttonTextColor: cIndigo,
-                            buttonBorderColor: cIndigo,
-                          ),
+                        CustomGridView1(
+                          padding: EdgeInsets.symmetric(
+                              vertical: size(context, 0.03)),
+                          infoElements: popularPromotions,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: size(context, 0.02),
+                          crossAxisSpacing: size(context, 0.02),
+                        ),
+                        CustomButton(
+                          margin: EdgeInsets.symmetric(
+                              vertical: size(context, vert)),
+                          onTap: null,
+                          buttonText: 'Смотреть все предложения',
+                          buttonColor: cGrey,
+                          buttonTextColor: cIndigo,
+                          buttonBorderColor: cIndigo,
                         ),
                         Padding(
                           padding: EdgeInsets.only(bottom: _size.height * 0.04),

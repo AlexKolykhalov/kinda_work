@@ -159,8 +159,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                             child: CustomGridViewElement(
                                 infoElement: InfoElement(
                               isLargeGridElement: false,
-                              isDiscountVisible: false,
-                              isFavoriteVisible: false,
                               lightText: 'Массажный салон',
                               img: 'assets/png/grid/2.png',
                               rate: 9.5,
@@ -857,11 +855,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                             child: CustomGridViewElement(
                                 infoElement: InfoElement(
                               isLargeGridElement: false,
-                              isDiscountVisible: true,
                               discount: 50,
                               oldPrice: 10500,
                               newPrice: 8500,
-                              isFavoriteVisible: true,
                               countMessages: 25,
                               lightText: 'Массажный салон',
                               img: 'assets/png/grid/2.png',
@@ -892,8 +888,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                             child: CustomGridViewElement(
                                 infoElement: InfoElement(
                               isLargeGridElement: false,
-                              isDiscountVisible: false,
-                              isFavoriteVisible: false,
                               lightText: 'Массажный салон',
                               img: 'assets/png/grid/2.png',
                               rate: 9.5,

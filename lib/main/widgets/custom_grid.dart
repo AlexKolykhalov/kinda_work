@@ -65,14 +65,18 @@ class CustomGridView1 extends StatelessWidget {
     Key key,
     @required this.infoElements,
     @required this.crossAxisCount,
-    @required this.mainAxisSpacing,
-    @required this.crossAxisSpacing,
+    this.padding,
+    this.margin,
+    this.mainAxisSpacing = 10.0,
+    this.crossAxisSpacing = 10.0,
   }) : super(key: key);
 
   final List<InfoElement> infoElements;
   final int crossAxisCount;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
 
   Widget _getGrid({
     BoxConstraints constraints,
@@ -83,35 +87,44 @@ class CustomGridView1 extends StatelessWidget {
     List<Widget> _columnChildren = [];
 
     for (var element in infoElements) {
-      _rowChildren.add(Container(
-        width: (constraints.maxWidth - crossAxisSpacing) / crossAxisCount,
-        height:
-            (constraints.maxWidth - crossAxisSpacing) / crossAxisCount * 1.1,
-        child: CustomGridViewElement(infoElement: element),
-      ));
+      _columnChildren.clear();
+      _rowChildren.add(
+        Container(
+          width: (constraints.maxWidth - crossAxisSpacing) / crossAxisCount,
+          height:
+              (constraints.maxWidth - crossAxisSpacing) / crossAxisCount * 1.1,
+          child: CustomGridViewElement(infoElement: element),
+        ),
+      );
       _k++; // add child in Row
+
+      _columnChildren.add(
+        Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _rowChildren,
+            ),
+            SizedBox(
+                height: infoElements.length ~/ crossAxisCount == _r
+                    ? 0.0
+                    : mainAxisSpacing),
+          ],
+        ),
+      );
+
       if (_k == crossAxisCount) {
         _r++; //add row element in Column
-        _columnChildren.add(
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: _rowChildren,
-              ),
-              SizedBox(
-                  height: infoElements.length ~/ crossAxisCount == _r
-                      ? 0.0
-                      : mainAxisSpacing),
-            ],
-          ),
-        );
         _rowChildren = [];
         _k = 0;
       }
     }
-    return Column(
-      children: _columnChildren,
+    return Container(
+      padding: padding,
+      margin: margin,
+      child: Column(
+        children: _columnChildren,
+      ),
     );
   }
 
@@ -119,9 +132,7 @@ class CustomGridView1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return _getGrid(
-          constraints: constraints,
-        );
+        return _getGrid(constraints: constraints);
       },
     );
   }
@@ -162,7 +173,7 @@ class CustomGridViewElement extends StatelessWidget {
               child: Container(
                 child: Column(children: [
                   Container(
-                    height: cConstantWidth * 0.67,
+                    height: constraints.maxHeight * 0.6,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
@@ -184,37 +195,15 @@ class CustomGridViewElement extends StatelessWidget {
                 ]),
               ),
             ),
-            Visibility(
-              visible: infoElement.isFavoriteVisible,
-              child: Positioned(
-                top: 5.0,
-                right: 5.0,
-                child: Container(
-                  width: cConstantWidth * 0.14,
-                  height: cConstantWidth * 0.14,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      (infoElement.isFavorite)
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: cPink,
-                      size: cConstantWidth * 0.1,
-                    ),
-                  ),
-                ),
-              ),
+            Positioned(
+              top: 5.0,
+              right: 5.0,
+              child: FavoriteBadge(favorite: infoElement.favoriteSelected),
             ),
-            Visibility(
-              visible: infoElement.isDiscountVisible,
-              child: Positioned(
-                top: cConstantWidth * 0.58,
-                left: 8.0,
-                child: DiscountBadge(discount: infoElement.discount),
-              ),
+            Positioned(
+              top: constraints.maxHeight * 0.52,
+              left: 8.0,
+              child: DiscountBadge(discount: infoElement.discount),
             ),
           ],
         );
