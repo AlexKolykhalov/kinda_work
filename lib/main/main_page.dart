@@ -107,11 +107,17 @@ class _MainPageState extends State<MainPage> {
                           textTotalAmount: '5369 из 15600',
                         ),
                         // _customGridViewPlaces,
-                        CustomGridView(
-                          size: Size(414, 240),
-                          childAspectRatio: cRatioSmallSize,
+                        CustomGridView1(
                           infoElements: popularPlaces,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: size(context, 0.02),
+                          crossAxisSpacing: size(context, 0.02),
                         ),
+                        // CustomGridView(
+                        //   size: Size(414, 240),
+                        //   childAspectRatio: cRatioSmallSize,
+                        //   infoElements: popularPlaces,
+                        // ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                             0.0,
