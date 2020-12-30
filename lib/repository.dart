@@ -9,6 +9,62 @@ enum ReviewStatus {
   deny,
 }
 
+User user1 = User(
+  name: 'Фредди Макгрегор',
+  birthday: '04.06.1980',
+  about: 'О да, я супер крут!',
+  points: 2500,
+  giftPoints: 152,
+);
+
+Company kventin = Company(
+  img: 'assets/png/grid/1.png',
+  type: 'Квест-комнаты',
+  name: 'Kventin',
+  adress: 'г. Минск, ул. Кульман, 9',
+  favoriteSelected: true,
+  messages: 36,
+  discount: 50,
+);
+
+Company tochka = Company(
+  img: 'assets/png/grid/2.png',
+  type: 'Кафе',
+  name: 'Т.О.Ч.К.А',
+  adress: 'г. Минск, ул. Иванова, 13-9',
+  rate: 3.5,
+  messages: 123,
+);
+
+Company sherlock = Company(
+    img: 'assets/png/grid/3.png',
+    type: 'Кофейня',
+    name: 'Шерлок',
+    adress: 'г. Минск, ул. Петрова, 5',
+    rate: 5.8,
+    favoriteSelected: true,
+    discount: 10);
+
+Promotion promo = Promotion(
+  img: 'assets/png/grid/1.png',
+  discount: 35,
+  type: 'Кафе, бар, караоке',
+  adress: 'г. Минск, ул. Кульман, 9',
+  discription:
+      'Ужин в "Loft Cafe" за 30 руб. для двоих, сеты для одного и для компании от 20 руб.',
+  rate: 8.0,
+  oldPrice: 15000,
+  newPrice: 14500,
+);
+
+List<Company> popularPlaces1 = [
+  kventin,
+  tochka,
+  sherlock,
+];
+
+List<Promotion> popularPromotions1 = [promo];
+
 List<InfoElement> popularPlaces = [
   InfoElement(
     isLargeGridElement: false,
@@ -352,50 +408,6 @@ List bookingData = [
     'unseen': false,
   },
 ];
-
-User user1 = User(
-  name: 'Фредди Макгрегор',
-  birthday: '04.06.1980',
-  about: 'О да, я супер крут!',
-  points: 2500,
-  giftPoints: 152,
-);
-
-Company kventin = Company(
-  img: 'assets/png/grid/1.png',
-  name: 'Kventin',
-  type: 'Квест-комнаты',
-  adress: 'г. Минск, ул. Кульман, 9',
-  rate: 8.0,
-);
-
-Company tochka = Company(
-  img: 'assets/png/grid/2.png',
-  name: 'Т.О.Ч.К.А',
-  type: 'Кафе',
-  adress: 'г. Минск, ул. Иванова, 13-9',
-  rate: 3.5,
-);
-
-Company sherlock = Company(
-  img: 'assets/png/grid/3.png',
-  name: 'Шерлок',
-  type: 'Кофейня',
-  adress: 'г. Минск, ул. Петрова, 5',
-  rate: 5.8,
-);
-
-Promotion promo = Promotion(
-  img: 'assets/png/grid/1.png',
-  discount: 35,
-  discription:
-      'Ужин в "Loft Cafe" за 30 руб. для двоих, сеты для одного и для компании от 20 руб.',
-  rate: 8.0,
-  newPrice: 0,
-  oldPrice: 0,
-  type: 'Кафе, бар, караоке',
-  adress: 'г. Минск, ул. Кульман, 9',
-);
 
 List<Review> reviews = [
   Review(

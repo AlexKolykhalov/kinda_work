@@ -706,22 +706,21 @@ class RateBadge extends StatelessWidget {
         Icon(
           Icons.star,
           color: rate == 0.0 ? Colors.grey[600] : textColor,
-          size: cConstantWidth * 0.1,
+          size: size(context, 0.02),
         ),
-        SizedBox(width: cConstantWidth * 0.01),
+        SizedBox(width: size(context, 0.005)),
         (rate == 0.0)
-            ? Container(
-                width: cConstantWidth * 0.45,
-                child: Text(
-                  'Нет оценок',
-                  style: TextStyle(fontSize: cConstantWidth * scaleLightText),
+            ? Text(
+                'Нет оценок',
+                style: style4(context).copyWith(
+                  color: Colors.grey[600],
                 ),
               )
             : Text(
                 rate.toStringAsFixed(rate.truncateToDouble() == rate ? 0 : 1),
-                style: TextStyle(
-                  fontSize: cConstantWidth * scaleLightText,
+                style: style4(context).copyWith(
                   color: textColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
       ],
@@ -745,16 +744,17 @@ class MessagesBadge extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(countMessages.toString(),
-              style: TextStyle(
-                fontSize: cConstantWidth * scaleLightText,
-                color: Colors.grey[600],
-              )),
-          SizedBox(width: cConstantWidth * 0.02),
+          Text(
+            countMessages.toString(),
+            style: style4(context).copyWith(
+              color: Colors.grey[600],
+            ),
+          ),
+          SizedBox(width: size(context, 0.008)),
           SvgPicture.asset(
             'assets/svg/chat.svg',
-            width: cConstantWidth * scaleLightText,
-            height: cConstantWidth * scaleLightText,
+            width: size(context, 0.02),
+            height: size(context, 0.02),
           )
         ],
       ),
@@ -765,30 +765,25 @@ class MessagesBadge extends StatelessWidget {
 class FavoriteBadge extends StatelessWidget {
   const FavoriteBadge({
     Key key,
-    this.visible = true,
-    this.favorite = true,
+    this.favorite,
   }) : super(key: key);
 
-  final bool visible;
   final bool favorite;
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: visible,
-      child: Container(
-        width: size(context, 0.03),
-        height: size(context, 0.03),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-        ),
-        child: Center(
-          child: Icon(
-            favorite ? Icons.favorite : Icons.favorite_border,
-            color: cPink,
-            size: size(context, 0.02),
-          ),
+    return Container(
+      width: size(context, 0.035),
+      height: size(context, 0.035),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      child: Center(
+        child: Icon(
+          favorite ? Icons.favorite : Icons.favorite_border,
+          color: cPink,
+          size: size(context, 0.022),
         ),
       ),
     );
@@ -799,20 +794,18 @@ class DiscountBadge extends StatelessWidget {
   const DiscountBadge({
     Key key,
     @required this.discount,
-    this.visible = true,
   }) : super(key: key);
 
   final int discount;
-  final bool visible;
 
   @override
   Widget build(BuildContext context) {
     //print('-->DiscountBadge');
     return Visibility(
-      visible: visible,
+      visible: discount > 0,
       child: Container(
-        width: cConstantWidth * 0.3,
-        height: cConstantWidth * 0.15,
+        width: size(context, 0.07),
+        height: size(context, 0.033),
         decoration: BoxDecoration(
           color: cPink,
           borderRadius: BorderRadius.circular(5.0),
@@ -820,9 +813,8 @@ class DiscountBadge extends StatelessWidget {
         child: Center(
           child: Text(
             '-${discount.toString()}%',
-            style: TextStyle(
+            style: style3(context).copyWith(
               color: Colors.white,
-              fontSize: cConstantWidth * scaleBoltText,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -338,8 +338,7 @@ void _displayBottomSheet(
                     ),
                     child: Container(
                       width: cConstantWidth,
-                      child:
-                          CustomGridViewElement(infoElement: listPlaces[index]),
+                      child: CustomGridViewElement(element: listPlaces[index]),
                     ),
                   ),
                   separatorBuilder: (context, index) => SizedBox(width: 15.0),
@@ -381,8 +380,8 @@ void _displayBottomSheet(
                     ),
                     child: Container(
                       width: cConstantWidth,
-                      child: CustomGridViewElement(
-                          infoElement: listPromotions[index]),
+                      child:
+                          CustomGridViewElement(element: listPromotions[index]),
                     ),
                   ),
                   separatorBuilder: (context, index) => SizedBox(width: 15.0),

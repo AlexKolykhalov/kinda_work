@@ -621,7 +621,7 @@ class _DescriptionState extends State<Description> {
                       itemBuilder: (context, index) => Container(
                         width: cConstantWidth,
                         child: CustomGridViewElement(
-                            infoElement: InfoElement(
+                            element: InfoElement(
                           isLargeGridElement: false,
                           discount: 50,
                           oldPrice: 10500,

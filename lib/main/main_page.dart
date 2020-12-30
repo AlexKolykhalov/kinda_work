@@ -77,13 +77,14 @@ class MainPage extends StatelessWidget {
                     child: Column(
                       children: [
                         CustomGridViewTitle(
+                          padding: EdgeInsets.only(top: size(context, vert)),
                           title: 'Популярные места',
                           textTotalAmount: '5369 из 15600',
                         ),
                         CustomGridView1(
                           padding: EdgeInsets.symmetric(
                               vertical: size(context, 0.03)),
-                          infoElements: popularPlaces,
+                          children: popularPlaces1,
                           crossAxisCount: 2,
                           mainAxisSpacing: size(context, 0.02),
                           crossAxisSpacing: size(context, 0.02),
@@ -98,13 +99,14 @@ class MainPage extends StatelessWidget {
                           buttonBorderColor: cIndigo,
                         ),
                         CustomGridViewTitle(
+                          padding: EdgeInsets.only(top: size(context, vert)),
                           title: 'Популярные акции',
                           textTotalAmount: '5090',
                         ),
                         CustomGridView1(
                           padding: EdgeInsets.symmetric(
                               vertical: size(context, 0.03)),
-                          infoElements: popularPromotions,
+                          children: popularPromotions1,
                           crossAxisCount: 2,
                           mainAxisSpacing: size(context, 0.02),
                           crossAxisSpacing: size(context, 0.02),

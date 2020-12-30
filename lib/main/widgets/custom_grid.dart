@@ -3,6 +3,7 @@ import 'package:kinda_work/models.dart';
 
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/styles.dart';
 
 class CustomGridView extends StatelessWidget {
   const CustomGridView({
@@ -53,7 +54,7 @@ class CustomGridView extends StatelessWidget {
           crossAxisCount: _initialData['crossAxisCount'],
         ),
         itemBuilder: (context, index) => CustomGridViewElement(
-          infoElement: infoElements[index],
+          element: infoElements[index],
         ),
       ),
     );
@@ -63,7 +64,7 @@ class CustomGridView extends StatelessWidget {
 class CustomGridView1 extends StatelessWidget {
   const CustomGridView1({
     Key key,
-    @required this.infoElements,
+    @required this.children,
     @required this.crossAxisCount,
     this.padding,
     this.margin,
@@ -71,7 +72,7 @@ class CustomGridView1 extends StatelessWidget {
     this.crossAxisSpacing = 10.0,
   }) : super(key: key);
 
-  final List<InfoElement> infoElements;
+  final List children;
   final int crossAxisCount;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
@@ -81,50 +82,56 @@ class CustomGridView1 extends StatelessWidget {
   Widget _getGrid({
     BoxConstraints constraints,
   }) {
-    int _k = 0; // count of children in row
-    int _r = 0; // count of rows
+    int _k = 0; // total counter
     List<Widget> _rowChildren = [];
     List<Widget> _columnChildren = [];
 
-    for (var element in infoElements) {
-      _columnChildren.clear();
-      _rowChildren.add(
-        Container(
-          width: (constraints.maxWidth - crossAxisSpacing) / crossAxisCount,
-          height:
-              (constraints.maxWidth - crossAxisSpacing) / crossAxisCount * 1.1,
-          child: CustomGridViewElement(infoElement: element),
-        ),
-      );
-      _k++; // add child in Row
-
+    for (var i = 1; i <= (children.length / crossAxisCount).ceil(); i++) {
+      for (var j = 1; j <= crossAxisCount; j++) {
+        try {
+          _rowChildren.add(
+            Row(
+              children: [
+                Container(
+                  width: (constraints.maxWidth -
+                          crossAxisSpacing * (crossAxisCount - 1)) /
+                      crossAxisCount,
+                  height: (constraints.maxWidth -
+                          crossAxisSpacing * (crossAxisCount - 1)) /
+                      crossAxisCount *
+                      (children[_k] is Company ? 1.1 : 1.3),
+                  child: CustomGridViewElement(element: children[_k]),
+                ),
+                SizedBox(
+                  width: (crossAxisCount == j ? 0.0 : crossAxisSpacing),
+                ),
+              ],
+            ),
+          );
+        } catch (e) {}
+        _k++;
+      }
       _columnChildren.add(
         Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: _rowChildren,
             ),
             SizedBox(
-                height: infoElements.length ~/ crossAxisCount == _r
-                    ? 0.0
-                    : mainAxisSpacing),
+              height: (children.length / crossAxisCount).ceil() == i
+                  ? 0.0
+                  : mainAxisSpacing,
+            ),
           ],
         ),
       );
-
-      if (_k == crossAxisCount) {
-        _r++; //add row element in Column
-        _rowChildren = [];
-        _k = 0;
-      }
+      _rowChildren = [];
     }
+
     return Container(
       padding: padding,
       margin: margin,
-      child: Column(
-        children: _columnChildren,
-      ),
+      child: Column(children: _columnChildren),
     );
   }
 
@@ -141,29 +148,29 @@ class CustomGridView1 extends StatelessWidget {
 class CustomGridViewElement extends StatelessWidget {
   const CustomGridViewElement({
     Key key,
-    @required this.infoElement,
+    @required this.element,
   }) : super(key: key);
 
-  final InfoElement infoElement;
+  final element;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _widgets =
-        (infoElement.oldPrice != null || infoElement.newPrice != null)
-            ? _listWidgetsWithPrices(
-                infoElement.lightText,
-                infoElement.rate,
-                infoElement.countMessages,
-                infoElement.newPrice,
-                infoElement.oldPrice,
-                isLarge: infoElement.isLargeGridElement,
-              )
-            : _listWidgetsWithoutPrices(
-                infoElement.lightText,
-                infoElement.boltText,
-                infoElement.rate,
-                infoElement.countMessages,
-              );
+    // final List<Widget> _widgets =
+    //     (element.oldPrice != null || element.newPrice != null)
+    //         ? _listWidgetsWithPrices(
+    //             element.lightText,
+    //             element.rate,
+    //             element.countMessages,
+    //             element.newPrice,
+    //             element.oldPrice,
+    //             isLarge: element.isLargeGridElement,
+    //           )
+    //         : _listWidgetsWithoutPrices(
+    //             element.lightText,
+    //             element.boltText,
+    //             element.rate,
+    //             element.countMessages,
+    //           );
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Stack(
@@ -177,7 +184,7 @@ class CustomGridViewElement extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(infoElement.img),
+                        image: AssetImage(element.img),
                       ),
                     ),
                   ),
@@ -185,11 +192,9 @@ class CustomGridViewElement extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(color: Colors.white),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _widgets,
-                      ),
+                      child: element is Company
+                          ? CompanyInfo(element: element)
+                          : PromotionInfo(element: element),
                     ),
                   ),
                 ]),
@@ -198,13 +203,105 @@ class CustomGridViewElement extends StatelessWidget {
             Positioned(
               top: 5.0,
               right: 5.0,
-              child: FavoriteBadge(favorite: infoElement.favoriteSelected),
+              child: FavoriteBadge(favorite: element.favoriteSelected),
             ),
             Positioned(
-              top: constraints.maxHeight * 0.52,
+              top: constraints.maxHeight * 0.53,
               left: 8.0,
-              child: DiscountBadge(discount: infoElement.discount),
+              child: DiscountBadge(discount: element.discount),
             ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class CompanyInfo extends StatelessWidget {
+  const CompanyInfo({Key key, @required this.element}) : super(key: key);
+
+  final Company element;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          element.type,
+          style: style4(context).copyWith(
+            color: Colors.grey[600],
+          ),
+        ),
+        Text(
+          element.name,
+          style: style2(context).copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            RateBadge(rate: element.rate, textColor: Colors.green),
+            MessagesBadge(countMessages: element.messages),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class PromotionInfo extends StatelessWidget {
+  const PromotionInfo({Key key, @required this.element}) : super(key: key);
+
+  final Promotion element;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: constraints.maxHeight * 0.5,
+              child: Text(element.discription, style: style3(context)),
+            ),
+            Container(
+              height: constraints.maxHeight * 0.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RateBadge(rate: element.rate, textColor: Colors.green),
+                      MessagesBadge(countMessages: element.messages),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'от ${element.newPrice} р.',
+                        style: style4(context).copyWith(
+                          color: cPink,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: size(context, 0.02)),
+                      Text(
+                        '${element.oldPrice} р.',
+                        style: style4(context).copyWith(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         );
       },

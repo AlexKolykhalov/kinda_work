@@ -64,39 +64,49 @@ class InfoElement {
 class Promotion {
   Promotion({
     @required this.img,
-    @required this.discount,
     @required this.discription,
-    @required this.rate,
-    @required this.newPrice,
-    @required this.oldPrice,
-    this.type = '',
-    this.adress = '',
+    this.type,
+    this.adress,
+    this.rate = 0.0,
+    this.favoriteSelected = false,
+    this.messages = 0,
+    this.discount = 0,
+    this.oldPrice = 0.0,
+    this.newPrice = 0.0,
   });
 
   final String img;
-  final int discount;
   final String discription;
-  final double rate;
-  final int newPrice;
-  final int oldPrice;
   final String type;
   final String adress;
+  final double rate;
+  final bool favoriteSelected;
+  final int messages;
+  final int discount;
+  final num oldPrice;
+  final num newPrice;
 }
 
 class Company {
   Company({
     @required this.img,
-    @required this.name,
     @required this.type,
-    @required this.adress,
-    @required this.rate,
+    @required this.name,
+    this.adress,
+    this.rate = 0.0,
+    this.favoriteSelected = false,
+    this.messages = 0,
+    this.discount = 0,
   });
 
   final String img;
-  final String name;
   final String type;
+  final String name;
   final String adress;
   final double rate;
+  final bool favoriteSelected;
+  final int messages;
+  final int discount;
 }
 
 class Review {

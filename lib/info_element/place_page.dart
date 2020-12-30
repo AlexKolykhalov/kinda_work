@@ -157,7 +157,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           itemBuilder: (context, index) => Container(
                             width: cConstantWidth,
                             child: CustomGridViewElement(
-                                infoElement: InfoElement(
+                                element: InfoElement(
                               isLargeGridElement: false,
                               lightText: 'Массажный салон',
                               img: 'assets/png/grid/2.png',
@@ -853,7 +853,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           itemBuilder: (context, index) => Container(
                             width: cConstantWidth,
                             child: CustomGridViewElement(
-                                infoElement: InfoElement(
+                                element: InfoElement(
                               isLargeGridElement: false,
                               discount: 50,
                               oldPrice: 10500,
@@ -886,7 +886,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           itemBuilder: (context, index) => Container(
                             width: cConstantWidth,
                             child: CustomGridViewElement(
-                                infoElement: InfoElement(
+                                element: InfoElement(
                               isLargeGridElement: false,
                               lightText: 'Массажный салон',
                               img: 'assets/png/grid/2.png',
