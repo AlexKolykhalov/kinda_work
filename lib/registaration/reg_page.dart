@@ -12,23 +12,19 @@ class RegistrationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    MediaQueryData _mq = MediaQuery.of(context);
     print('-->RegistrationPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
-          title: '',
+          height: appBarHeight(context),
           backgroundColor: cGrey,
           elevation: 0.0,
         ),
         body: SingleChildScrollView(
           child: Container(
-            height: _size.height -
-                AppBar().preferredSize.height * 0.85 -
-                MediaQuery.of(context).padding.top,
-            padding: EdgeInsets.symmetric(
-              horizontal: _size.width * cLoginPageHorizontal,
-            ),
+            height: _mq.size.height - appBarHeight(context) - _mq.padding.top,
+            padding: EdgeInsets.symmetric(horizontal: size(context, 0.05)),
             child: Column(
               children: [
                 LogoPart(),

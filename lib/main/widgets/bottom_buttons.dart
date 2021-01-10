@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
 
 import 'package:kinda_work/main/pages/beauty/pages/map_page.dart';
-import 'package:kinda_work/main/pages/camera/camera_page.dart';
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/styles.dart';
 
 class BottomButtons extends StatelessWidget {
-  const BottomButtons({Key key, @required this.size}) : super(key: key);
+  const BottomButtons({
+    Key key,
+    this.padding,
+    this.margin,
+  }) : super(key: key);
 
-  final Size size;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: padding,
+      margin: margin,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: [
           GestureDetector(
               onTap: () => displayQrCode(context),
               child: Container(
-                width: size.height * cHeight,
-                height: size.height * cHeight,
-                padding: EdgeInsets.all(size.height * 0.02),
+                width: size(context, 0.07),
+                height: size(context, 0.07),
+                padding: EdgeInsets.all(size(context, 0.02)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
                   color: cIndigo,
@@ -36,8 +45,8 @@ class BottomButtons extends StatelessWidget {
                 child: cQrCodeIcon,
               )),
           Container(
-            width: size.height * 3 * cHeight,
-            height: size.height * cHeight,
+            width: size(context, 0.21),
+            height: size(context, 0.07),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               color: Colors.white,
@@ -58,7 +67,7 @@ class BottomButtons extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                  padding: EdgeInsets.all(size.height * 0.015),
+                  padding: EdgeInsets.all(size(context, 0.015)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -69,9 +78,8 @@ class BottomButtons extends StatelessWidget {
                       ),
                       Text(
                         'На карте',
-                        style: TextStyle(
+                        style: style1(context).copyWith(
                           color: cIndigo,
-                          fontSize: size.height * 0.03,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -82,14 +90,14 @@ class BottomButtons extends StatelessWidget {
           GestureDetector(
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => CameraPage(size: size),
-              ),
+              MaterialPageRoute(builder: (context) => null
+                  //CameraPage(size: size),
+                  ),
             ),
             child: Container(
-              width: size.height * cHeight,
-              height: size.height * cHeight,
-              padding: EdgeInsets.all(size.height * 0.02),
+              width: size(context, 0.07),
+              height: size(context, 0.07),
+              padding: EdgeInsets.all(size(context, 0.02)),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: cIndigo,

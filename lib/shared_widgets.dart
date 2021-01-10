@@ -1,23 +1,20 @@
-import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kinda_work/main/pages/discount/discount_details_page.dart';
 import 'package:latlong/latlong.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import 'package:kinda_work/cards/cards_page.dart';
-import 'package:kinda_work/catalog/catalog_page.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/login/BLoC/switcher_icon_cubit.dart';
-import 'package:kinda_work/other/other_page.dart';
 import 'package:kinda_work/styles.dart';
 import 'package:kinda_work/main/BLoC/bloc/search_result_bloc.dart';
-import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/promo/BLoC/horizontal_listview_switcher_cubit.dart';
-import 'package:kinda_work/promo/promos_page.dart';
 import 'package:kinda_work/promo/widgets/custom_bottom_appbar.dart';
 
 class CustomButton extends StatelessWidget {
@@ -48,7 +45,7 @@ class CustomButton extends StatelessWidget {
       // TODO maybe only push
       onTap: onTap,
       child: Container(
-        height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+        height: math.min(size(context, 0.075), 48.0),
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
@@ -72,21 +69,21 @@ class CustomButton extends StatelessWidget {
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key key,
-    @required this.title,
+    this.title,
+    this.height = 56.0,
     this.actions = const [],
-    this.tabController,
-    this.bottom = const [],
-    this.isScrollable = false,
+    this.bottom,
     this.backgroundColor = Colors.white,
+    this.showBackArrow = true,
     this.elevation = 4.0,
   }) : super(key: key);
 
   final String title;
+  final double height;
   final List<Widget> actions;
-  final TabController tabController;
-  final List<String> bottom;
-  final bool isScrollable;
+  final AppBarBottom bottom;
   final Color backgroundColor;
+  final bool showBackArrow;
   final double elevation;
 
   @override
@@ -94,20 +91,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: true,
       title: Text(
-        title,
-        style: style1(context).copyWith(color: Colors.black),
+        title ?? '',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: height * 0.38,
+        ),
       ),
-      leading: FlatButton(
-        onPressed: () => Navigator.pop(context),
-        child: Container(width: size(context, 0.035), child: cLeftArrow),
+      leading: Visibility(
+        visible: showBackArrow,
+        child: FlatButton(
+          onPressed: () => Navigator.pop(context),
+          child: Container(width: size(context, 0.035), child: cLeftArrow),
+        ),
       ),
       actions: actions,
-      bottom: bottom.isNotEmpty
+      bottom: bottom != null
           ? CustomBottomAppBar(
               preferredSize: preferredSize,
-              tabController: tabController,
-              bottomData: bottom,
-              isScrollable: isScrollable,
+              tabController: bottom.tabController,
+              bottomData: bottom.bottomData,
+              isScrollable: bottom.isScrollable,
             )
           : null,
       backgroundColor: backgroundColor,
@@ -116,20 +119,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => bottom.isNotEmpty
-      ? Size.fromHeight(AppBar().preferredSize.height * 1.7)
-      : Size.fromHeight(AppBar().preferredSize.height * 0.85);
+  Size get preferredSize =>
+      bottom != null ? Size.fromHeight(height * 1.7) : Size.fromHeight(height);
 }
 
 class CustomAppBarWithSearch extends StatefulWidget
     implements PreferredSizeWidget {
   const CustomAppBarWithSearch({
     Key key,
+    @required this.height,
   }) : super(key: key);
 
+  final double height;
+
   @override
-  Size get preferredSize =>
-      Size.fromHeight(AppBar().preferredSize.height * 0.85);
+  Size get preferredSize => Size.fromHeight(height);
 
   @override
   _CustomAppBarWithSearchState createState() => _CustomAppBarWithSearchState();
@@ -224,209 +228,6 @@ class _CustomAppBarWithSearchState extends State<CustomAppBarWithSearch> {
         },
       ),
       backgroundColor: Colors.white,
-    );
-  }
-}
-
-class CustomBottomNavBar extends StatelessWidget {
-  const CustomBottomNavBar({
-    Key key,
-    @required this.currentIndex,
-  }) : super(key: key);
-
-  final int currentIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    BoxConstraints _iconButtonConstraints = BoxConstraints(
-      minWidth: size(context, 0.04),
-      minHeight: size(context, 0.04),
-    );
-
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: currentIndex,
-      selectedFontSize: style4(context).fontSize,
-      unselectedFontSize: style4(context).fontSize,
-      selectedItemColor: cPink,
-      unselectedItemColor: cIndigo,
-      showUnselectedLabels: true,
-      items: [
-        BottomNavigationBarItem(
-          label: 'Главная',
-          activeIcon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/home_sel.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    MainPage(),
-              ),
-            ),
-          ),
-          icon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/home.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    MainPage(),
-              ),
-            ),
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: 'Каталог',
-          activeIcon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon:
-                SvgPicture.asset('assets/svg/bottombar_icons/catalog_sel.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    CatalogPage(),
-              ),
-            ),
-          ),
-          icon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/catalog.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    CatalogPage(),
-              ),
-            ),
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: 'Акции',
-          activeIcon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/gift_sel.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    PromotionsPage(),
-              ),
-            ),
-          ),
-          // TODO refactoring with top element
-          icon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/gift.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              // TODO why two same PageRouteBuilder ???
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    PromotionsPage(),
-              ),
-            ),
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: 'Карты',
-          activeIcon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/cards_sel.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    CardsPage(),
-              ),
-            ),
-          ),
-          icon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/cards.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    CardsPage(),
-              ),
-            ),
-          ),
-        ),
-        BottomNavigationBarItem(
-          label: 'Прочее',
-          activeIcon: IconButton(
-            constraints: _iconButtonConstraints,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/svg/bottombar_icons/more_sel.svg'),
-            onPressed: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    OtherPage(),
-              ),
-            ),
-          ),
-          icon: Container(
-            width: double.infinity,
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    IconButton(
-                      constraints: _iconButtonConstraints,
-                      padding: EdgeInsets.zero,
-                      icon: SvgPicture.asset(
-                          'assets/svg/bottombar_icons/more.svg'),
-                      onPressed: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: Duration(seconds: 0),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  OtherPage(),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: constraints.maxWidth * 0.1,
-                      right: constraints.maxWidth * 0.23,
-                      child: Container(
-                        width: size(context, 0.01),
-                        height: size(context, 0.01),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: cPink,
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -590,33 +391,30 @@ class CustomGridViewTitle extends StatelessWidget {
 class CustomHorizontalListView extends StatelessWidget {
   const CustomHorizontalListView({
     Key key,
-    @required this.size,
     @required this.listViewData,
     @required this.selectedElement,
   }) : super(key: key);
 
-  final Size size;
   final List<String> listViewData;
   final int selectedElement;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: size.height * 0.05,
+      height: size(context, 0.05),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => GestureDetector(
           onTap: () => BlocProvider.of<SwitcherHorigontalListViewCubit>(context)
               .changed(index),
           child: ListViewElement(
-            size: size,
             title: listViewData[index],
             isSelected: selectedElement == index,
           ),
         ),
         itemCount: listViewData.length,
         separatorBuilder: (context, index) =>
-            SizedBox(width: size.width * 0.02),
+            SizedBox(width: size(context, 0.02)),
       ),
     );
   }
@@ -625,19 +423,17 @@ class CustomHorizontalListView extends StatelessWidget {
 class ListViewElement extends StatelessWidget {
   const ListViewElement({
     Key key,
-    @required this.size,
     @required this.title,
     @required this.isSelected,
   }) : super(key: key);
 
-  final Size size;
   final String title;
   final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
+      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
       decoration: BoxDecoration(
         color: (isSelected) ? Colors.green : Colors.transparent,
         borderRadius: BorderRadius.circular(50.0),
@@ -701,7 +497,7 @@ class RateBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     //print('-->RateBadge');
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
           Icons.star,
@@ -712,13 +508,13 @@ class RateBadge extends StatelessWidget {
         (rate == 0.0)
             ? Text(
                 'Нет оценок',
-                style: style4(context).copyWith(
+                style: style3(context).copyWith(
                   color: Colors.grey[600],
                 ),
               )
             : Text(
                 rate.toStringAsFixed(rate.truncateToDouble() == rate ? 0 : 1),
-                style: style4(context).copyWith(
+                style: style3(context).copyWith(
                   color: textColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -811,12 +607,17 @@ class DiscountBadge extends StatelessWidget {
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: Center(
-          child: Text(
-            '-${discount.toString()}%',
-            style: style3(context).copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Text(
+                '-${discount.toString()}%',
+                style: TextStyle(
+                  fontSize: constraints.maxHeight * 0.65,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -847,8 +648,10 @@ class TextBadge extends StatelessWidget {
         padding: EdgeInsets.all(size(context, 0.0065)),
         child: Text(
           text,
-          style: style4(context)
-              .copyWith(color: textColor, fontWeight: FontWeight.bold),
+          style: style4(context).copyWith(
+            color: textColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -856,87 +659,63 @@ class TextBadge extends StatelessWidget {
 }
 
 class CustomFilterSortBar extends StatelessWidget {
-  const CustomFilterSortBar({Key key, @required this.size}) : super(key: key);
-
-  final Size size;
+  const CustomFilterSortBar({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Orientation _currentOrientation = MediaQuery.of(context).orientation;
-    return Padding(
-      padding: EdgeInsets.only(bottom: size.height * 0.02),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            width: _currentOrientation == Orientation.portrait
-                ? size.width * 0.325
-                : size.height * 0.325,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  Icons.sort,
-                  color: cPink,
-                  size: _currentOrientation == Orientation.portrait
-                      ? size.height * 0.025
-                      : size.width * 0.025,
-                ),
-                Text(
-                  'По умолчанию',
-                  style: TextStyle(
-                      fontSize: _currentOrientation == Orientation.portrait
-                          ? size.height * 0.02
-                          : size.width * 0.02),
-                ),
-              ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              Icons.sort,
+              color: cPink,
+              size: size(context, 0.025),
             ),
-          ),
-          Container(
-            width: _currentOrientation == Orientation.portrait
-                ? size.width * 0.25
-                : size.height * 0.25,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 17,
-                  height: 17,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: cIndigo,
-                  ),
-                  child: Center(
-                      child: Text(
-                    '10',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
+            SizedBox(width: size(context, 0.02)),
+            Text('По умолчанию', style: style3(context)),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: size(context, 0.027),
+              height: size(context, 0.027),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: cIndigo,
+              ),
+              child: Center(
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Text(
+                      '10',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: constraints.maxHeight * 0.55,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
                 ),
-                Text(
-                  'Фильтр',
-                  style: TextStyle(
-                      fontSize: _currentOrientation == Orientation.portrait
-                          ? size.height * 0.02
-                          : size.width * 0.02),
-                ),
-                SvgPicture.asset(
-                  'assets/svg/filter.svg',
-                  width: _currentOrientation == Orientation.portrait
-                      ? size.height * 0.025
-                      : size.width * 0.025,
-                  height: _currentOrientation == Orientation.portrait
-                      ? size.height * 0.025
-                      : size.width * 0.025,
-                ),
-              ],
+              ),
             ),
-          )
-        ],
-      ),
+            SizedBox(width: size(context, 0.01)),
+            Text('Фильтр', style: style3(context)),
+            SizedBox(width: size(context, 0.01)),
+            SvgPicture.asset(
+              'assets/svg/filter.svg',
+              width: size(context, 0.022),
+              height: size(context, 0.022),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
@@ -1192,7 +971,7 @@ List<Widget> getReviews(List<Review> reviews, Size size) {
     _widgets.add(Divider(
       height: 30.0,
       thickness: 1.0,
-      indent: size.width * cHorizont,
+      indent: size.width * hor,
     ));
   }
   return _widgets;
@@ -1201,7 +980,7 @@ List<Widget> getReviews(List<Review> reviews, Size size) {
 // TODO do something with size
 createReviewWidget(Review review, Size _size) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+    padding: EdgeInsets.symmetric(horizontal: _size.width * hor),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1558,7 +1337,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+      height: math.min(size(context, 0.075), 48.0),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Stack(
@@ -1601,10 +1380,34 @@ class _EmailTextFieldState extends State<EmailTextField> {
 }
 
 class PhoneTextField extends StatefulWidget {
-  const PhoneTextField({Key key}) : super(key: key);
+  const PhoneTextField({
+    Key key,
+    this.onEditingComplete,
+    this.maxLength,
+  }) : super(key: key);
+
+  final VoidCallback onEditingComplete;
+  final int maxLength;
 
   @override
   _PhoneTextFieldState createState() => _PhoneTextFieldState();
+}
+
+Map<String, bool> _map = {'textfield': false, 'phonetextfield': false};
+
+void _validation(BuildContext context) {
+  if (_map['textfield'] && _map['phonetextfield']) {
+    _map['textfield'] = false;
+    _map['phonetextfield'] = false;
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(seconds: 2),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            DiscountDetailsPage(),
+      ),
+    );
+  }
 }
 
 class _PhoneTextFieldState extends State<PhoneTextField> {
@@ -1620,18 +1423,35 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
   Widget build(BuildContext context) {
     //TODO make propper phone number fotmatter
     return Container(
-      height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+      height: math.min(size(context, 0.075), 48.0),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Stack(
             alignment: Alignment.centerRight,
             children: [
               TextField(
+                onChanged: (value) {
+                  if (widget.maxLength != null &&
+                      value.length == widget.maxLength) {
+                    _map['phonetextfield'] = true;
+                    return _validation(context);
+                  }
+                },
+                onEditingComplete: () {
+                  if (widget.maxLength != null &&
+                      _controller.text.length == widget.maxLength) {
+                    _map['phonetextfield'] = true;
+                    return _validation(context);
+                  }
+                },
                 controller: _controller,
+                maxLength: widget.maxLength,
                 keyboardType: TextInputType.phone,
                 textAlignVertical: TextAlignVertical.center,
+                style: style2(context),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
+                  counterText: '',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: EdgeInsets.symmetric(
@@ -1639,6 +1459,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                   ),
                   prefixIcon: Container(
                     width: constraints.maxWidth * 0.3,
+                    height: constraints.maxHeight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1657,14 +1478,17 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                   ),
                 ),
               ),
-              IconButton(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onPressed: () {
-                  _controller.clear();
-                  BlocProvider.of<SwitcherIconCubit>(context).changed();
-                },
-                icon: Icon(Icons.email, color: cPink),
+              Visibility(
+                visible: false,
+                child: IconButton(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onPressed: () {
+                    _controller.clear();
+                    BlocProvider.of<SwitcherIconCubit>(context).changed();
+                  },
+                  icon: Icon(Icons.email, color: cPink),
+                ),
               ),
             ],
           );
@@ -1694,7 +1518,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+      height: math.min(size(context, 0.075), 48.0),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Stack(
@@ -1739,15 +1563,21 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key key,
     this.text,
+    this.onChanged,
+    this.maxLength,
+    this.fontWeight = FontWeight.normal,
     this.hintText,
-    this.textInputType = TextInputType.text,
+    this.keyboardType = TextInputType.text,
     this.isEnabled = true,
     this.isMultiLines = false,
     this.popupMenuItems = const [],
   }) : super(key: key);
 
-  final TextInputType textInputType;
+  final ValueChanged<String> onChanged;
+  final TextInputType keyboardType;
   final String text;
+  final int maxLength;
+  final FontWeight fontWeight;
   final String hintText;
   final bool isEnabled;
   final List<dynamic> popupMenuItems;
@@ -1764,7 +1594,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     _controller = TextEditingController(text: widget.text);
-
     super.initState();
   }
 
@@ -1795,20 +1624,39 @@ class _CustomTextFieldState extends State<CustomTextField> {
             children: [
               TextField(
                 controller: _controller,
-                keyboardType: widget.textInputType,
+                onChanged: widget.onChanged,
+                // onChanged: (value) {
+                //   if (widget.maxLength != null &&
+                //       value.length == widget.maxLength) {
+                //     _map['textfield'] = true;
+                //     return _validation(context);
+                //   }
+                // },
+                // onEditingComplete: () {
+                //   if (widget.maxLength != null &&
+                //       _controller.text.length == widget.maxLength) {
+                //     _map['textfield'] = true;
+                //     return _validation(context);
+                //   }
+                // },
+                keyboardType: widget.keyboardType,
                 textAlignVertical: TextAlignVertical.center,
+                maxLength: widget.maxLength,
                 minLines: widget.isMultiLines ? 6 : 1,
                 maxLines: widget.isMultiLines ? 6 : 1,
-                style: TextStyle(
+                style: style2(context).copyWith(
                   color: widget.isEnabled ? Colors.black : Colors.grey[600],
+                  fontWeight: widget.fontWeight,
                 ),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
+                  counterText: '',
                   enabled: widget.isEnabled,
                   fillColor: Colors.white,
                   filled: widget.isEnabled ?? false,
                   hintText: widget.hintText,
-                  hintStyle: style2(context),
+                  hintStyle:
+                      style2(context).copyWith(fontWeight: FontWeight.normal),
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: constraints.maxWidth * 0.05,
                     vertical: widget.isMultiLines ? 5.0 : 0.0,

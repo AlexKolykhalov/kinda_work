@@ -1,7 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kinda_work/cards/cards_page.dart';
+import 'package:kinda_work/catalog/catalog_page.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/BLoC/bloc/search_result_bloc.dart';
@@ -9,441 +10,289 @@ import 'package:kinda_work/main/widgets/bottom_buttons.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/main/widgets/features_list.dart';
 import 'package:kinda_work/models.dart';
+import 'package:kinda_work/other/other_page.dart';
+import 'package:kinda_work/promo/promos_page.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/styles.dart';
+
+class StartPage extends StatefulWidget {
+  const StartPage({Key key}) : super(key: key);
+
+  @override
+  _StartPageState createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
+  int _currentIndex = 0;
+  BoxConstraints _iconButtonConstraints;
+
+  @override
+  void didChangeDependencies() {
+    _iconButtonConstraints = BoxConstraints(
+      maxWidth: size(context, 0.04),
+      maxHeight: size(context, 0.04),
+    );
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            MainPage(),
+            CatalogPage(),
+            PromotionsPage(),
+            CardsPage(),
+            OtherPage(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedFontSize: style4(context).fontSize,
+          unselectedFontSize: style4(context).fontSize,
+          selectedItemColor: cPink,
+          unselectedItemColor: cIndigo,
+          showUnselectedLabels: true,
+          onTap: (int index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              label: 'Главная',
+              icon: Container(
+                constraints: _iconButtonConstraints,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 0
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/home_sel.svg')
+                    : SvgPicture.asset('assets/svg/bottombar_icons/home.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Каталог',
+              icon: Container(
+                constraints: _iconButtonConstraints,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 1
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/catalog_sel.svg')
+                    : SvgPicture.asset(
+                        'assets/svg/bottombar_icons/catalog.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Акции',
+              icon: Container(
+                constraints: _iconButtonConstraints,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 2
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/gift_sel.svg')
+                    : SvgPicture.asset('assets/svg/bottombar_icons/gift.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Карты',
+              icon: Container(
+                constraints: _iconButtonConstraints,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 3
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/cards_sel.svg')
+                    : SvgPicture.asset('assets/svg/bottombar_icons/cards.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Прочее',
+              activeIcon: Container(
+                constraints: _iconButtonConstraints,
+                padding: EdgeInsets.zero,
+                child:
+                    SvgPicture.asset('assets/svg/bottombar_icons/more_sel.svg'),
+              ),
+              icon: Container(
+                width: double.infinity,
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          constraints: _iconButtonConstraints,
+                          padding: EdgeInsets.zero,
+                          child: SvgPicture.asset(
+                              'assets/svg/bottombar_icons/more.svg'),
+                        ),
+                        Positioned(
+                          top: constraints.maxWidth * 0.1,
+                          right: constraints.maxWidth * 0.23,
+                          child: Container(
+                            width: size(context, 0.01),
+                            height: size(context, 0.01),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: cPink,
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class MainPage extends StatelessWidget {
   const MainPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     print('-->MainPage');
-    return SafeArea(
-        child: BlocProvider(
-      create: (context) => SearchResultBloc(),
-      child: Scaffold(
-        appBar: CustomAppBarWithSearch(),
-        body: BlocBuilder<SearchResultBloc, SearchResultState>(
-          builder: (context, state) {
-            if (state is SearchResultLoadInProgress) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (state is SearchResultLoadSuccess) {
-              return SingleChildScrollView(
-                child: Column(children: [
-                  SearchResultPrices(
-                    size: _size,
-                    prices: state.result['prices'],
-                  ),
-                  Divider(thickness: 2.0),
-                  SearchResultPromotions(
-                    size: _size,
-                    promotions: state.result['promotions'],
-                  ),
-                  Divider(thickness: 2.0),
-                  SearchResultCompanies(
-                    size: _size,
-                    companies: state.result['companies'],
-                  ),
-                  Divider(thickness: 2.0),
-                  SearchResultTypeOfCompanies(
-                    size: _size,
-                    typeCompanies: state.result['type_companies'],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: _size.height * 0.02),
-                    child: Divider(thickness: 2.0),
-                  ),
-                ]),
-              );
-            }
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(_size.width * cHorizont),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5.0),
-                        child: CustomSlider(images: sliderImages)),
-                  ),
-                  FeaturesList(size: _size, currentIndex: 0),
-                  //TODO do discription for this widget & widgets at all
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: size(context, hor),
-                    ),
-                    child: Column(
-                      children: [
-                        CustomGridViewTitle(
-                          padding: EdgeInsets.only(top: size(context, vert)),
-                          title: 'Популярные места',
-                          textTotalAmount: '5369 из 15600',
+    return Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => SearchResultBloc(),
+              child: Scaffold(
+                appBar: CustomAppBarWithSearch(
+                  height: appBarHeight(context),
+                ),
+                body: BlocBuilder<SearchResultBloc, SearchResultState>(
+                  builder: (context, state) {
+                    if (state is SearchResultLoadInProgress) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (state is SearchResultLoadSuccess) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SearchResultPrices(
+                              companies: state.result['companies'],
+                            ),
+                            Divider(thickness: 1.0),
+                            SearchResultPromotions(
+                              promotions: state.result['promotions'],
+                            ),
+                            Divider(thickness: 1.0),
+                            SearchResultCompanies(
+                              companies: state.result['companies'],
+                            ),
+                            Divider(thickness: 1.0),
+                            SearchResultTypeOfCompanies(
+                              typeCompanies: state.result['type_companies'],
+                            ),
+                            Divider(thickness: 1.0),
+                          ],
                         ),
-                        CustomGridView1(
-                          padding: EdgeInsets.symmetric(
-                              vertical: size(context, 0.03)),
-                          children: popularPlaces1,
-                          crossAxisCount: 2,
-                          mainAxisSpacing: size(context, 0.02),
-                          crossAxisSpacing: size(context, 0.02),
-                        ),
-                        CustomButton(
-                          margin: EdgeInsets.symmetric(
-                              vertical: size(context, vert)),
-                          onTap: null,
-                          buttonText: 'Смотреть все предложения',
-                          buttonColor: cGrey,
-                          buttonTextColor: cIndigo,
-                          buttonBorderColor: cIndigo,
-                        ),
-                        CustomGridViewTitle(
-                          padding: EdgeInsets.only(top: size(context, vert)),
-                          title: 'Популярные акции',
-                          textTotalAmount: '5090',
-                        ),
-                        CustomGridView1(
-                          padding: EdgeInsets.symmetric(
-                              vertical: size(context, 0.03)),
-                          children: popularPromotions1,
-                          crossAxisCount: 2,
-                          mainAxisSpacing: size(context, 0.02),
-                          crossAxisSpacing: size(context, 0.02),
-                        ),
-                        CustomButton(
-                          margin: EdgeInsets.symmetric(
-                              vertical: size(context, vert)),
-                          onTap: null,
-                          buttonText: 'Смотреть все предложения',
-                          buttonColor: cGrey,
-                          buttonTextColor: cIndigo,
-                          buttonBorderColor: cIndigo,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: _size.height * 0.04),
-                          child: BottomButtons(size: _size),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      );
+                    }
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(size(context, hor)),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5.0),
+                                child: CustomSlider(images: sliderImages)),
+                          ),
+                          Sections(
+                            padding: EdgeInsets.only(left: size(context, hor)),
+                            elements: sectionsElements,
+                          ),
+                          //TODO do discription for this widget & widgets at all
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: size(context, hor),
+                            ),
+                            child: Column(
+                              children: [
+                                CustomGridViewTitle(
+                                  padding:
+                                      EdgeInsets.only(top: size(context, vert)),
+                                  title: 'Популярные места',
+                                  textTotalAmount: '5369 из 15600',
+                                ),
+                                CustomGridView(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: size(context, 0.03)),
+                                  elements: popularPlaces,
+                                  mainAxisSpacing: size(context, 0.02),
+                                  crossAxisSpacing: size(context, 0.02),
+                                ),
+                                CustomButton(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: size(context, vert)),
+                                  onTap: null,
+                                  buttonText: 'Смотреть все предложения',
+                                  buttonColor: cGrey,
+                                  buttonTextColor: cIndigo,
+                                  buttonBorderColor: cIndigo,
+                                ),
+                                CustomGridViewTitle(
+                                  padding:
+                                      EdgeInsets.only(top: size(context, vert)),
+                                  title: 'Популярные акции',
+                                  textTotalAmount: '5090',
+                                ),
+                                CustomGridView(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: size(context, 0.03)),
+                                  elements: popularPromotions,
+                                  mainAxisSpacing: size(context, 0.02),
+                                  crossAxisSpacing: size(context, 0.02),
+                                ),
+                                CustomButton(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: size(context, vert)),
+                                  onTap: null,
+                                  buttonText: 'Смотреть все предложения',
+                                  buttonColor: cGrey,
+                                  buttonTextColor: cIndigo,
+                                  buttonBorderColor: cIndigo,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: size(context, 0.04)),
+                                  child: BottomButtons(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           },
-        ),
-        bottomNavigationBar: CustomBottomNavBar(currentIndex: 0),
-      ),
-    ));
+        );
+      },
+    );
   }
 }
 
 class SearchResultPrices extends StatelessWidget {
   const SearchResultPrices({
     Key key,
-    @required this.size,
-    @required this.prices,
-  }) : super(key: key);
-
-  final Size size;
-  final List<Price> prices;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        customTitle('Menu/prices', size),
-        Container(
-          height: (size.height * (0.42 + 0.02)) * prices.length,
-          child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: prices.length,
-            itemBuilder: (context, index) => Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(
-                    size.width * cHorizont,
-                    0.0,
-                    size.width * cHorizont,
-                    size.width * cVertical,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                prices[index].type,
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      (prices[index].name.length < 24)
-                                          ? prices[index].name
-                                          : prices[index]
-                                                  .name
-                                                  .substring(0, 23) +
-                                              '...',
-                                      style: TextStyle(
-                                        fontSize: size.height * 0.025,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  RateBadge(rate: 9.5, textColor: Colors.green),
-                                ],
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(top: size.height * 0.005),
-                                child: Text(
-                                  prices[index].adress,
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: size.height * 0.022,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: size.width * 0.05),
-                          child: DiscountBadge(discount: 50),
-                        ),
-                      ]),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: size.width * cHorizont),
-                  height: size.height * 0.305,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: prices[index].menu.length,
-                    itemBuilder: (context, indexMenu) => Column(
-                      children: [
-                        Container(
-                          width: size.width * 0.5,
-                          height: size.height * 0.2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5.0),
-                              topRight: Radius.circular(5.0),
-                            ),
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    prices[index].menu[indexMenu].img),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.5,
-                          height: size.height * 0.1,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(5.0),
-                                bottomRight: Radius.circular(5.0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[600],
-                                  offset: Offset(0.0, 2.0),
-                                  blurRadius: 2.0,
-                                ),
-                              ]),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.02,
-                            vertical: size.height * 0.015,
-                          ),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  prices[index].menu[indexMenu].name,
-                                  style: TextStyle(
-                                    fontSize: size.height * 0.025,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                //TODO try to refactoring
-                                Row(
-                                  children: [
-                                    Text(
-                                      prices[index]
-                                              .menu[indexMenu]
-                                              .newPrice
-                                              .toString() +
-                                          ' р.',
-                                      style: TextStyle(
-                                        color: cPink,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: size.height * 0.02,
-                                      ),
-                                    ),
-                                    SizedBox(width: size.width * 0.02),
-                                    Text(
-                                      prices[index]
-                                              .menu[indexMenu]
-                                              .oldPrice
-                                              .toString() +
-                                          ' р.',
-                                      style: TextStyle(
-                                        decoration: TextDecoration.lineThrough,
-                                        color: Colors.grey[600],
-                                        fontSize: size.height * 0.02,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                        ),
-                      ],
-                    ),
-                    separatorBuilder: (context, index) => SizedBox(
-                      width: size.width * 0.04,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            separatorBuilder: (context, index) =>
-                SizedBox(height: size.height * 0.02),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class SearchResultPromotions extends StatelessWidget {
-  const SearchResultPromotions({
-    Key key,
-    @required this.size,
-    @required this.promotions,
-  }) : super(key: key);
-
-  final Size size;
-  final List<Promotion> promotions;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        customTitle('Акции', size),
-        Container(
-          height: size.height * (0.16 + 0.02) * promotions.length,
-          padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
-          child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: promotions.length,
-            itemBuilder: (context, index) => Container(
-              height: size.height * 0.16,
-              child: Stack(
-                children: [
-                  Container(
-                    height: size.height * 0.15,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: size.height * 0.15,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(promotions[index].img),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding:
-                                  EdgeInsets.only(left: size.width * cHorizont),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Text(promotions[index].discription,
-                                        style: TextStyle(
-                                            fontSize: size.height * 0.022)),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      RateBadge(
-                                          rate: promotions[index].rate,
-                                          textColor: Colors.green),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            promotions[index]
-                                                    .newPrice
-                                                    .toString() +
-                                                ' р.',
-                                            style: TextStyle(
-                                              color: cPink,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: size.height * 0.02,
-                                            ),
-                                          ),
-                                          SizedBox(width: size.width * 0.02),
-                                          Text(
-                                            promotions[index]
-                                                    .oldPrice
-                                                    .toString() +
-                                                ' р.',
-                                            style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              color: Colors.grey[600],
-                                              fontSize: size.height * 0.02,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ]),
-                  ),
-                  Positioned(
-                    bottom: 0.0,
-                    left: size.width * (cHorizont + 0.02),
-                    child: DiscountBadge(discount: promotions[index].discount),
-                  ),
-                ],
-              ),
-            ),
-            separatorBuilder: (context, index) => Divider(thickness: 2.0),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class SearchResultCompanies extends StatelessWidget {
-  const SearchResultCompanies({
-    Key key,
-    @required this.size,
     @required this.companies,
   }) : super(key: key);
 
-  final Size size;
   final List<Company> companies;
 
   @override
@@ -451,79 +300,505 @@ class SearchResultCompanies extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        customTitle('Компании', size),
         Container(
-          height: (size.height * 0.1 + 16.0) * companies.length,
-          padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
-          child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: companies.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: size.height * 0.1,
-                        height: size.height * 0.1,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage(companies[index].img),
-                          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: size(context, hor),
+            vertical: size(context, vert),
+          ),
+          child: Text(
+            'Меню/прайс',
+            style: style3(context).copyWith(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Column(
+          children: companies
+              .map((company) => CompanyWithMenu(company: company))
+              .toList(),
+        )
+      ],
+    );
+  }
+}
+
+class CompanyWithMenu extends StatelessWidget {
+  const CompanyWithMenu({
+    Key key,
+    @required this.company,
+  }) : super(key: key);
+
+  final Company company;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          child: CompanyPart(
+            type: company.type,
+            name: company.name,
+            adress: company.adress,
+            rate: company.rate,
+            discount: company.discount,
+          ),
+        ),
+        Container(
+            padding: EdgeInsets.symmetric(vertical: size(context, hor)),
+            margin: EdgeInsets.only(left: size(context, hor)),
+            child: MenuPart(menu: company.menu)),
+      ],
+    );
+  }
+}
+
+class CompanyPart extends StatelessWidget {
+  const CompanyPart({
+    Key key,
+    @required this.type,
+    @required this.name,
+    @required this.adress,
+    @required this.rate,
+    @required this.discount,
+  }) : super(key: key);
+
+  final String type;
+  final String name;
+  final String adress;
+  final double rate;
+  final int discount;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  type,
+                  style: style4(context).copyWith(color: Colors.grey[600]),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      constraints:
+                          BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                      child: Text(
+                        name,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        maxLines: 2,
+                        style: style2(context).copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: size.width * 0.02),
-                      Column(
+                    ),
+                    SizedBox(width: size(context, hor)),
+                    RateBadge(rate: rate, textColor: Colors.green)
+                  ],
+                ),
+                SizedBox(height: size(context, 0.007)),
+                Text(
+                  adress,
+                  style: style4(context).copyWith(
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+            DiscountBadge(discount: discount),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class MenuPart extends StatelessWidget {
+  const MenuPart({
+    Key key,
+    @required this.menu,
+  }) : super(key: key);
+
+  final List<Menu> menu;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size(context, 0.21),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) => MenuElement(element: menu[index]),
+        separatorBuilder: (context, index) =>
+            SizedBox(width: size(context, hor)),
+        itemCount: menu.length,
+      ),
+    );
+  }
+}
+
+class MenuElement extends StatelessWidget {
+  const MenuElement({
+    Key key,
+    @required this.element,
+  }) : super(key: key);
+
+  final Menu element;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(5.0),
+          child: Container(
+            width: size(context, 0.23),
+            child: Column(children: [
+              Container(
+                height: constraints.maxHeight * 0.6,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(element.img),
+                  ),
+                ),
+              ),
+              Container(
+                height: constraints.maxHeight * 0.4,
+                child: LayoutBuilder(
+                  builder: (BuildContext context,
+                      BoxConstraints constraintsContainer) {
+                    return Container(
+                      width: constraintsContainer.maxWidth,
+                      padding:
+                          EdgeInsets.all(constraintsContainer.maxHeight * 0.15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: LayoutBuilder(
+                        builder: (BuildContext context,
+                            BoxConstraints constraintsPadding) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                element.name,
+                                style: TextStyle(
+                                  fontSize: constraintsPadding.maxHeight * 0.35,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Visibility(
+                                    visible: element.newPrice != 0.0,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '${element.newPrice.toString()} p.',
+                                          style: TextStyle(
+                                            color: cPink,
+                                            fontSize:
+                                                constraintsPadding.maxHeight *
+                                                    0.35,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width:
+                                              constraintsPadding.maxWidth * 0.1,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '${element.oldPrice.toString()} p.',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      decoration: element.newPrice == 0.0
+                                          ? TextDecoration.none
+                                          : TextDecoration.lineThrough,
+                                      fontSize:
+                                          constraintsPadding.maxHeight * 0.35,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ]),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class SearchResultPromotions extends StatelessWidget {
+  const SearchResultPromotions({
+    Key key,
+    @required this.promotions,
+  }) : super(key: key);
+
+  final List<Promotion> promotions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: size(context, hor),
+            vertical: size(context, vert),
+          ),
+          child: Text(
+            'Акции',
+            style: style3(context).copyWith(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(bottom: size(context, 0.018)),
+          child: Column(
+            children: promotions
+                .asMap()
+                .entries
+                .map((entry) => Column(
+                      children: [
+                        SearchPromotions(element: entry.value),
+                        Visibility(
+                          visible: entry.key != promotions.length - 1,
+                          child: Divider(
+                              height: size(context, 0.035),
+                              indent: size(context, hor),
+                              thickness: 1.0),
+                        )
+                      ],
+                    ))
+                .toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SearchPromotions extends StatelessWidget {
+  const SearchPromotions({
+    Key key,
+    @required this.element,
+  }) : super(key: key);
+
+  final Promotion element;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size(context, 0.13),
+      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+      child: Stack(
+        children: [
+          Container(
+            height: size(context, 0.12),
+            child: Row(
+              children: [
+                Container(
+                  width: size(context, 0.12),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(element.img),
+                    ),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                SizedBox(width: size(context, hor)),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        element.discription,
+                        style: style3(context),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RateBadge(
+                              rate: element.rate, textColor: Colors.green),
+                          Row(
+                            children: [
+                              Text(
+                                '${element.newPrice} р.',
+                                style: style3(context).copyWith(color: cPink),
+                              ),
+                              SizedBox(width: size(context, 0.01)),
+                              Text(
+                                '${element.oldPrice} р.',
+                                style: style3(context).copyWith(
+                                  color: Colors.grey[600],
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0.0,
+            left: 8.0,
+            child: DiscountBadge(discount: element.discount),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SearchResultCompanies extends StatelessWidget {
+  const SearchResultCompanies({
+    Key key,
+    @required this.companies,
+  }) : super(key: key);
+
+  final List<Company> companies;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: size(context, hor),
+            vertical: size(context, vert),
+          ),
+          child: Text(
+            'Компании',
+            style: style3(context).copyWith(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Column(
+            children: companies
+                .asMap()
+                .entries
+                .map(
+                  (entry) => Column(
+                    children: [
+                      SearchCompany(element: entry.value),
+                      Visibility(
+                        visible: entry.key != companies.length - 1,
+                        child: Divider(
+                            height: size(context, 0.035),
+                            indent: size(context, hor),
+                            thickness: 1.0),
+                      )
+                    ],
+                  ),
+                )
+                .toList()),
+      ],
+    );
+  }
+}
+
+class SearchCompany extends StatelessWidget {
+  const SearchCompany({
+    Key key,
+    @required this.element,
+  }) : super(key: key);
+
+  final Company element;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                constraints:
+                    BoxConstraints(maxWidth: constraints.maxWidth * 0.8),
+                child: Row(
+                  children: [
+                    Container(
+                      width: size(context, 0.06),
+                      height: size(context, 0.06),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(element.img),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: size(context, 0.02)),
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: size.height * 0.01),
-                              child:
-                                  customRichText(companies[index].name, size)),
                           Text(
-                            companies[index].type,
-                            style: TextStyle(
-                              fontSize: size.height * 0.02,
+                            element.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: style2(context),
+                          ),
+                          SizedBox(height: size(context, 0.006)),
+                          Text(
+                            element.type,
+                            style: style4(context).copyWith(
                               color: Colors.grey[600],
                             ),
                           ),
                           Text(
-                            companies[index].adress,
-                            style: TextStyle(
-                              fontSize: size.height * 0.02,
+                            element.adress,
+                            style: style4(context).copyWith(
                               color: Colors.grey[600],
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RateBadge(
-                          rate: companies[index].rate, textColor: Colors.green),
-                      SizedBox(width: size.width * 0.05),
-                      GestureDetector(
-                        onTap: () => null,
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: cPink,
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  RateBadge(rate: 8.0, textColor: Colors.green),
+                  CustomRedRightArrow(onPressed: null),
                 ],
-              );
-            },
-            separatorBuilder: (context, index) => Divider(thickness: 2.0),
-          ),
-        )
-      ],
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -531,11 +806,9 @@ class SearchResultCompanies extends StatelessWidget {
 class SearchResultTypeOfCompanies extends StatelessWidget {
   const SearchResultTypeOfCompanies({
     Key key,
-    @required this.size,
     @required this.typeCompanies,
   }) : super(key: key);
 
-  final Size size;
   final List<String> typeCompanies;
 
   @override
@@ -543,30 +816,63 @@ class SearchResultTypeOfCompanies extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        customTitle('Type of companies', size),
         Container(
-          height: (size.height * 0.035 + 16.0) * typeCompanies.length,
-          padding: EdgeInsets.symmetric(horizontal: size.width * cHorizont),
-          child: ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: typeCompanies.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  customRichText(typeCompanies[index], size),
-                  GestureDetector(
-                    onTap: () => null,
-                    child: Icon(Icons.chevron_right,
-                        color: cPink, size: size.height * 0.035),
-                  ),
-                ],
-              );
-            },
-            separatorBuilder: (context, index) => Divider(thickness: 2.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: size(context, hor),
+            vertical: size(context, vert),
           ),
+          child: Text(
+            'Тип заведения',
+            style: style3(context).copyWith(
+              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Column(
+          children: typeCompanies
+              .asMap()
+              .entries
+              .map(
+                (entry) => Column(
+                  children: [
+                    SearchTypeCompany(element: entry.value),
+                    Visibility(
+                      visible: entry.key != typeCompanies.length - 1,
+                      child: Divider(
+                          // height: size(context, 0.035),
+                          indent: size(context, hor),
+                          thickness: 1.0),
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
         )
       ],
+    );
+  }
+}
+
+class SearchTypeCompany extends StatelessWidget {
+  const SearchTypeCompany({
+    Key key,
+    @required this.element,
+  }) : super(key: key);
+
+  final String element;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          element,
+          style: style2(context),
+        ),
+        CustomRedRightArrow(onPressed: null),
+      ]),
     );
   }
 }
@@ -604,21 +910,4 @@ customRichText(String text, Size size) {
   );
 
   return widgetRichText;
-}
-
-customTitle(String title, Size size) {
-  return Container(
-    padding: EdgeInsets.symmetric(
-      horizontal: size.width * cHorizont,
-      vertical: size.height * cVertical,
-    ),
-    child: Text(
-      title,
-      style: TextStyle(
-        color: Colors.grey[600],
-        fontWeight: FontWeight.bold,
-        fontSize: size.height * 0.02,
-      ),
-    ),
-  );
 }

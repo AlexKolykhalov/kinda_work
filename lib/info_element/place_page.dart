@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kinda_work/styles.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
@@ -122,15 +123,18 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
+          height: appBarHeight(context),
           title: 'Подробности места',
           actions: [Icon(Icons.favorite_border_outlined, color: cPink)],
-          tabController: _tabController,
-          bottom: [
-            'Описание',
-            'Цена',
-            'Отзывы',
-            'Лента',
-          ],
+          bottom: AppBarBottom(
+            tabController: _tabController,
+            bottomData: [
+              'Описание',
+              'Цена',
+              'Отзывы',
+              'Лента',
+            ],
+          ),
         ),
         body: TabBarView(
           controller: _tabController,
@@ -143,26 +147,22 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: CustomGridViewTitle(
                           title: 'Часто просматривают',
                           textTotalAmount: '',
                         ),
                       ),
                       Container(
-                        height: cConstantWidth / cRatioSmallSize,
-                        padding: EdgeInsets.only(left: _size.width * cHorizont),
+                        height: 350.0,
+                        padding: EdgeInsets.only(left: size(context, hor)),
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) => Container(
-                            width: cConstantWidth,
+                            width: 100.0,
                             child: CustomGridViewElement(
-                                element: InfoElement(
-                              isLargeGridElement: false,
-                              lightText: 'Массажный салон',
-                              img: 'assets/png/grid/2.png',
-                              rate: 9.5,
-                            )),
+                              element: kventin,
+                            ),
                           ),
                           separatorBuilder: (context, index) =>
                               SizedBox(width: 10.0),
@@ -170,8 +170,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: _size.height * cVertical),
+                        padding:
+                            EdgeInsets.symmetric(vertical: size(context, vert)),
                         child: Stack(
                           children: [
                             Column(
@@ -189,8 +189,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                 Container(
                                   height: 310.0,
                                   width: _size.width,
-                                  padding:
-                                      EdgeInsets.all(_size.width * cHorizont),
+                                  padding: EdgeInsets.all(size(context, vert)),
                                   decoration:
                                       BoxDecoration(color: Colors.white),
                                   child: Column(
@@ -364,7 +363,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: GestureDetector(
                           behavior: HitTestBehavior
                               .opaque, //позволяет GestureDetector отрабатывать на все Row
@@ -393,7 +392,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         visible: _isVisible,
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: _size.width * cHorizont),
+                              horizontal: size(context, hor)),
                           margin: EdgeInsets.only(top: _size.height * 0.01),
                           width: _size.width,
                           child: Column(
@@ -442,7 +441,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       Divider(thickness: 1.0),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -454,7 +453,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       Divider(thickness: 1.0),
                       Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         margin: EdgeInsets.only(bottom: _size.height * 0.01),
                         child: Column(
                           children: [
@@ -492,7 +491,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       Divider(thickness: 1.0),
                       Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         margin: EdgeInsets.only(bottom: _size.height * 0.01),
                         child: Column(
                           children: [
@@ -634,12 +633,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                                             _size.height * 0.07,
                                                         child: Center(
                                                           child: Container(
-                                                            width:
-                                                                cConstantWidth *
-                                                                    0.27,
-                                                            height:
-                                                                cConstantWidth *
-                                                                    0.15,
+                                                            width: 20.0 * 0.27,
+                                                            height: 20.0 * 0.15,
                                                             decoration:
                                                                 BoxDecoration(
                                                               color:
@@ -839,30 +834,20 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       const SizedBox(height: 30.0),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: CustomGridViewTitle(
                           title: 'Акции заведения',
                           textTotalAmount: '',
                         ),
                       ),
                       Container(
-                        height: cConstantWidth / cRatioMediumSize,
-                        padding: EdgeInsets.only(left: _size.width * cHorizont),
+                        height: 150.0,
+                        padding: EdgeInsets.only(left: size(context, hor)),
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) => Container(
-                            width: cConstantWidth,
-                            child: CustomGridViewElement(
-                                element: InfoElement(
-                              isLargeGridElement: false,
-                              discount: 50,
-                              oldPrice: 10500,
-                              newPrice: 8500,
-                              countMessages: 25,
-                              lightText: 'Массажный салон',
-                              img: 'assets/png/grid/2.png',
-                              rate: 9.5,
-                            )),
+                            width: 20.0,
+                            child: CustomGridViewElement(element: promo),
                           ),
                           separatorBuilder: (context, index) =>
                               SizedBox(width: 10.0),
@@ -872,26 +857,20 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       SizedBox(height: 30.0),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: CustomGridViewTitle(
                           title: 'Часто просматривают',
                           textTotalAmount: '',
                         ),
                       ),
                       Container(
-                        height: cConstantWidth / cRatioSmallSize,
-                        padding: EdgeInsets.only(left: _size.width * cHorizont),
+                        height: 150.0,
+                        padding: EdgeInsets.only(left: size(context, hor)),
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) => Container(
-                            width: cConstantWidth,
-                            child: CustomGridViewElement(
-                                element: InfoElement(
-                              isLargeGridElement: false,
-                              lightText: 'Массажный салон',
-                              img: 'assets/png/grid/2.png',
-                              rate: 9.5,
-                            )),
+                            width: 20.0,
+                            child: CustomGridViewElement(element: promo),
                           ),
                           separatorBuilder: (context, index) =>
                               SizedBox(width: 10.0),
@@ -907,8 +886,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                   right: 0.0,
                   bottom: 25.0,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: _size.width * cHorizont),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size(context, hor)),
                     child: CustomButton(
                       onTap: null,
                       buttonText: 'Экономь с нами 20%',
@@ -929,7 +908,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       SizedBox(height: _size.height * 0.02),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -941,7 +920,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       Divider(thickness: 1.0),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
-                          _size.width * cHorizont,
+                          size(context, hor),
                           _size.height * 0.02,
                           0.0,
                           _size.height * 0.04,
@@ -984,7 +963,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                             TabBarView(controller: _tabController1, children: [
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: _size.width * cHorizont),
+                                horizontal: size(context, hor)),
                             child: Column(
                               children: [
                                 Theme(
@@ -1061,8 +1040,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                     right: 0.0,
                     bottom: 25.0,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: _size.width * cHorizont),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size(context, hor)),
                       child: CustomButton(
                         onTap: () => displayQrCode(context),
                         buttonText: 'Предъявите скидку -20%',
@@ -1080,7 +1059,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                     SizedBox(height: _size.height * 0.02),
                     Padding(
                       padding: EdgeInsets.fromLTRB(
-                        _size.width * cHorizont,
+                        size(context, hor),
                         _size.height * 0.02,
                         0.0,
                         _size.height * 0.04,
@@ -1090,8 +1069,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           listViewDataReviews: _listViewDataReviews),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(_size.width * cHorizont, 0.0,
-                          _size.width * cHorizont, _size.height * 0.04),
+                      padding: EdgeInsets.fromLTRB(size(context, hor), 0.0,
+                          size(context, hor), _size.height * 0.04),
                       child: CustomButton(
                         onTap: null,
                         buttonText: 'Оставить отзыв',
@@ -1103,7 +1082,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                     Column(children: getReviews(reviews, _size)),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: _size.width * cHorizont,
+                          horizontal: size(context, hor),
                           vertical: _size.height * 0.04),
                       child: CustomButton(
                         onTap: null,
@@ -1121,8 +1100,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                   right: 0.0,
                   bottom: 25.0,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: _size.width * cHorizont),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size(context, hor)),
                     child: CustomButton(
                       onTap: null,
                       buttonText: 'Экономь с нами 20%',
@@ -1136,9 +1115,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
             // Лента
             Container(
               padding: EdgeInsets.fromLTRB(
-                _size.width * cHorizont,
-                _size.width * cVertical,
-                _size.width * cHorizont,
+                size(context, hor),
+                size(context, vert),
+                size(context, hor),
                 0.0,
               ),
               child: Stack(
@@ -1230,7 +1209,7 @@ class NewsWidget extends StatelessWidget {
             ),
           ),
           Container(
-            height: _size.width * 0.85 - 2 * _size.width * cHorizont,
+            height: _size.width * 0.85 - 2 * size(context, hor),
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/pages/discount/thanks_page.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class AddCompanyPage extends StatelessWidget {
   const AddCompanyPage({Key key}) : super(key: key);
@@ -11,13 +12,16 @@ class AddCompanyPage extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Добавить компанию'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Добавить компанию',
+        ),
         body: SingleChildScrollView(
           child: Container(
             height: _size.height - MediaQuery.of(context).padding.top - 48.0,
             padding: EdgeInsets.symmetric(
-              horizontal: _size.width * cHorizont,
-              vertical: _size.height * cVertical,
+              horizontal: size(context, hor),
+              vertical: size(context, vert),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,7 +32,6 @@ class AddCompanyPage extends StatelessWidget {
                         'Размещение на нашем портале абсолютно бесплатное! Заполните эту заявку - и в ближайшее время мы с свяжемся с Вами!'),
                     SizedBox(height: 15.0),
                     TextField(
-                      // controller: emailPhoneController,
                       keyboardType: TextInputType.emailAddress,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
@@ -42,7 +45,6 @@ class AddCompanyPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     TextField(
-                      // controller: emailPhoneController,
                       keyboardType: TextInputType.emailAddress,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
@@ -56,7 +58,6 @@ class AddCompanyPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     TextField(
-                      // controller: emailPhoneController,
                       keyboardType: TextInputType.emailAddress,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
@@ -70,7 +71,6 @@ class AddCompanyPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     TextField(
-                      // controller: emailPhoneController,
                       keyboardType: TextInputType.emailAddress,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
@@ -84,7 +84,6 @@ class AddCompanyPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     TextField(
-                      // controller: emailPhoneController,
                       keyboardType: TextInputType.emailAddress,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(

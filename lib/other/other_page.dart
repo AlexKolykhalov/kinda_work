@@ -17,47 +17,55 @@ class OtherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        // TODO remove back arrow
-        appBar: CustomAppBar(title: 'Прочее'),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: _size.height * cVertical),
-              TopPart(),
-              Divider(thickness: 1.0),
-              BusinessPart(),
-              Divider(thickness: 1.0),
-              SizedBox(height: _size.height * cVertical),
-              BottomPart(),
-              Divider(thickness: 1.0),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _size.width * cHorizont,
-                  vertical: _size.height * cVertical,
-                ),
-                child: CustomButton(
-                  onTap: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          AddCompanyPage(),
-                    ),
+    return Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            return Scaffold(
+              appBar: CustomAppBar(
+                height: appBarHeight(context),
+                showBackArrow: false,
+                title: 'Прочее',
+              ),
+              body: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: size(context, vert)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TopPart(),
+                      Divider(thickness: 1.0),
+                      BusinessPart(),
+                      Divider(thickness: 1.0),
+                      SizedBox(height: size(context, vert)),
+                      BottomPart(),
+                      Divider(thickness: 1.0),
+                      SizedBox(height: size(context, vert)),
+                      CustomButton(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: size(context, hor)),
+                        onTap: () => Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    AddCompanyPage(),
+                          ),
+                        ),
+                        buttonText: 'Добавить компанию',
+                        buttonColor: cGrey,
+                        buttonBorderColor: Colors.grey[600],
+                        buttonTextColor: Colors.black,
+                      )
+                    ],
                   ),
-                  buttonText: 'Добавить компанию',
-                  buttonColor: cGrey,
-                  buttonBorderColor: Colors.grey[600],
-                  buttonTextColor: Colors.black,
                 ),
-              )
-            ],
-          ),
-        ),
-        bottomNavigationBar: CustomBottomNavBar(currentIndex: 4),
-      ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -67,7 +75,6 @@ class TopPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
@@ -218,10 +225,10 @@ class BusinessPart extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(
-            _size.width * cHorizont,
-            _size.height * cVertical,
+            size(context, hor),
+            size(context, vert),
             0.0,
-            _size.height * cVertical,
+            size(context, vert),
           ),
           child: Text(
             'Бизнес',
@@ -232,7 +239,7 @@ class BusinessPart extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -258,9 +265,9 @@ class BusinessPart extends StatelessWidget {
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: _size.width * cHorizont),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -286,12 +293,9 @@ class BusinessPart extends StatelessWidget {
             ],
           ),
         ),
-        Divider(
-          thickness: 1.0,
-          indent: _size.width * cHorizont,
-        ),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -328,12 +332,9 @@ class BusinessPart extends StatelessWidget {
             ],
           ),
         ),
-        Divider(
-          thickness: 1.0,
-          indent: _size.width * cHorizont,
-        ),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -369,11 +370,10 @@ class BottomPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -401,12 +401,9 @@ class BottomPart extends StatelessWidget {
             ],
           ),
         ),
-        Divider(
-          thickness: 1.0,
-          indent: _size.width * cHorizont,
-        ),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -434,12 +431,9 @@ class BottomPart extends StatelessWidget {
             ],
           ),
         ),
-        Divider(
-          thickness: 1.0,
-          indent: _size.width * cHorizont,
-        ),
+        Divider(thickness: 1.0, indent: size(context, hor)),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

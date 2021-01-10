@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
+import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key key}) : super(key: key);
@@ -32,10 +34,13 @@ class _FavoritesPageState extends State<FavoritesPage>
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
+          height: appBarHeight(context),
           title: 'Избранное',
           actions: [Icon(Icons.delete_outline, color: cPink)],
-          tabController: _tabController,
-          bottom: ['Все', 'Заведения', 'Акции'],
+          bottom: AppBarBottom(
+            tabController: _tabController,
+            bottomData: ['Все', 'Заведения', 'Акции'],
+          ),
         ),
         body: TabBarView(controller: _tabController, children: [
           All(),
@@ -52,13 +57,11 @@ class All extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     return SingleChildScrollView(
         child: Container(
       padding: EdgeInsets.symmetric(
-        // TODO без этого (horizontal) размеры плывут
-        horizontal: _size.width * cHorizont,
-        vertical: _size.height * cVertical,
+        horizontal: size(context, hor),
+        vertical: size(context, vert),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,9 +75,9 @@ class All extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           CustomGridView(
-            size: _size,
-            childAspectRatio: cRatioSmallSize,
-            infoElements: popularPlaces
+            // size: _size,
+            // childAspectRatio: cRatioSmallSize,
+            elements: popularPlaces
                 .where((element) => element.favoriteSelected)
                 .toList(),
           ),
@@ -88,9 +91,7 @@ class All extends StatelessWidget {
           ),
           SizedBox(height: 15.0),
           CustomGridView(
-            size: _size,
-            childAspectRatio: cRatioMediumSize,
-            infoElements: popularPromotions
+            elements: popularPromotions
                 .where((element) => element.favoriteSelected)
                 .toList(),
           ),

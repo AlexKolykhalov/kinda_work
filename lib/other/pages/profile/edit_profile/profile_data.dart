@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import 'package:kinda_work/shared_widgets.dart';
@@ -34,7 +36,7 @@ class ProfileData extends StatelessWidget {
             ),
           ),
           Container(
-            height: size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075),
+            height: math.min(size(context, 0.075), 48.0),
             margin: EdgeInsets.only(bottom: size(context, 0.02)),
             child: Row(
               children: [

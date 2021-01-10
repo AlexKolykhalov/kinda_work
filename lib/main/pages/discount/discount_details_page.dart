@@ -6,6 +6,7 @@ import 'package:kinda_work/main/pages/discount/thanks_page.dart';
 import 'package:kinda_work/main/pages/discount/visit_history_page.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class DiscountDetailsPage extends StatefulWidget {
   const DiscountDetailsPage({Key key}) : super(key: key);
@@ -15,7 +16,6 @@ class DiscountDetailsPage extends StatefulWidget {
 }
 
 class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
-  Size _size;
   bool _isVisible;
 
   @override
@@ -25,32 +25,26 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    _size = MediaQuery.of(context).size;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppBar().preferredSize.height * 0.85),
+          preferredSize: Size.fromHeight(appBarHeight(context)),
           child: AppBar(
             backgroundColor: cGrey,
-            elevation: (_isVisible) ? 0.0 : 1.0,
+            elevation: (_isVisible) ? 0.0 : 4.0,
             leading: FlatButton(
-              padding: EdgeInsets.all(13.0),
               onPressed: () => Navigator.pop(context),
-              child: cLeftArrow,
+              child: Container(width: size(context, 0.035), child: cLeftArrow),
             ),
             centerTitle: true,
             title: _isVisible
                 ? null
                 : Container(
-                    width: 40.0,
-                    height: 40.0,
+                    width: appBarHeight(context) * 0.85,
+                    height: appBarHeight(context) * 0.85,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -61,174 +55,149 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                   ),
           ),
         ),
-        body: SingleChildScrollView(
-          reverse: true,
-          child: Container(
-            width: _size.width,
-            height: _size.height - MediaQuery.of(context).padding.top - 48.0,
-            padding: EdgeInsets.symmetric(vertical: _size.height * cVertical),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        body: Container(
+          // height: MediaQuery.of(context).size.height -
+          //     MediaQuery.of(context).padding.top -
+          //     appBarHeight(context),
+          padding: EdgeInsets.symmetric(
+              horizontal: size(context, 0.07), vertical: size(context, vert)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Visibility(
+                visible: _isVisible,
+                child: Container(
+                  width: size(context, 0.17),
+                  height: size(context, 0.17),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/png/face.png'),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: size(context, 0.02)),
+              Text(
+                'Роман Красновский',
+                style: style1(context).copyWith(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: size(context, 0.01)),
+              Text('19.08.1980', style: style2(context)),
+              SizedBox(height: size(context, 0.025)),
+              Text(
+                '5%',
+                style: TextStyle(
+                  fontSize: size(context, 0.08),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text('Размер скидки', style: style3(context)),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(seconds: 0),
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        DiscountConditionsPage(),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: size(context, 0.03)),
+                  child: Text(
+                    'Смотреть условия скидки',
+                    style: style2(context).copyWith(color: cPink),
+                  ),
+                ),
+              ),
+              Container(
+                // padding: _isVisible
+                //     ? EdgeInsets.only(bottom: _size.height * 0.07)
+                //     : EdgeInsets.only(bottom: _size.height * 0.01),
+                child: Row(
                   children: [
-                    Visibility(
-                      visible: _isVisible,
+                    Expanded(
+                      flex: 3,
                       child: Container(
-                        width: _size.height * 0.2,
-                        height: _size.height * 0.2,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/png/face.png'),
-                          ),
+                        child: CustomTextField(
+                          fontWeight: FontWeight.bold,
+                          hintText: 'Сумма чека',
+                          keyboardType: TextInputType.number,
                         ),
+
+                        // TextField(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       _isVisible = false;
+                        //     });
+                        //   },
+                        //   onSubmitted: (value) {
+                        //     setState(() {
+                        //       _isVisible = true;
+                        //     });
+                        //   },
+                        //   keyboardType: TextInputType.number,
+                        //   textAlignVertical: TextAlignVertical.center,
+                        //   decoration: InputDecoration(
+                        //     border: OutlineInputBorder(),
+                        //     fillColor: Colors.white,
+                        //     filled: true,
+                        //     hintText: 'Сумма чека',
+                        //     contentPadding: EdgeInsets.symmetric(
+                        //         horizontal: _size.width * 0.05),
+                        //   ),
+                        // ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        0.0,
-                        _size.height * 0.02,
-                        0.0,
-                        _size.height * 0.015,
-                      ),
-                      child: Text('Роман Красновский',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: _size.height * 0.04)),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: _size.height * 0.04),
-                      child:
-                          Text('19.08.1980', style: TextStyle(fontSize: 15.0)),
-                    ),
-                    Text('5 %',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: _size.height * 0.07)),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: _size.height * 0.04),
-                      child: Text('Размер скидки',
-                          style: TextStyle(fontSize: 15.0)),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: _size.height * 0.05),
-                      child: GestureDetector(
+                    SizedBox(width: size(context, hor)),
+                    Expanded(
+                      child: CustomButton(
                         onTap: () => Navigator.push(
                           context,
                           PageRouteBuilder(
                             transitionDuration: Duration(seconds: 0),
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    DiscountConditionsPage(size: _size),
+                                    ThanksPage(text: 'Скидка зафиксирована'),
                           ),
                         ),
-                        child: Text(
-                          'Смотреть условия скидки',
-                          style: TextStyle(
-                            color: cPink,
-                            fontSize: 17.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: _size.width * 0.65,
-                      padding: _isVisible
-                          ? EdgeInsets.only(bottom: _size.height * 0.07)
-                          : EdgeInsets.only(bottom: _size.height * 0.01),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: _size.width * 0.5,
-                            child: TextField(
-                              onTap: () {
-                                setState(() {
-                                  _isVisible = false;
-                                });
-                              },
-                              onSubmitted: (value) {
-                                setState(() {
-                                  _isVisible = true;
-                                });
-                              },
-                              keyboardType: TextInputType.number,
-                              textAlignVertical: TextAlignVertical.center,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: 'Сумма чека',
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: _size.width * 0.05),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: _size.width * 0.01),
-                          Expanded(
-                            child: Container(
-                              height: 48.0,
-                              decoration: BoxDecoration(
-                                color: cPink,
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: GestureDetector(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    transitionDuration: Duration(seconds: 0),
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        ThanksPage(
-                                            text: 'Скидка зафиксирована'),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'OK',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                        buttonText: 'OK',
+                        buttonColor: cPink,
+                        buttonTextColor: Colors.white,
                       ),
                     ),
                   ],
                 ),
-                Visibility(
-                  visible: _isVisible,
-                  child: Container(
-                    width: _size.width * 0.65,
-                    child: CustomButton(
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: Duration(seconds: 0),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  VisitHistoryPage(
-                                      historyVisits: historyVisitsOneUser),
-                        ),
-                      ),
-                      buttonText: 'Посетил 8 раз',
-                      buttonColor: cGrey,
-                      buttonBorderColor: Colors.grey[600],
-                      buttonTextColor: Colors.black,
+              ),
+              Expanded(child: Container()),
+              Visibility(
+                visible: MediaQuery.of(context).viewInsets.bottom == 0,
+
+                // _isVisible,
+                child: CustomButton(
+                  onTap: () => Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          VisitHistoryPage(historyVisits: historyVisitsOneUser),
                     ),
                   ),
+                  buttonText: 'Посетил 8 раз',
+                  buttonColor: cGrey,
+                  buttonBorderColor: Colors.grey[600],
+                  buttonTextColor: Colors.black,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+
+        // LayoutBuilder(
+        //   builder: (BuildContext context, BoxConstraints constraints) {
+        //     return  },
+        // ),
       ),
     );
   }

@@ -15,7 +15,7 @@ class ThanksPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: _size.height * cVertical),
+          padding: EdgeInsets.symmetric(vertical: _size.height * vert),
           child: Column(
             children: [
               Container(

@@ -3,6 +3,7 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/booking_page_details.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class BookingPage extends StatelessWidget {
   const BookingPage({Key key}) : super(key: key);
@@ -11,17 +12,20 @@ class BookingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Бронирование'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Бронирование',
+        ),
         body: Container(
             padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * cVertical),
+                vertical: MediaQuery.of(context).size.height * vert),
             child: ListView.separated(
               itemBuilder: (context, index) => BookingListViewElement(
                 booking: bookingData[index],
               ),
               separatorBuilder: (context, index) => Divider(
                 thickness: 1.0,
-                indent: MediaQuery.of(context).size.width * cHorizont,
+                indent: MediaQuery.of(context).size.width * hor,
               ),
               itemCount: bookingData.length,
             )),
@@ -42,7 +46,7 @@ class BookingListViewElement extends StatelessWidget {
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: _size.width * cHorizont),
+      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

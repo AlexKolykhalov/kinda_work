@@ -1,77 +1,50 @@
 import 'package:flutter/material.dart';
 
-import 'package:kinda_work/main/pages/beauty/beauty.dart';
-import 'package:kinda_work/main/pages/restaurants_cafe_page.dart';
+import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/styles.dart';
 
-class FeaturesList extends StatelessWidget {
-  const FeaturesList({
+class Sections extends StatelessWidget {
+  const Sections({
     Key key,
-    @required this.size,
-    @required this.currentIndex,
+    @required this.elements,
+    this.padding,
+    this.margin,
   }) : super(key: key);
 
-  final Size size;
-  final int currentIndex;
+  final List<Map<String, dynamic>> elements;
+
+  final EdgeInsets padding;
+  final EdgeInsets margin;
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> listViewElements = [
-      {
-        'img': 'assets/png/features/1.png',
-        'text': 'Рестораны и кафе',
-        'page': RestaurantsCafe(
-          currentIndex: currentIndex,
-        ),
-      },
-      {
-        'img': 'assets/png/features/2.png',
-        'text': 'Красота',
-        'page': Beauty(
-          currentIndex: currentIndex,
-        ),
-      },
-      {
-        'img': 'assets/png/features/3.png',
-        'text': 'Развлечения',
-        'page': null //Entertainment(),
-      },
-      {
-        'img': 'assets/png/features/4.png',
-        'text': 'Авто и мото',
-        'page': null //Autoservices(),
-      },
-      {
-        'img': 'assets/png/features/5.png',
-        'text': 'Спорт',
-        'page': null //Sports(),
-      },
-    ];
     return Container(
-      height: size.height * 0.18,
-      child: ListView.builder(
+      height: size(context, 0.15),
+      padding: padding,
+      margin: margin,
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => ListElement(
-          size: size,
-          page: listViewElements[index]['page'],
-          img: listViewElements[index]['img'],
-          text: listViewElements[index]['text'],
+        itemBuilder: (context, index) => SectionElement(
+          page: elements[index]['page'],
+          img: elements[index]['img'],
+          text: elements[index]['text'],
         ),
-        itemCount: listViewElements.length,
+        separatorBuilder: (context, index) =>
+            SizedBox(width: size(context, hor)),
+        itemCount: elements.length,
       ),
     );
   }
 }
 
-class ListElement extends StatelessWidget {
-  const ListElement({
+class SectionElement extends StatelessWidget {
+  const SectionElement({
     Key key,
-    @required this.size,
     @required this.page,
     @required this.img,
     @required this.text,
   }) : super(key: key);
 
-  final Size size;
   final Widget page;
   final String img;
   final String text;
@@ -87,8 +60,8 @@ class ListElement extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: size.height * 0.1,
-            height: size.height * 0.1,
+            width: size(context, 0.1),
+            height: size(context, 0.1),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               image: DecorationImage(
@@ -96,14 +69,11 @@ class ListElement extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: size.height * 0.01),
-          Container(
-            width: size.height * 0.15,
-            child: Text(
-              text,
-              style: TextStyle(fontSize: size.height * 0.02),
-              textAlign: TextAlign.center,
-            ),
+          SizedBox(height: size(context, 0.01)),
+          Text(
+            text,
+            style: style3(context),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

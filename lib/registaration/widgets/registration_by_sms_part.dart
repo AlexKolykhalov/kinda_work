@@ -23,7 +23,7 @@ class RegistrationBySmsPart extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: size(context, 0.02)),
             child: CustomTextField(
-              textInputType: TextInputType.number,
+              keyboardType: TextInputType.number,
               hintText: 'СМС код',
             ),
           ),

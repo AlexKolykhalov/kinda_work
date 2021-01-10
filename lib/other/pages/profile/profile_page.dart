@@ -36,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage>
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
+          height: appBarHeight(context),
           title: 'Профиль',
           actions: [
             FlatButton(
@@ -65,8 +66,10 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ),
           ],
-          tabController: _tabController,
-          bottom: ['Общее', 'Где я был', 'Отзывы', 'Впечатления'],
+          bottom: AppBarBottom(
+            tabController: _tabController,
+            bottomData: ['Общее', 'Где я был', 'Отзывы', 'Впечатления'],
+          ),
         ),
         body: TabBarView(
           controller: _tabController,
@@ -199,7 +202,7 @@ class _GeneralState extends State<General> {
                           Container(
                             height: _heightRow,
                             padding: EdgeInsets.symmetric(
-                              horizontal: constraints.maxWidth * cHorizont,
+                              horizontal: size(context, hor),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,13 +241,13 @@ class _GeneralState extends State<General> {
                           ),
                           Divider(
                             height: 0.0,
-                            indent: constraints.maxWidth * cHorizont,
+                            indent: constraints.maxWidth * hor,
                             thickness: 1.0,
                           ),
                           Container(
                             height: _heightRow,
                             padding: EdgeInsets.symmetric(
-                              horizontal: constraints.maxWidth * cHorizont,
+                              horizontal: size(context, hor),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -264,13 +267,13 @@ class _GeneralState extends State<General> {
                           ),
                           Divider(
                             height: 0.0,
-                            indent: constraints.maxWidth * cHorizont,
+                            indent: constraints.maxWidth * hor,
                             thickness: 1.0,
                           ),
                           Container(
                             height: _heightRow,
                             padding: EdgeInsets.symmetric(
-                              horizontal: constraints.maxWidth * cHorizont,
+                              horizontal: size(context, hor),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -290,13 +293,13 @@ class _GeneralState extends State<General> {
                           ),
                           Divider(
                             height: 0.0,
-                            indent: constraints.maxWidth * cHorizont,
+                            indent: constraints.maxWidth * hor,
                             thickness: 1.0,
                           ),
                           Container(
                             height: _heightRow,
                             padding: EdgeInsets.symmetric(
-                              horizontal: constraints.maxWidth * cHorizont,
+                              horizontal: size(context, hor),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -330,7 +333,7 @@ class _GeneralState extends State<General> {
                               Expanded(child: Container()),
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: constraints.maxWidth * cHorizont,
+                                  horizontal: size(context, hor),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

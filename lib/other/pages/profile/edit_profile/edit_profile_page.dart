@@ -15,7 +15,10 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Редактирование профиля'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Редактирование профиля',
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [

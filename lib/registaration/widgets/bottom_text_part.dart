@@ -9,7 +9,7 @@ class BottomTextPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: size(context, cLoginPageVertical)),
+      margin: EdgeInsets.only(bottom: size(context, 0.05)),
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(

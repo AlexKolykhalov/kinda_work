@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class VisitHistoryPage extends StatelessWidget {
   const VisitHistoryPage({
@@ -16,13 +17,16 @@ class VisitHistoryPage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'История посещений'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'История посещений',
+        ),
         body: Container(
-          padding: EdgeInsets.only(top: _size.height * cVertical),
+          padding: EdgeInsets.only(top: _size.height * vert),
           child: ListView.separated(
             separatorBuilder: (context, index) =>
                 (index < historyVisits.length - 1)
-                    ? Divider(thickness: 1, indent: _size.width * cHorizont)
+                    ? Divider(thickness: 1, indent: size(context, hor))
                     : Divider(thickness: 1),
             itemCount: historyVisits.length + 1,
             itemBuilder: (context, index) => (index < historyVisits.length)
@@ -30,13 +34,13 @@ class VisitHistoryPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: _size.width * cHorizont),
+                        padding: EdgeInsets.only(left: size(context, hor)),
                         child: Text(historyVisits[index]['date'],
                             style: TextStyle(color: Colors.grey[600])),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -52,7 +56,7 @@ class VisitHistoryPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

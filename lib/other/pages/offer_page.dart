@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class OfferPage extends StatelessWidget {
   const OfferPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Оферта'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Оферта',
+        ),
         body: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: _size.width * cHorizont,
-            vertical: _size.height * cVertical,
+            horizontal: size(context, hor),
+            vertical: size(context, vert),
           ),
           child: SingleChildScrollView(
             child: Column(

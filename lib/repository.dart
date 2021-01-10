@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kinda_work/main/pages/beauty/beauty.dart';
+import 'package:kinda_work/main/pages/restaurants_cafe_page.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/models.dart';
@@ -22,6 +24,25 @@ Company kventin = Company(
   type: 'Квест-комнаты',
   name: 'Kventin',
   adress: 'г. Минск, ул. Кульман, 9',
+  menu: [
+    Menu(
+      img: 'assets/png/grid/1.png',
+      name: 'Суши Калифорния',
+      newPrice: 240,
+      oldPrice: 275,
+    ),
+    Menu(
+      img: 'assets/png/grid/2.png',
+      name: 'Суши Филадельфия',
+      oldPrice: 275,
+    ),
+    Menu(
+      img: 'assets/png/grid/3.png',
+      name: 'Суши Ням-Ням',
+      newPrice: 240,
+      oldPrice: 275,
+    ),
+  ],
   favoriteSelected: true,
   messages: 36,
   discount: 50,
@@ -32,6 +53,26 @@ Company tochka = Company(
   type: 'Кафе',
   name: 'Т.О.Ч.К.А',
   adress: 'г. Минск, ул. Иванова, 13-9',
+  menu: [
+    Menu(
+      img: 'assets/png/grid/3.png',
+      name: 'Суши',
+      newPrice: 240,
+      oldPrice: 275,
+    ),
+    Menu(
+      img: 'assets/png/grid/2.png',
+      name: 'Филадельфия',
+      newPrice: 240,
+      oldPrice: 275,
+    ),
+    Menu(
+      img: 'assets/png/grid/1.png',
+      name: 'BigBon',
+      newPrice: 240,
+      oldPrice: 275,
+    ),
+  ],
   rate: 3.5,
   messages: 123,
 );
@@ -39,8 +80,28 @@ Company tochka = Company(
 Company sherlock = Company(
     img: 'assets/png/grid/3.png',
     type: 'Кофейня',
-    name: 'Шерлок',
+    name: 'Джомалунгма-Суши Супер-пупер бар и лаундж',
     adress: 'г. Минск, ул. Петрова, 5',
+    menu: [
+      Menu(
+        img: 'assets/png/grid/3.png',
+        name: 'Суши',
+        newPrice: 240,
+        oldPrice: 275,
+      ),
+      Menu(
+        img: 'assets/png/grid/2.png',
+        name: 'Филадельфия',
+        newPrice: 240,
+        oldPrice: 275,
+      ),
+      Menu(
+        img: 'assets/png/grid/1.png',
+        name: 'BigBon',
+        newPrice: 240,
+        oldPrice: 275,
+      ),
+    ],
     rate: 5.8,
     favoriteSelected: true,
     discount: 10);
@@ -57,132 +118,59 @@ Promotion promo = Promotion(
   newPrice: 14500,
 );
 
-List<Company> popularPlaces1 = [
+List<Company> popularPlaces = [
   kventin,
   tochka,
   sherlock,
 ];
 
-List<Promotion> popularPromotions1 = [promo];
-
-List<InfoElement> popularPlaces = [
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/1.png',
-    favoriteSelected: true,
-    lightText: 'Автомойка',
-    boltText: 'ЧистоМойка',
-    rate: 5.3,
-    countMessages: 200,
-    discount: 50,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/2.png',
-    favoriteSelected: true,
-    lightText: 'Салон красоты',
-    boltText: 'Bojoli',
-    rate: 9.5,
-    countMessages: 567,
-    discount: 55,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/3.png',
-    favoriteSelected: false,
-    lightText: 'Ресторан',
-    boltText: 'Хижина',
-    rate: 8.8,
-    countMessages: 35,
-    discount: 30,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/no_photo.png',
-    favoriteSelected: false,
-    lightText: 'Автомойка',
-    boltText: 'GreatМойка',
-    rate: 0.0,
-    countMessages: 1,
-    discount: 25,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/1.png',
-    favoriteSelected: false,
-    lightText: 'Автомойка',
-    boltText: 'ЧистоМойка',
-    rate: 5.3,
-    countMessages: 200,
-    discount: 60,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/2.png',
-    favoriteSelected: true,
-    lightText: 'Салон красоты',
-    boltText: 'Bojoli',
-    rate: 9.5,
-    countMessages: 567,
-    discount: 75,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/3.png',
-    favoriteSelected: false,
-    lightText: 'Ресторан',
-    boltText: 'Хижина',
-    rate: 8.8,
-    countMessages: 35,
-    discount: 45,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/no_photo.png',
-    favoriteSelected: false,
-    lightText: 'Автомойка',
-    boltText: 'GreatМойка',
-    rate: 0.0,
-    countMessages: 1,
-    discount: 50,
-  ),
+List<Promotion> popularPromotions = [
+  promo,
+  promo,
 ];
 
-List<InfoElement> popularPromotions = [
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/1.png',
-    favoriteSelected: false,
-    lightText: 'Всё меню и напитки в ресторане грузинско...',
-    rate: 4.2,
-    countMessages: 26,
-    discount: 50,
-    //TODO make right format to this prices
-    newPrice: 120540,
-    oldPrice: 130565,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/2.png',
-    favoriteSelected: true,
-    lightText: 'Блюда и напитки в сети кафе "Шантимель" со...',
-    rate: 0.0,
-    countMessages: 2,
-    discount: 50,
-    newPrice: 230,
-    oldPrice: 265,
-  ),
-  InfoElement(
-    isLargeGridElement: false,
-    img: 'assets/png/grid/1.png',
-    favoriteSelected: false,
-    lightText: 'Всё меню и напитки в ресторане грузинско...',
-    rate: 4.2,
-    countMessages: 26,
-    discount: 50,
-    newPrice: 120540,
-    oldPrice: 130565,
-  ),
+Map searchResult = {
+  'companies': [kventin, tochka, sherlock],
+  'promotions': [promo, promo],
+  'type_companies': [
+    '&Суши&',
+    '&Суши&-ресторан',
+    'Доставка &суши&',
+    '&Суши&-ресторан',
+    'Доставка &суши&',
+  ],
+};
+
+List<Map<String, dynamic>> sectionsElements = [
+  {
+    'img': 'assets/png/features/1.png',
+    'text': 'Рестораны и кафе',
+    'page': RestaurantsCafe(
+      currentIndex: 1,
+    ),
+  },
+  {
+    'img': 'assets/png/features/2.png',
+    'text': 'Красота',
+    'page': Beauty(
+      currentIndex: 1,
+    ),
+  },
+  {
+    'img': 'assets/png/features/3.png',
+    'text': 'Развлечения',
+    'page': null //Entertainment(),
+  },
+  {
+    'img': 'assets/png/features/4.png',
+    'text': 'Авто и мото',
+    'page': null //Autoservices(),
+  },
+  {
+    'img': 'assets/png/features/5.png',
+    'text': 'Спорт',
+    'page': null //Sports(),
+  },
 ];
 
 List<InfoMarker> listInfoMarkers = [
@@ -190,69 +178,12 @@ List<InfoMarker> listInfoMarkers = [
     id: 1,
     position: LatLng(53.912180, 27.545018),
     places: [
-      InfoElement(
-        isLargeGridElement: false,
-        lightText: 'Массажный салон',
-        img: 'assets/png/grid/2.png',
-        rate: 9.5,
-      ),
-      InfoElement(
-        isLargeGridElement: false,
-        lightText: 'Фото салон',
-        img: 'assets/png/grid/1.png',
-        rate: 1.5,
-      ),
+      kventin,
+      tochka,
     ],
     promotions: [
-      InfoElement(
-        isLargeGridElement: false,
-        discount: 50,
-        lightText: 'Романтический ужин',
-        img: 'assets/png/grid/2.png',
-        rate: 7.9,
-        countMessages: 26,
-        newPrice: 150,
-        oldPrice: 200,
-      ),
-      InfoElement(
-        isLargeGridElement: false,
-        lightText: 'Романтический ужин',
-        img: 'assets/png/grid/2.png',
-        rate: 7.9,
-        countMessages: 26,
-        newPrice: 150,
-        oldPrice: 200,
-      ),
-      InfoElement(
-        isLargeGridElement: false,
-        discount: 45,
-        lightText: 'Романтический ужин',
-        img: 'assets/png/grid/2.png',
-        rate: 7.9,
-        countMessages: 26,
-        newPrice: 150,
-        oldPrice: 200,
-      ),
-      InfoElement(
-        isLargeGridElement: false,
-        discount: 45,
-        lightText: 'Романтический ужин',
-        img: 'assets/png/grid/2.png',
-        rate: 7.9,
-        countMessages: 26,
-        newPrice: 150,
-        oldPrice: 200,
-      ),
-      InfoElement(
-        isLargeGridElement: false,
-        discount: 45,
-        lightText: 'Романтический ужин',
-        img: 'assets/png/grid/2.png',
-        rate: 7.9,
-        countMessages: 26,
-        newPrice: 150,
-        oldPrice: 200,
-      )
+      promo,
+      promo,
     ],
   ),
   InfoMarker(

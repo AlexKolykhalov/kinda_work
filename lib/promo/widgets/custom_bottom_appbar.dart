@@ -26,23 +26,26 @@ class CustomBottomAppBar extends StatelessWidget
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        child: TabBar(
-          isScrollable: isScrollable,
-          controller: tabController,
-          labelPadding: EdgeInsets.zero,
-          labelColor: cPink,
-          indicatorColor: cPink,
-          unselectedLabelColor: Colors.grey[600],
-          tabs: bottomData
-              .map(
-                (e) => Tab(
-                  child: Text(
-                    e,
-                    style: style3(context),
+        child: Container(
+          height: preferredSize.height - (preferredSize.height * (1 / 1.7)),
+          child: TabBar(
+            isScrollable: isScrollable,
+            controller: tabController,
+            labelPadding: EdgeInsets.zero,
+            labelColor: cPink,
+            indicatorColor: cPink,
+            unselectedLabelColor: Colors.grey[600],
+            tabs: bottomData
+                .map(
+                  (e) => Tab(
+                    child: Text(
+                      e,
+                      style: style3(context),
+                    ),
                   ),
-                ),
-              )
-              .toList(),
+                )
+                .toList(),
+          ),
         ),
       ),
       preferredSize: preferredSize,

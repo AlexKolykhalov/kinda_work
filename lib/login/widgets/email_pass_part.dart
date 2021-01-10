@@ -40,7 +40,7 @@ class EmailPasswordPart extends StatelessWidget {
               PageRouteBuilder(
                 transitionDuration: Duration(seconds: 0),
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    MainPage(),
+                    StartPage(),
               ),
             ),
             buttonText: 'Войти',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 List _users = [
   {
@@ -34,15 +35,17 @@ class UsersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Пользователи'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Пользователи',
+        ),
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: _size.height * cVertical),
+          padding: EdgeInsets.symmetric(vertical: size(context, vert)),
           child: ListView.separated(
             separatorBuilder: (context, index) => (index < _users.length - 1)
-                ? Divider(thickness: 1, indent: _size.width * cHorizont)
+                ? Divider(thickness: 1, indent: size(context, hor))
                 : Divider(thickness: 1),
             itemCount: _users.length + 1,
             itemBuilder: (context, index) => (index < _users.length)
@@ -51,7 +54,7 @@ class UsersPage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _size.width * cHorizont),
+                            horizontal: size(context, hor)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -109,7 +112,7 @@ void _displayBottomSheet(
       return Container(
         height: _size.height * 0.45,
         padding: EdgeInsets.symmetric(
-          horizontal: _size.width * cHorizont,
+          horizontal: size(context, hor),
         ),
         color: cGrey,
         child: LayoutBuilder(

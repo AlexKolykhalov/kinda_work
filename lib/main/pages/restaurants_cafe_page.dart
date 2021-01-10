@@ -5,6 +5,7 @@ import 'package:kinda_work/main/widgets/bottom_buttons.dart';
 import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class RestaurantsCafe extends StatelessWidget {
   const RestaurantsCafe({
@@ -19,7 +20,10 @@ class RestaurantsCafe extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Рестораны и кафе'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Рестораны и кафе',
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -28,11 +32,7 @@ class RestaurantsCafe extends StatelessWidget {
                 title: 'Популярные места',
                 textTotalAmount: '5394 из 15600',
               ),
-              CustomGridView(
-                size: _size,
-                childAspectRatio: cRatioSmallSize,
-                infoElements: popularPlaces,
-              ),
+              CustomGridView(elements: popularPlaces),
               CustomButton(
                 onTap: null,
                 buttonText: 'Смотреть все предложения',
@@ -43,22 +43,17 @@ class RestaurantsCafe extends StatelessWidget {
                 title: 'Популярные акции',
                 textTotalAmount: '5090',
               ),
-              CustomGridView(
-                size: _size,
-                childAspectRatio: cRatioMediumSize,
-                infoElements: popularPromotions,
-              ),
+              CustomGridView(elements: popularPromotions),
               CustomButton(
                 onTap: null,
                 buttonText: 'Смотреть все предложения',
                 buttonColor: cGrey,
                 buttonTextColor: cIndigo,
               ),
-              BottomButtons(size: _size),
+              BottomButtons(),
             ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavBar(currentIndex: currentIndex),
       ),
     );
   }

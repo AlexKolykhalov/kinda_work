@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
+import 'package:kinda_work/styles.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
@@ -222,6 +223,7 @@ class _MapPageState extends State<MapPage> {
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
+          height: appBarHeight(context),
           title: 'Красота',
           actions: [cSearchIcon],
         ),
@@ -276,8 +278,8 @@ class _MapPageState extends State<MapPage> {
 
 void _displayBottomSheet(
   BuildContext context,
-  List<InfoElement> listPlaces,
-  List<InfoElement> listPromotions,
+  List<Company> listPlaces,
+  List<Promotion> listPromotions,
 ) {
   showModalBottomSheet(
     context: context,
@@ -287,8 +289,8 @@ void _displayBottomSheet(
       return Container(
         height: _size.height * 0.55,
         padding: EdgeInsets.symmetric(
-          horizontal: _size.width * cHorizont,
-          vertical: _size.height * cVertical,
+          horizontal: size(context, hor),
+          vertical: size(context, vert),
         ),
         color: cGrey,
         child: SingleChildScrollView(
@@ -303,8 +305,7 @@ void _displayBottomSheet(
                 ),
               ),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(vertical: _size.height * cVertical),
+                padding: EdgeInsets.symmetric(vertical: size(context, vert)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -325,7 +326,7 @@ void _displayBottomSheet(
                 ),
               ),
               Container(
-                height: cConstantWidth / cRatioSmallSize,
+                height: 150.0,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => GestureDetector(
@@ -337,7 +338,7 @@ void _displayBottomSheet(
                       ),
                     ),
                     child: Container(
-                      width: cConstantWidth,
+                      width: 20.0,
                       child: CustomGridViewElement(element: listPlaces[index]),
                     ),
                   ),
@@ -346,8 +347,7 @@ void _displayBottomSheet(
                 ),
               ),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(vertical: _size.height * cVertical),
+                padding: EdgeInsets.symmetric(vertical: size(context, vert)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -367,7 +367,7 @@ void _displayBottomSheet(
                 ),
               ),
               Container(
-                height: cConstantWidth / cRatioMediumSize,
+                height: 150.0,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => GestureDetector(
@@ -379,7 +379,7 @@ void _displayBottomSheet(
                       ),
                     ),
                     child: Container(
-                      width: cConstantWidth,
+                      width: 20.0,
                       child:
                           CustomGridViewElement(element: listPromotions[index]),
                     ),

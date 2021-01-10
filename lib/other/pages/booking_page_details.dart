@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class BookingPageDetails extends StatelessWidget {
   const BookingPageDetails({
@@ -16,7 +17,10 @@ class BookingPageDetails extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Бронирование'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Бронирование',
+        ),
         body: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,8 +30,8 @@ class BookingPageDetails extends StatelessWidget {
                 children: [
                   Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: _size.width * cHorizont,
-                        vertical: _size.height * cVertical,
+                        horizontal: size(context, hor),
+                        vertical: size(context, vert),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,8 +98,8 @@ class BookingPageDetails extends StatelessWidget {
                   Container(
                     width: _size.width,
                     padding: EdgeInsets.symmetric(
-                      horizontal: _size.width * cHorizont,
-                      vertical: _size.height * cVertical,
+                      horizontal: size(context, hor),
+                      vertical: size(context, vert),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,8 +144,8 @@ class BookingPageDetails extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: _size.width * cHorizont,
-                  vertical: _size.height * cVertical,
+                  horizontal: size(context, hor),
+                  vertical: size(context, vert),
                 ),
                 child: CustomButton(
                   onTap: null,

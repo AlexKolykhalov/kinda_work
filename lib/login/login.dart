@@ -11,23 +11,17 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
-    final _totalHorizontalPadding = 2 * _size.width * cHorizont;
-    cConstantWidth =
-        (_size.width - _totalHorizontalPadding - cCrossAxisSpacing) / 2;
     print('-->LoginPage');
-
+    MediaQueryData _mq = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            height: _size.height - MediaQuery.of(context).padding.top,
-            padding: EdgeInsets.symmetric(
-              horizontal: _size.width * cLoginPageHorizontal,
-            ),
+            height: _mq.size.height - _mq.padding.top,
+            padding: EdgeInsets.symmetric(horizontal: size(context, 0.05)),
             child: Column(
               children: [
-                SizedBox(height: AppBar().preferredSize.height * 0.85),
+                SizedBox(height: appBarHeight(context)),
                 LogoPart(),
                 SizedBox(height: size(context, 0.05)),
                 EmailPasswordPart(),

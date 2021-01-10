@@ -12,7 +12,10 @@ class ReviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Ваш отзыв'),
+        appBar: CustomAppBar(
+          height: appBarHeight(context),
+          title: 'Ваш отзыв',
+        ),
         body: Container(
           padding: EdgeInsets.symmetric(
               horizontal: size(context, hor), vertical: size(context, vert)),

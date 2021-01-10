@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:kinda_work/repository.dart';
 import 'package:latlong/latlong.dart';
+
+import 'package:kinda_work/repository.dart';
+
+class AppBarBottom {
+  AppBarBottom({
+    @required this.tabController,
+    @required this.bottomData,
+    this.isScrollable = false,
+  });
+  final TabController tabController;
+  final List<String> bottomData;
+  final bool isScrollable;
+}
 
 //search
 class Price {
@@ -25,41 +37,41 @@ class Menu {
   Menu({
     @required this.img,
     @required this.name,
-    @required this.newPrice,
-    @required this.oldPrice,
+    this.newPrice = 0.0,
+    this.oldPrice = 0.0,
   });
 
   final String img;
   final String name;
-  final int newPrice;
-  final int oldPrice;
-}
-
-class InfoElement {
-  InfoElement({
-    @required this.isLargeGridElement,
-    @required this.img,
-    @required this.rate,
-    this.favoriteSelected = false,
-    this.lightText = '',
-    this.boltText = '',
-    this.countMessages = 0,
-    this.discount = 0,
-    this.newPrice,
-    this.oldPrice,
-  });
-
-  final bool isLargeGridElement;
-  final bool favoriteSelected;
-  final String img;
-  final String lightText;
-  final String boltText;
   final num newPrice;
   final num oldPrice;
-  final double rate;
-  final int countMessages;
-  final int discount;
 }
+
+// class InfoElement {
+//   InfoElement({
+//     @required this.isLargeGridElement,
+//     @required this.img,
+//     @required this.rate,
+//     this.favoriteSelected = false,
+//     this.lightText = '',
+//     this.boltText = '',
+//     this.countMessages = 0,
+//     this.discount = 0,
+//     this.newPrice,
+//     this.oldPrice,
+//   });
+
+//   final bool isLargeGridElement;
+//   final bool favoriteSelected;
+//   final String img;
+//   final String lightText;
+//   final String boltText;
+//   final num newPrice;
+//   final num oldPrice;
+//   final double rate;
+//   final int countMessages;
+//   final int discount;
+// }
 
 class Promotion {
   Promotion({
@@ -93,6 +105,7 @@ class Company {
     @required this.type,
     @required this.name,
     this.adress,
+    this.menu = const <Menu>[],
     this.rate = 0.0,
     this.favoriteSelected = false,
     this.messages = 0,
@@ -103,6 +116,7 @@ class Company {
   final String type;
   final String name;
   final String adress;
+  final List<Menu> menu;
   final double rate;
   final bool favoriteSelected;
   final int messages;
@@ -141,15 +155,16 @@ class Review {
 }
 
 class User {
-  User(
-      {this.avatar = 'assets/png/face.png',
-      @required this.name,
-      @required this.birthday,
-      this.about = '',
-      this.points = 0,
-      this.giftPoints = 0,
-      this.reviews = const [],
-      this.socialMediaAccounts = const []});
+  User({
+    this.avatar = 'assets/png/face.png',
+    @required this.name,
+    @required this.birthday,
+    this.about = '',
+    this.points = 0,
+    this.giftPoints = 0,
+    this.reviews = const [],
+    this.socialMediaAccounts = const [],
+  });
 
   final String avatar;
   final String name;
@@ -171,8 +186,8 @@ class InfoMarker {
 
   final int id;
   final LatLng position;
-  final List<InfoElement> places;
-  final List<InfoElement> promotions;
+  final List<Company> places;
+  final List<Promotion> promotions;
 }
 
 class DiscountMarker {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:kinda_work/styles.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
@@ -37,10 +38,13 @@ class _PromotionPageState extends State<PromotionPage>
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
+          height: appBarHeight(context),
           title: 'Подробности акции',
           actions: [Icon(Icons.favorite, color: cPink)],
-          bottom: ['Описание', 'Условия', 'Отзывы'],
-          tabController: _tabController,
+          bottom: AppBarBottom(
+            tabController: _tabController,
+            bottomData: ['Описание', 'Условия', 'Отзывы'],
+          ),
         ),
         body: TabBarView(
           controller: _tabController,
@@ -92,7 +96,7 @@ class _DescriptionState extends State<Description> {
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
-                                horizontal: constraints.maxWidth * cHorizont),
+                                horizontal: constraints.maxWidth * hor),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -228,7 +232,7 @@ class _DescriptionState extends State<Description> {
                         ]),
                         Positioned(
                           top: constraints.maxHeight * 0.35 - 15.0,
-                          left: MediaQuery.of(context).size.width * cHorizont,
+                          left: MediaQuery.of(context).size.width * hor,
                           child: DiscountBadge(discount: 45),
                         ),
                       ],
@@ -237,7 +241,7 @@ class _DescriptionState extends State<Description> {
                   Container(
                     color: cGrey,
                     padding: EdgeInsets.symmetric(
-                        horizontal: constraints.maxWidth * cHorizont),
+                        horizontal: constraints.maxWidth * hor),
                     child: Column(children: [
                       GestureDetector(
                         behavior: HitTestBehavior
@@ -284,7 +288,7 @@ class _DescriptionState extends State<Description> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                        horizontal: constraints.maxWidth * cHorizont),
+                        horizontal: constraints.maxWidth * hor),
                     child: Column(
                       children: [
                         Row(
@@ -333,8 +337,7 @@ class _DescriptionState extends State<Description> {
                               transitionDuration: Duration(seconds: 0),
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
-                                      PromotionConditionsPage(
-                                          size: constraints.biggest),
+                                      PromotionConditionsPage(),
                             ),
                           ),
                           child: Row(
@@ -360,7 +363,7 @@ class _DescriptionState extends State<Description> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: constraints.maxWidth * cHorizont,
+                      horizontal: constraints.maxWidth * hor,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -398,7 +401,7 @@ class _DescriptionState extends State<Description> {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: constraints.maxWidth * cHorizont,
+                      horizontal: constraints.maxWidth * hor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -557,7 +560,7 @@ class _DescriptionState extends State<Description> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: constraints.maxHeight * cVertical),
+                              vertical: constraints.maxHeight * vert),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -578,8 +581,8 @@ class _DescriptionState extends State<Description> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(
-                        bottom: constraints.maxHeight * cVertical),
+                    margin:
+                        EdgeInsets.only(bottom: constraints.maxHeight * vert),
                     height: 250.0,
                     child: FlutterMap(
                       options: MapOptions(
@@ -606,31 +609,20 @@ class _DescriptionState extends State<Description> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: constraints.maxWidth * cHorizont),
+                        horizontal: constraints.maxWidth * hor),
                     child: CustomGridViewTitle(
                       title: 'Другие акции',
                       textTotalAmount: '',
                     ),
                   ),
                   Container(
-                    height: cConstantWidth / cRatioMediumSize,
-                    padding:
-                        EdgeInsets.only(left: constraints.maxWidth * cHorizont),
+                    height: 150.0,
+                    padding: EdgeInsets.only(left: constraints.maxWidth * hor),
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) => Container(
-                        width: cConstantWidth,
-                        child: CustomGridViewElement(
-                            element: InfoElement(
-                          isLargeGridElement: false,
-                          discount: 50,
-                          oldPrice: 10500,
-                          newPrice: 8500,
-                          countMessages: 25,
-                          lightText: 'Массажный салон',
-                          img: 'assets/png/grid/2.png',
-                          rate: 9.5,
-                        )),
+                        width: 20.0,
+                        child: CustomGridViewElement(element: promo),
                       ),
                       separatorBuilder: (context, index) =>
                           SizedBox(width: 10.0),
@@ -642,8 +634,8 @@ class _DescriptionState extends State<Description> {
               ),
             ),
             Positioned(
-              left: constraints.maxWidth * cHorizont,
-              right: constraints.maxWidth * cHorizont,
+              left: constraints.maxWidth * hor,
+              right: constraints.maxWidth * hor,
               bottom: 40.0,
               child: CustomButton(
                 onTap: () => displayQrCode(context),

@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         // dividerTheme: DividerThemeData(),
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
+      // TODO remove MultiBlocProvider to LoginPage
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
