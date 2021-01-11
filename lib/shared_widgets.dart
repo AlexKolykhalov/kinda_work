@@ -1382,32 +1382,15 @@ class _EmailTextFieldState extends State<EmailTextField> {
 class PhoneTextField extends StatefulWidget {
   const PhoneTextField({
     Key key,
-    this.onEditingComplete,
     this.maxLength,
+    this.hintText = '',
   }) : super(key: key);
 
-  final VoidCallback onEditingComplete;
   final int maxLength;
+  final String hintText;
 
   @override
   _PhoneTextFieldState createState() => _PhoneTextFieldState();
-}
-
-Map<String, bool> _map = {'textfield': false, 'phonetextfield': false};
-
-void _validation(BuildContext context) {
-  if (_map['textfield'] && _map['phonetextfield']) {
-    _map['textfield'] = false;
-    _map['phonetextfield'] = false;
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: Duration(seconds: 2),
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            DiscountDetailsPage(),
-      ),
-    );
-  }
 }
 
 class _PhoneTextFieldState extends State<PhoneTextField> {
@@ -1433,15 +1416,16 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                 onChanged: (value) {
                   if (widget.maxLength != null &&
                       value.length == widget.maxLength) {
-                    _map['phonetextfield'] = true;
-                    return _validation(context);
-                  }
-                },
-                onEditingComplete: () {
-                  if (widget.maxLength != null &&
-                      _controller.text.length == widget.maxLength) {
-                    _map['phonetextfield'] = true;
-                    return _validation(context);
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: Duration(seconds: 5),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            DiscountDetailsPage(),
+                      ),
+                    );
+                    _controller.clear();
+                    FocusScope.of(context).unfocus();
                   }
                 },
                 controller: _controller,
@@ -1454,6 +1438,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                   counterText: '',
                   fillColor: Colors.white,
                   filled: true,
+                  hintText: widget.hintText,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: constraints.maxWidth * 0.05,
                   ),
@@ -1563,7 +1548,6 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     Key key,
     this.text,
-    this.onChanged,
     this.maxLength,
     this.fontWeight = FontWeight.normal,
     this.hintText,
@@ -1573,7 +1557,6 @@ class CustomTextField extends StatefulWidget {
     this.popupMenuItems = const [],
   }) : super(key: key);
 
-  final ValueChanged<String> onChanged;
   final TextInputType keyboardType;
   final String text;
   final int maxLength;
@@ -1602,7 +1585,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     if (widget.isMultiLines) {
       _height = null;
     } else {
-      _height = size(context, 0.075) > 48.0 ? 48.0 : size(context, 0.075);
+      _height = math.min(size(context, 0.075), 48.0);
     }
     super.didChangeDependencies();
   }
@@ -1624,21 +1607,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
             children: [
               TextField(
                 controller: _controller,
-                onChanged: widget.onChanged,
-                // onChanged: (value) {
-                //   if (widget.maxLength != null &&
-                //       value.length == widget.maxLength) {
-                //     _map['textfield'] = true;
-                //     return _validation(context);
-                //   }
-                // },
-                // onEditingComplete: () {
-                //   if (widget.maxLength != null &&
-                //       _controller.text.length == widget.maxLength) {
-                //     _map['textfield'] = true;
-                //     return _validation(context);
-                //   }
-                // },
+                onTap: () => print('object'),
+                onChanged: (value) {
+                  if (widget.maxLength != null &&
+                      value.length == widget.maxLength) {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: Duration(seconds: 5),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            DiscountDetailsPage(),
+                      ),
+                    );
+                    _controller.clear();
+                    FocusScope.of(context).unfocus();
+                  }
+                },
                 keyboardType: widget.keyboardType,
                 textAlignVertical: TextAlignVertical.center,
                 maxLength: widget.maxLength,
