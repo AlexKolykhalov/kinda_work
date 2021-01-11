@@ -1549,6 +1549,7 @@ class CustomTextField extends StatefulWidget {
     Key key,
     this.text,
     this.maxLength,
+    this.focusNode,
     this.fontWeight = FontWeight.normal,
     this.hintText,
     this.keyboardType = TextInputType.text,
@@ -1557,6 +1558,7 @@ class CustomTextField extends StatefulWidget {
     this.popupMenuItems = const [],
   }) : super(key: key);
 
+  final FocusNode focusNode;
   final TextInputType keyboardType;
   final String text;
   final int maxLength;
@@ -1606,8 +1608,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             alignment: Alignment.centerRight,
             children: [
               TextField(
+                focusNode: widget.focusNode,
                 controller: _controller,
-                onTap: () => print('object'),
                 onChanged: (value) {
                   if (widget.maxLength != null &&
                       value.length == widget.maxLength) {

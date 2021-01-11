@@ -18,17 +18,30 @@ class DiscountDetailsPage extends StatefulWidget {
 }
 
 class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
+  FocusNode _focusNode;
   bool _isVisible;
 
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode()..addListener(_focusNodeListener);
     _isVisible = true;
+  }
+
+  Future<Null> _focusNodeListener() async {
+    if (_focusNode.hasFocus) {
+      setState(() {
+        _isVisible = false;
+      });
+    } else {
+      setState(() {
+        _isVisible = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    double _c = MediaQuery.of(context).viewInsets.bottom;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -134,6 +147,7 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                           Expanded(
                             flex: 3,
                             child: CustomTextField(
+                              focusNode: _focusNode,
                               fontWeight: FontWeight.bold,
                               hintText: 'Сумма чека',
                               keyboardType: TextInputType.number,
@@ -161,7 +175,7 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                     ),
                     Expanded(child: Container()),
                     Visibility(
-                      visible: false,
+                      visible: _isVisible,
                       child: CustomButton(
                         onTap: () => Navigator.push(
                           context,
