@@ -17,6 +17,7 @@ class OtherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->OtherPage');
     return Navigator(
       onGenerateRoute: (settings) {
         return MaterialPageRoute(

@@ -8,6 +8,7 @@ class CardsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->CardsPage');
     return Navigator(
       onGenerateRoute: (settings) {
         return MaterialPageRoute(

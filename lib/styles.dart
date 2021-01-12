@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Size
 double size(BuildContext context, double value) {
-  print('SIZE');
+  // print('SIZE');
   return MediaQuery.of(context).size.height * value;
 }
 
