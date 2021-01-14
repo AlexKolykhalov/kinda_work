@@ -31,6 +31,7 @@ class _FavoritesPageState extends State<FavoritesPage>
 
   @override
   Widget build(BuildContext context) {
+    print('-->FavoritesPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -57,6 +58,7 @@ class All extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->All');
     return SingleChildScrollView(
         child: Container(
       padding: EdgeInsets.symmetric(
@@ -106,6 +108,7 @@ class Places extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Places');
     return Container();
   }
 }
@@ -115,6 +118,7 @@ class Promotions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Promotions');
     return Container();
   }
 }

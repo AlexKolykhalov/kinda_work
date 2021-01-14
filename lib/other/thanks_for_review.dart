@@ -8,6 +8,7 @@ class ThanksForReviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->ThanksForReviewPage');
     return SafeArea(
       child: Scaffold(
         body: Column(

@@ -11,6 +11,7 @@ class RegistrationBySmsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RegistrationBySmsPage');
     MediaQueryData _mq = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(

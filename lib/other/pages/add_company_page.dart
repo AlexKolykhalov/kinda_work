@@ -9,6 +9,7 @@ class AddCompanyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->AddCompanyPage');
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(

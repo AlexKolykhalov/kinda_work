@@ -14,6 +14,7 @@ class BookingPageDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->BookingPageDetails');
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(

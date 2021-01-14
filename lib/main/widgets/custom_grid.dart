@@ -81,6 +81,7 @@ class CustomGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->CustomGridView');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return _getGrid(constraints: constraints);
@@ -99,6 +100,7 @@ class CustomGridViewElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('-->CustomGridViewElement');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Stack(
@@ -152,6 +154,7 @@ class CompanyInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('-->CompanyInfo');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Column(
@@ -194,6 +197,7 @@ class PromotionInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('-->PromotionInfo');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Column(

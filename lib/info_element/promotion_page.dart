@@ -35,6 +35,7 @@ class _PromotionPageState extends State<PromotionPage>
 
   @override
   Widget build(BuildContext context) {
+    print('-->PromotionPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -77,6 +78,7 @@ class _DescriptionState extends State<Description> {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Description');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Stack(
@@ -656,6 +658,7 @@ class Conditions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Conditions');
     return Container();
   }
 }
@@ -665,6 +668,7 @@ class Reviews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Reviews');
     return Container();
   }
 }
@@ -687,6 +691,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('-->DropdownWidget');
     return Column(
       children: [
         Container(

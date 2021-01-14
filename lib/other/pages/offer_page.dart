@@ -8,6 +8,7 @@ class OfferPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->OfferPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

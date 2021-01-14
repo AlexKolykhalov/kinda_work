@@ -10,6 +10,7 @@ class RegistrationDataPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RegistrationDataPart');
     return Container(
       child: Column(
         children: [

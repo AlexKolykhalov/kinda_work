@@ -10,6 +10,7 @@ class DiscountConditionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->DiscountConditionsPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

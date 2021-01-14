@@ -120,6 +120,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print('-->PlacePage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -1178,6 +1179,7 @@ class NewsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->NewsWidget');
     Size _size = MediaQuery.of(context).size;
     return Container(
       child: Column(
@@ -1252,6 +1254,7 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->CustomTabBar');
     return Theme(
       data: ThemeData(
         splashColor: Colors.transparent,
@@ -1287,6 +1290,7 @@ class CustomMenuListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->CustomMenuListView');
     return Container(
       height: (125.0 * menu.length) + (10.0 * (menu.length - 1)),
       child: ListView.separated(

@@ -17,6 +17,7 @@ class RestaurantsCafe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RestaurantsCafe');
     Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(

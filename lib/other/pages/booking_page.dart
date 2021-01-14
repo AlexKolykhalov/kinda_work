@@ -10,6 +10,7 @@ class BookingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->BookingPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

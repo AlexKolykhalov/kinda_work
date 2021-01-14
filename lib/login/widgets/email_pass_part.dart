@@ -12,6 +12,7 @@ class EmailPasswordPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->EmailPasswordPart');
     return Container(
       child: Column(
         children: [

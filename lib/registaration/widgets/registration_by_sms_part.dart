@@ -10,6 +10,7 @@ class RegistrationBySmsPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RegistrationBySmsPart');
     return Container(
       child: Column(
         children: [

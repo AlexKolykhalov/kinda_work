@@ -10,6 +10,7 @@ class ReviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->ReviewPage');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -52,6 +53,7 @@ class PlaceName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->PlaceName');
     return Container(
       padding: EdgeInsets.only(bottom: size(context, vert)),
       child: ColumnElementGeneral(
@@ -70,6 +72,7 @@ class ReviewText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->ReviewText');
     return Column(
       children: [
         TextField(
@@ -101,6 +104,7 @@ class ReviewRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->ReviewRating');
     return Column(
       children: [
         Container(
@@ -164,6 +168,7 @@ class RatingPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RatingPoint');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

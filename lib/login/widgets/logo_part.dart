@@ -7,6 +7,7 @@ class LogoPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->LogoPart');
     return Container(
       height: size(context, 0.2),
       child: SvgPicture.asset(

@@ -10,6 +10,7 @@ class RegistrationByEmailPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RegistrationByEmailPart');
     return Container(
       child: Column(
         children: [

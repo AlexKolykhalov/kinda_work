@@ -17,6 +17,7 @@ class Beauty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Beauty');
     Size _size = MediaQuery.of(context).size;
     List<String> _listViewData = [
       'Маникюр',

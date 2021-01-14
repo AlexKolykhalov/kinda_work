@@ -11,6 +11,7 @@ class RegistrationByEmailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RegistrationByEmailPage');
     MediaQueryData _mq = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(

@@ -17,6 +17,7 @@ class BottomButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->BottomButtons');
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: padding,

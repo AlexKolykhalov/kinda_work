@@ -18,6 +18,7 @@ class Sections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->Sections');
     return Container(
       height: size(context, 0.15),
       padding: padding,

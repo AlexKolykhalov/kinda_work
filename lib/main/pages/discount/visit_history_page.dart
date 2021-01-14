@@ -13,8 +13,8 @@ class VisitHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->VisitHistoryPage');
     Size _size = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

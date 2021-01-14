@@ -8,6 +8,7 @@ class BottomTextPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->BottomTextPart');
     return Container(
       margin: EdgeInsets.only(bottom: size(context, 0.05)),
       child: RichText(

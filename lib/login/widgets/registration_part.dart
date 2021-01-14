@@ -9,6 +9,7 @@ class RegistrationPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('-->RegistrationPart');
     return Container(
       margin: EdgeInsets.only(bottom: size(context, 0.05)),
       child: Column(

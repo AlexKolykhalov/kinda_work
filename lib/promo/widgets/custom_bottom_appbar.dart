@@ -20,6 +20,7 @@ class CustomBottomAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    print('-->CustomBottomAppBar');
     return PreferredSize(
       child: Theme(
         data: ThemeData(
