@@ -19,15 +19,15 @@ class DiscountDetailsPage extends StatefulWidget {
 class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
   FocusNode _focusNode = FocusNode();
   bool _isVisible;
+  double _heightBottomAppBar;
 
   @override
   void initState() {
     super.initState();
     _focusNode.addListener(_focusNodeListener);
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _isVisible = true;
-    // });
-    // RenderBox _bottomAppBar;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _heightBottomAppBar = keyBottomAppBar.currentContext.size.height;
+    });
     _isVisible = true;
   }
 
@@ -52,7 +52,11 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
   @override
   Widget build(BuildContext context) {
     print('-->DiscountDetailsPage');
-    EdgeInsets _i = MediaQuery.of(context).padding;
+    MediaQueryData _mq = MediaQuery.of(context);
+    double _heightContainer = _mq.size.height -
+        _mq.padding.top -
+        appBarHeight(context) -
+        _heightBottomAppBar;
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
@@ -86,7 +90,7 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
             builder: (BuildContext context, BoxConstraints constraints) {
               return SingleChildScrollView(
                 child: Container(
-                  height: constraints.maxHeight,
+                  height: _heightContainer, //constraints.maxHeight,
                   padding: EdgeInsets.symmetric(
                     horizontal: size(context, 0.07),
                     vertical: constraints.maxHeight * 0.02,

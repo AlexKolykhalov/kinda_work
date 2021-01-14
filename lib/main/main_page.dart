@@ -16,6 +16,8 @@ import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
+final keyBottomAppBar = GlobalKey();
+
 class StartPage extends StatefulWidget {
   const StartPage({Key key}) : super(key: key);
 
@@ -29,7 +31,7 @@ class _StartPageState extends State<StartPage> {
   final Widget _promotionsPage = PromotionsPage();
   final Widget _cardsPage = CardsPage();
   final Widget _otherPage = OtherPage();
-  final GlobalKey _keyBottomAppBar = GlobalKey();
+  // final _keyBottomAppBar = GlobalKey();
   int _currentIndex = 0;
   BoxConstraints _iconButtonConstraints;
 
@@ -60,7 +62,7 @@ class _StartPageState extends State<StartPage> {
         bottomNavigationBar: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             return BottomNavigationBar(
-              key: _keyBottomAppBar,
+              key: keyBottomAppBar,
               type: BottomNavigationBarType.fixed,
               currentIndex: _currentIndex,
               selectedFontSize: style4(context).fontSize,
