@@ -14,7 +14,6 @@ class VisitHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('-->VisitHistoryPage');
-    Size _size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -22,12 +21,12 @@ class VisitHistoryPage extends StatelessWidget {
           title: 'История посещений',
         ),
         body: Container(
-          padding: EdgeInsets.only(top: _size.height * vert),
+          padding: EdgeInsets.only(top: size(context, vert)),
           child: ListView.separated(
             separatorBuilder: (context, index) =>
                 (index < historyVisits.length - 1)
-                    ? Divider(thickness: 1, indent: size(context, hor))
-                    : Divider(thickness: 1),
+                    ? Divider(thickness: 1.0, indent: size(context, hor))
+                    : Divider(thickness: 1.0),
             itemCount: historyVisits.length + 1,
             itemBuilder: (context, index) => (index < historyVisits.length)
                 ? Column(
@@ -35,8 +34,11 @@ class VisitHistoryPage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: size(context, hor)),
-                        child: Text(historyVisits[index]['date'],
-                            style: TextStyle(color: Colors.grey[600])),
+                        child: Text(
+                          historyVisits[index]['date'],
+                          style:
+                              style4(context).copyWith(color: Colors.grey[600]),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -45,12 +47,13 @@ class VisitHistoryPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(historyVisits[index]['phone'],
-                                style: TextStyle(fontSize: 15.0)),
-                            Text(historyVisits[index]['price'],
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
+                                style: style3(context)),
+                            Text(
+                              historyVisits[index]['price'],
+                              style: style3(context).copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -61,12 +64,11 @@ class VisitHistoryPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(historyVisits[index]['name'],
-                                style: TextStyle(fontSize: 15.0)),
+                                style: style3(context)),
                             Text(
                               historyVisits[index]['discount'],
-                              style: TextStyle(
+                              style: style3(context).copyWith(
                                 color: Colors.green,
-                                fontSize: 15.0,
                               ),
                             ),
                           ],

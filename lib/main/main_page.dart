@@ -16,7 +16,7 @@ import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
-final keyBottomAppBar = GlobalKey();
+double bottomAppHeight = 0.0;
 
 class StartPage extends StatefulWidget {
   const StartPage({Key key}) : super(key: key);
@@ -31,23 +31,28 @@ class _StartPageState extends State<StartPage> {
   final Widget _promotionsPage = PromotionsPage();
   final Widget _cardsPage = CardsPage();
   final Widget _otherPage = OtherPage();
-  // final _keyBottomAppBar = GlobalKey();
+  final _keyBottomAppBar = GlobalKey();
   int _currentIndex = 0;
-  BoxConstraints _iconButtonConstraints;
+  double _svgImageSize;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => bottomAppHeight = _keyBottomAppBar.currentContext.size.height,
+    );
+  }
 
   @override
   void didChangeDependencies() {
-    _iconButtonConstraints = BoxConstraints(
-      maxWidth: size(context, 0.04),
-      maxHeight: size(context, 0.04),
-    );
+    _svgImageSize = size(context, 0.04);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      // top: false,
+      top: false,
       child: Scaffold(
         body: IndexedStack(
           index: _currentIndex,
@@ -59,114 +64,112 @@ class _StartPageState extends State<StartPage> {
             _otherPage,
           ],
         ),
-        bottomNavigationBar: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return BottomNavigationBar(
-              key: keyBottomAppBar,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: _currentIndex,
-              selectedFontSize: style4(context).fontSize,
-              unselectedFontSize: style4(context).fontSize,
-              selectedItemColor: cPink,
-              unselectedItemColor: cIndigo,
-              showUnselectedLabels: true,
-              onTap: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              items: [
-                BottomNavigationBarItem(
-                  label: 'Главная',
-                  icon: Container(
-                    constraints: _iconButtonConstraints,
-                    padding: EdgeInsets.zero,
-                    child: _currentIndex == 0
-                        ? SvgPicture.asset(
-                            'assets/svg/bottombar_icons/home_sel.svg')
-                        : SvgPicture.asset(
-                            'assets/svg/bottombar_icons/home.svg'),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'Каталог',
-                  icon: Container(
-                    constraints: _iconButtonConstraints,
-                    padding: EdgeInsets.zero,
-                    child: _currentIndex == 1
-                        ? SvgPicture.asset(
-                            'assets/svg/bottombar_icons/catalog_sel.svg')
-                        : SvgPicture.asset(
-                            'assets/svg/bottombar_icons/catalog.svg'),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'Акции',
-                  icon: Container(
-                    constraints: _iconButtonConstraints,
-                    padding: EdgeInsets.zero,
-                    child: _currentIndex == 2
-                        ? SvgPicture.asset(
-                            'assets/svg/bottombar_icons/gift_sel.svg')
-                        : SvgPicture.asset(
-                            'assets/svg/bottombar_icons/gift.svg'),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'Карты',
-                  icon: Container(
-                    constraints: _iconButtonConstraints,
-                    padding: EdgeInsets.zero,
-                    child: _currentIndex == 3
-                        ? SvgPicture.asset(
-                            'assets/svg/bottombar_icons/cards_sel.svg')
-                        : SvgPicture.asset(
-                            'assets/svg/bottombar_icons/cards.svg'),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  label: 'Прочее',
-                  activeIcon: Container(
-                    constraints: _iconButtonConstraints,
-                    padding: EdgeInsets.zero,
-                    child: SvgPicture.asset(
-                        'assets/svg/bottombar_icons/more_sel.svg'),
-                  ),
-                  icon: Container(
-                    width: double.infinity,
-                    child: LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              constraints: _iconButtonConstraints,
-                              padding: EdgeInsets.zero,
-                              child: SvgPicture.asset(
-                                  'assets/svg/bottombar_icons/more.svg'),
-                            ),
-                            Positioned(
-                              top: constraints.maxWidth * 0.1,
-                              right: constraints.maxWidth * 0.23,
-                              child: Container(
-                                width: size(context, 0.01),
-                                height: size(context, 0.01),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: cPink,
-                                ),
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            );
+        bottomNavigationBar: BottomNavigationBar(
+          key: _keyBottomAppBar,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedFontSize: style4(context).fontSize,
+          unselectedFontSize: style4(context).fontSize,
+          selectedItemColor: cPink,
+          unselectedItemColor: cIndigo,
+          showUnselectedLabels: true,
+          onTap: (int index) {
+            setState(() {
+              _currentIndex = index;
+            });
           },
+          items: [
+            BottomNavigationBarItem(
+              label: 'Главная',
+              icon: Container(
+                width: _svgImageSize,
+                height: _svgImageSize,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 0
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/home_sel.svg')
+                    : SvgPicture.asset('assets/svg/bottombar_icons/home.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Каталог',
+              icon: Container(
+                width: _svgImageSize,
+                height: _svgImageSize,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 1
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/catalog_sel.svg')
+                    : SvgPicture.asset(
+                        'assets/svg/bottombar_icons/catalog.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Акции',
+              icon: Container(
+                width: _svgImageSize,
+                height: _svgImageSize,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 2
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/gift_sel.svg')
+                    : SvgPicture.asset('assets/svg/bottombar_icons/gift.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Карты',
+              icon: Container(
+                width: _svgImageSize,
+                height: _svgImageSize,
+                padding: EdgeInsets.zero,
+                child: _currentIndex == 3
+                    ? SvgPicture.asset(
+                        'assets/svg/bottombar_icons/cards_sel.svg')
+                    : SvgPicture.asset('assets/svg/bottombar_icons/cards.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: 'Прочее',
+              activeIcon: Container(
+                width: _svgImageSize,
+                height: _svgImageSize,
+                padding: EdgeInsets.zero,
+                child:
+                    SvgPicture.asset('assets/svg/bottombar_icons/more_sel.svg'),
+              ),
+              icon: Container(
+                width: double.infinity,
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: _svgImageSize,
+                          height: _svgImageSize,
+                          padding: EdgeInsets.zero,
+                          child: SvgPicture.asset(
+                              'assets/svg/bottombar_icons/more.svg'),
+                        ),
+                        Positioned(
+                          top: constraints.maxWidth * 0.1,
+                          right: constraints.maxWidth * 0.23,
+                          child: Container(
+                            width: size(context, 0.01),
+                            height: size(context, 0.01),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: cPink,
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
