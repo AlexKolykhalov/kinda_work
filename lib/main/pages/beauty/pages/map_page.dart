@@ -12,27 +12,16 @@ import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/shared_widgets.dart';
 
-enum zoomButtonsType { zoomIn, zoomOut, center }
-
 class MapPage extends StatefulWidget {
   const MapPage({Key key}) : super(key: key);
-
-  // final Size size;
 
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  MapController _mapController;
-  int _id;
-
-  @override
-  void initState() {
-    super.initState();
-    _mapController = MapController();
-    _id = 1;
-  }
+  final _mapController = MapController();
+  int _id = 1;
 
   List<Marker> _buildMarkers() {
     List<Marker> _markers = [];
@@ -55,44 +44,48 @@ class _MapPageState extends State<MapPage> {
     @required LatLng position,
   }) {
     return Marker(
-      width: 180.0,
-      height: 180.0,
+      width: size(context, 0.3),
+      height: size(context, 0.3),
       point: position,
-      builder: (ctx) => Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: 180.0,
-            height: 180.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: cIndigo.withOpacity(0.2),
-            ),
-          ),
-          Container(
-            width: 30.0,
-            height: 30.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-          ),
-          Container(
-            width: 23.5,
-            height: 23.5,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: cIndigo,
-            ),
-            child: Center(
-              child: Icon(
-                Icons.near_me_sharp,
-                color: Colors.white,
-                size: 20.0,
+      builder: (ctx) => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: constraints.maxHeight,
+                height: constraints.maxHeight,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: cIndigo.withOpacity(0.2),
+                ),
               ),
-            ),
-          ),
-        ],
+              Container(
+                width: constraints.maxHeight * 0.2,
+                height: constraints.maxHeight * 0.2,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                width: constraints.maxHeight * 0.15,
+                height: constraints.maxHeight * 0.15,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: cIndigo,
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.near_me_sharp,
+                    color: Colors.white,
+                    size: constraints.maxHeight * 0.12,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -101,8 +94,8 @@ class _MapPageState extends State<MapPage> {
     @required InfoMarker infoMarker,
   }) {
     return Marker(
-      width: 50.0,
-      height: 50.0,
+      width: size(context, 0.1),
+      height: size(context, 0.1),
       point: infoMarker.position,
       builder: (ctx) => GestureDetector(
         onTap: () {
@@ -115,44 +108,55 @@ class _MapPageState extends State<MapPage> {
             infoMarker.promotions,
           );
         },
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 50.0,
-              height: 50.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
-            ),
-            Container(
-              width: 45.0,
-              height: 45.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-            ),
-            Container(
-              width: 35.0,
-              height: 35.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _id == infoMarker.id ? cIndigo : Colors.red,
-              ),
-              child: Center(
-                  child: Text(
-                (infoMarker.places.length + infoMarker.promotions.length)
-                    .toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 21.0,
-                  fontWeight: FontWeight.bold,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: constraints.maxHeight * 0.8,
+                  height: constraints.maxHeight * 0.8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red,
+                  ),
                 ),
-              )),
-            ),
-          ],
+                Container(
+                  width: constraints.maxHeight * 0.62,
+                  height: constraints.maxHeight * 0.62,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  width: constraints.maxHeight * 0.48,
+                  height: constraints.maxHeight * 0.48,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _id == infoMarker.id ? cIndigo : Colors.red,
+                  ),
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      return Center(
+                        child: Text(
+                          (infoMarker.places.length +
+                                  infoMarker.promotions.length)
+                              .toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: constraints.maxHeight * 0.55,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -162,57 +166,61 @@ class _MapPageState extends State<MapPage> {
     @required DiscountMarker discountMarker,
   }) {
     return Marker(
-      width: 75.0,
-      height: 35.0,
+      width: size(context, 0.13),
+      height: size(context, 0.06),
       point: discountMarker.position,
-      builder: (ctx) => Container(
-        width: 75.0,
-        height: 30.0,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.0),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Stack(
-              alignment: Alignment.center,
+      builder: (ctx) => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50.0),
+              color: Colors.white,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: 30.0,
-                  height: 30.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red,
-                  ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: constraints.maxWidth * 0.38,
+                      height: constraints.maxHeight,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                    ),
+                    Container(
+                      width: constraints.maxWidth * 0.26,
+                      height: constraints.maxHeight,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      width: constraints.maxWidth * 0.15,
+                      height: constraints.maxHeight,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: 20.0,
-                  height: 20.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
+                Text(
+                  '-${discountMarker.discount.toString()}%',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: constraints.maxHeight * 0.48,
                   ),
-                ),
-                Container(
-                  width: 10.0,
-                  height: 10.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red,
-                  ),
-                ),
+                )
               ],
             ),
-            Text(
-              '-${discountMarker.discount.toString()}%',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15.0,
-              ),
-            )
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -247,31 +255,95 @@ class _MapPageState extends State<MapPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ZoomButtons(
-                        buttonType: zoomButtonsType.zoomIn,
-                        mapController: _mapController,
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 25.0),
-                        child: ZoomButtons(
-                          buttonType: zoomButtonsType.zoomOut,
-                          mapController: _mapController,
-                        ),
-                      ),
-                      ZoomButtons(
-                        buttonType: zoomButtonsType.center,
-                        mapController: _mapController,
-                      ),
-                    ],
-                  ),
+                  padding: EdgeInsets.only(left: size(context, hor)),
+                  child: ZoomButtons(mapController: _mapController),
                 ),
               ),
             ]),
+      ),
+    );
+  }
+}
+
+class ZoomButtons extends StatelessWidget {
+  const ZoomButtons({
+    Key key,
+    @required this.mapController,
+  }) : super(key: key);
+
+  final MapController mapController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ZoomButton(
+          onTap: () {
+            if (mapController.zoom + 1 < 19.0) {
+              mapController.move(mapController.center, mapController.zoom + 1);
+            }
+          },
+          icon: Icons.add,
+        ),
+        SizedBox(height: size(context, 0.025)),
+        ZoomButton(
+          onTap: () {
+            if (mapController.zoom - 1 > 14.0) {
+              mapController.move(mapController.center, mapController.zoom - 1);
+            }
+          },
+          icon: Icons.remove,
+        ),
+        SizedBox(height: size(context, 0.05)),
+        ZoomButton(
+          onTap: () {
+            mapController.move(LatLng(53.909480, 27.544318), 16.0);
+          },
+          icon: Icons.near_me_outlined,
+        ),
+      ],
+    );
+  }
+}
+
+class ZoomButton extends StatelessWidget {
+  const ZoomButton({
+    Key key,
+    @required this.onTap,
+    @required this.icon,
+  }) : super(key: key);
+
+  final VoidCallback onTap;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: size(context, 0.065),
+        height: size(context, 0.065),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black38,
+                blurRadius: 5.0,
+              )
+            ]),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Center(
+              child: Icon(
+                icon,
+                size: constraints.maxHeight * 0.65,
+                color: Colors.grey[600],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -286,168 +358,119 @@ void _displayBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) {
-      Size _size = MediaQuery.of(context).size;
       return Container(
-        height: _size.height * 0.55,
+        height: MediaQuery.of(context).size.height > 550
+            ? size(context, 0.74)
+            : size(context, 0.78),
         padding: EdgeInsets.symmetric(
           horizontal: size(context, hor),
-          vertical: size(context, vert),
+          vertical: size(context, 0.01),
         ),
         color: cGrey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                width: _size.width * 0.1,
-                height: _size.height * 0.005,
-                decoration: BoxDecoration(
-                  color: Colors.grey[600],
-                  borderRadius: BorderRadius.circular(20.0),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Column(
+              children: [
+                Container(
+                  width: constraints.maxWidth * 0.12,
+                  height: constraints.maxHeight * 0.01,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[600],
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size(context, vert)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                SizedBox(height: constraints.maxHeight * 0.02),
+                Row(
                   children: [
                     Text(
                       'Заведения',
-                      style: TextStyle(
+                      style: style3(context).copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17.0,
                       ),
                     ),
-                    SizedBox(width: 15.0),
+                    SizedBox(width: constraints.maxWidth * 0.03),
                     Text(
-                      // TODO склонения
                       '${listPlaces.length} предложений',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
+                      style: style4(context).copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    )
                   ],
                 ),
-              ),
-              Container(
-                height: 150.0,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            PlacePage(),
+                SizedBox(height: constraints.maxHeight * 0.01),
+                Container(
+                  height: constraints.maxHeight * 0.38,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  PlacePage(),
+                        ),
+                      ),
+                      child: Container(
+                        width: constraints.maxWidth * 0.53,
+                        child:
+                            CustomGridViewElement(element: listPlaces[index]),
                       ),
                     ),
-                    child: Container(
-                      width: 20.0,
-                      child: CustomGridViewElement(element: listPlaces[index]),
+                    separatorBuilder: (context, index) => SizedBox(
+                      width: constraints.maxWidth * 0.03,
                     ),
+                    itemCount: listPlaces.length,
                   ),
-                  separatorBuilder: (context, index) => SizedBox(width: 15.0),
-                  itemCount: listPlaces.length,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size(context, vert)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                Expanded(child: Container()),
+                Row(
                   children: [
                     Text(
                       'Акции',
-                      style: TextStyle(
+                      style: style3(context).copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17.0,
                       ),
                     ),
-                    SizedBox(width: 15.0),
+                    SizedBox(width: constraints.maxWidth * 0.03),
                     Text(
-                      '${listPromotions.length} предложения',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
+                      '${listPromotions.length} предложений',
+                      style: style4(context).copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    )
                   ],
                 ),
-              ),
-              Container(
-                height: 150.0,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            PromotionPage(),
+                SizedBox(height: constraints.maxHeight * 0.01),
+                Container(
+                  height: constraints.maxHeight * 0.46,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  PromotionPage(),
+                        ),
+                      ),
+                      child: Container(
+                        width: constraints.maxWidth * 0.53,
+                        child: CustomGridViewElement(
+                            element: listPromotions[index]),
                       ),
                     ),
-                    child: Container(
-                      width: 20.0,
-                      child:
-                          CustomGridViewElement(element: listPromotions[index]),
-                    ),
+                    separatorBuilder: (context, index) =>
+                        SizedBox(width: constraints.maxWidth * 0.03),
+                    itemCount: listPromotions.length,
                   ),
-                  separatorBuilder: (context, index) => SizedBox(width: 15.0),
-                  itemCount: listPromotions.length,
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
         ),
       );
     },
   );
-}
-
-class ZoomButtons extends StatelessWidget {
-  const ZoomButtons({
-    Key key,
-    @required this.buttonType,
-    @required this.mapController,
-  }) : super(key: key);
-
-  final buttonType;
-  final MapController mapController;
-
-  Icon _icon() {
-    if (buttonType == zoomButtonsType.zoomIn) {
-      return Icon(Icons.add, color: Colors.grey[600]);
-    } else if (buttonType == zoomButtonsType.zoomOut) {
-      return Icon(Icons.remove, color: Colors.grey[600]);
-    } else
-      return Icon(Icons.near_me_outlined, color: Colors.grey[600]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (buttonType == zoomButtonsType.zoomIn) {
-          if (mapController.zoom + 1 < 19.0) {
-            mapController.move(mapController.center, mapController.zoom + 1);
-          }
-        }
-        if (buttonType == zoomButtonsType.zoomOut) {
-          if (mapController.zoom - 1 > 14.0) {
-            mapController.move(mapController.center, mapController.zoom - 1);
-          }
-        }
-        if (buttonType == zoomButtonsType.center) {
-          mapController.move(LatLng(53.909480, 27.544318), 16.0);
-        }
-      },
-      child: Container(
-        width: 40.0,
-        height: 40.0,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black38,
-                blurRadius: 5.0,
-              )
-            ]),
-        child: Center(child: _icon()),
-      ),
-    );
-  }
 }

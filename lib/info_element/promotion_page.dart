@@ -10,6 +10,7 @@ import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets.dart';
 
+// TODO deal with it
 class PromotionPage extends StatefulWidget {
   const PromotionPage({Key key}) : super(key: key);
 
