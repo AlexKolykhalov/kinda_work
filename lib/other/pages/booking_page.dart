@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/booking_page_details.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';
 
 class BookingPage extends StatelessWidget {
@@ -18,18 +20,21 @@ class BookingPage extends StatelessWidget {
           title: 'Бронирование',
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.height * vert),
-            child: ListView.separated(
-              itemBuilder: (context, index) => BookingListViewElement(
-                booking: bookingData[index],
-              ),
-              separatorBuilder: (context, index) => Divider(
-                thickness: 1.0,
-                indent: MediaQuery.of(context).size.width * hor,
-              ),
-              itemCount: bookingData.length,
-            )),
+          padding: EdgeInsets.symmetric(vertical: size(context, vert)),
+          child: ListView.builder(
+            itemBuilder: (context, index) => Column(
+              children: [
+                BookingListViewElement(booking: bookingData[index]),
+                Divider(
+                  height: size(context, vert),
+                  thickness: 1.0,
+                  indent: size(context, hor),
+                )
+              ],
+            ),
+            itemCount: bookingData.length,
+          ),
+        ),
       ),
     );
   }
@@ -45,38 +50,56 @@ class BookingListViewElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    final double _h = size(context, 0.015);
+    final double _hor = size(context, hor);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+      padding: EdgeInsets.symmetric(horizontal: _hor),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(booking['date'], style: TextStyle(color: Colors.grey[600])),
-              Text(booking['name'], style: TextStyle(fontSize: 15.0)),
-              Text(booking['booking_date'], style: TextStyle(fontSize: 15.0)),
-              SizedBox(height: 5.0),
+              Text(
+                booking['date'],
+                style: style4(context).copyWith(
+                  color: Colors.grey[600],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: _hor / 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(booking['name'], style: style2(context)),
+                    Text(booking['booking_date'], style: style2(context)),
+                  ],
+                ),
+              ),
               booking['status'] == 0
-                  ? Text('На рассмотрении',
-                      style: TextStyle(color: Colors.grey[600]))
-                  : Text('Подтверждено', style: TextStyle(color: Colors.green))
+                  ? Text(
+                      'На рассмотрении',
+                      style: style3(context).copyWith(
+                        color: Colors.grey[600],
+                      ),
+                    )
+                  : Text(
+                      'Подтверждено',
+                      style: style3(context).copyWith(color: Colors.green),
+                    )
             ],
           ),
           Row(
             children: [
               Container(
-                width: _size.height * 0.015,
-                height: _size.height * 0.015,
+                width: _h,
+                height: _h,
                 decoration: BoxDecoration(
-                    color: booking['unseen'] ? cPink : Colors.transparent,
-                    borderRadius: BorderRadius.circular(50.0)),
+                  color: booking['unseen'] ? cPink : Colors.transparent,
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
+              CustomRedRightArrow(
                 onPressed: () => Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -85,11 +108,7 @@ class BookingListViewElement extends StatelessWidget {
                         BookingPageDetails(booking: booking),
                   ),
                 ),
-                icon: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.keyboard_arrow_right, color: cPink),
-                ),
-              ),
+              )
             ],
           )
         ],

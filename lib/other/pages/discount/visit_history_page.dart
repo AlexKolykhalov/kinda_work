@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
 import 'package:kinda_work/styles.dart';
 
 class VisitHistoryPage extends StatelessWidget {
@@ -13,6 +14,7 @@ class VisitHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
     print('-->VisitHistoryPage');
     return SafeArea(
       child: Scaffold(
@@ -25,7 +27,7 @@ class VisitHistoryPage extends StatelessWidget {
           child: ListView.separated(
             separatorBuilder: (context, index) =>
                 (index < historyVisits.length - 1)
-                    ? Divider(thickness: 1.0, indent: size(context, hor))
+                    ? Divider(thickness: 1.0, indent: _hor)
                     : Divider(thickness: 1.0),
             itemCount: historyVisits.length + 1,
             itemBuilder: (context, index) => (index < historyVisits.length)
@@ -33,7 +35,7 @@ class VisitHistoryPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: size(context, hor)),
+                        padding: EdgeInsets.only(left: _hor),
                         child: Text(
                           historyVisits[index]['date'],
                           style:
@@ -41,16 +43,15 @@ class VisitHistoryPage extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size(context, hor)),
+                        padding: EdgeInsets.symmetric(horizontal: _hor),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(historyVisits[index]['phone'],
-                                style: style3(context)),
+                                style: style2(context)),
                             Text(
                               historyVisits[index]['price'],
-                              style: style3(context).copyWith(
+                              style: style2(context).copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -58,16 +59,15 @@ class VisitHistoryPage extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size(context, hor)),
+                        padding: EdgeInsets.symmetric(horizontal: _hor),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(historyVisits[index]['name'],
-                                style: style3(context)),
+                                style: style2(context)),
                             Text(
                               historyVisits[index]['discount'],
-                              style: style3(context).copyWith(
+                              style: style2(context).copyWith(
                                 color: Colors.green,
                               ),
                             ),

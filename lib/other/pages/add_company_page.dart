@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/pages/discount/thanks_page.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/main/main_page.dart';
+import 'package:kinda_work/other/pages/discount/thanks_page.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/text_fields.dart';
 import 'package:kinda_work/styles.dart';
 
 class AddCompanyPage extends StatelessWidget {
@@ -10,7 +14,10 @@ class AddCompanyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('-->AddCompanyPage');
-    Size _size = MediaQuery.of(context).size;
+    MediaQueryData _mq = MediaQuery.of(context);
+    final double _hor = _mq.size.height * hor;
+    final double _vert = _mq.size.height * vert;
+    final double _appBarHeight = appBarHeight(context);
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -19,83 +26,32 @@ class AddCompanyPage extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            height: _size.height - MediaQuery.of(context).padding.top - 48.0,
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, hor),
-              vertical: size(context, vert),
-            ),
+            height: _mq.size.height -
+                _mq.padding.top -
+                _appBarHeight -
+                bottomAppHeight,
+            padding: EdgeInsets.symmetric(horizontal: _hor, vertical: _vert),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
                     Text(
-                        'Размещение на нашем портале абсолютно бесплатное! Заполните эту заявку - и в ближайшее время мы с свяжемся с Вами!'),
-                    SizedBox(height: 15.0),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Название компании',
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: _size.width * 0.05),
-                      ),
+                      'Размещение на нашем портале абсолютно бесплатное! Заполните эту заявку - и в ближайшее время мы с свяжемся с Вами!',
+                      style: style2(context),
                     ),
-                    SizedBox(height: 10.0),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Вид деятельности (кафе, боулинг...)',
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: _size.width * 0.05),
-                      ),
+                    SizedBox(height: _vert),
+                    CustomTextField(hintText: 'Название компании'),
+                    SizedBox(height: _hor),
+                    CustomTextField(
+                      hintText: 'Вид деятельности (кафе, боулинг...)',
                     ),
-                    SizedBox(height: 10.0),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Контактное лицо',
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: _size.width * 0.05),
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Телефон',
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: _size.width * 0.05),
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Email',
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: _size.width * 0.05),
-                      ),
-                    )
+                    SizedBox(height: _hor),
+                    CustomTextField(hintText: 'Контактное лицо'),
+                    SizedBox(height: _hor),
+                    CustomTextField(hintText: 'Телефон'),
+                    SizedBox(height: _hor),
+                    CustomTextField(hintText: 'Email'),
                   ],
                 ),
                 CustomButton(

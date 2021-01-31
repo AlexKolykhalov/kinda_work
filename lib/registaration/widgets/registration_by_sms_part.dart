@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/registaration/pages/registration_by_email_page.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/shared_widgets/text_fields.dart';
 import 'package:kinda_work/styles.dart';
 
 class RegistrationBySmsPart extends StatelessWidget {
@@ -29,14 +30,17 @@ class RegistrationBySmsPart extends StatelessWidget {
             ),
           ),
           CustomButton(
-            onTap: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    RegistrationByEmailPage(),
-              ),
-            ),
+            onTap: () {
+              final Widget _registrationByEmailPage = RegistrationByEmailPage();
+              return Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: Duration(seconds: 0),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      _registrationByEmailPage,
+                ),
+              );
+            },
             buttonText: 'Отправить код',
             buttonTextColor: Colors.white,
             buttonColor: cPink,

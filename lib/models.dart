@@ -7,96 +7,37 @@ class AppBarBottom {
   AppBarBottom({
     @required this.tabController,
     @required this.bottomData,
+    this.onTap,
     this.isScrollable = false,
+    this.labelPadding = EdgeInsets.zero,
   });
   final TabController tabController;
   final List<String> bottomData;
+  final ValueChanged<int> onTap;
   final bool isScrollable;
+  final EdgeInsets labelPadding;
 }
 
-//search
-class Price {
-  Price({
-    @required this.type,
-    @required this.name,
-    @required this.discount,
-    @required this.rate,
-    @required this.adress,
-    @required this.menu,
+class TabsStyle {
+  const TabsStyle({
+    this.isScrolling = true,
+    this.indicator,
+    this.indicatorColor,
+    this.labelColor,
+    this.labelStyle,
+    this.labelPadding,
+    this.unselectedLabelStyle = const TextStyle(fontWeight: FontWeight.normal),
+    this.unselectedLabelColor,
   });
 
-  final String type;
-  final String name;
-  final int discount;
-  final double rate;
-  final String adress;
-  final List<Menu> menu;
-}
-
-class Menu {
-  Menu({
-    @required this.img,
-    @required this.name,
-    this.newPrice = 0.0,
-    this.oldPrice = 0.0,
-  });
-
-  final String img;
-  final String name;
-  final num newPrice;
-  final num oldPrice;
-}
-
-// class InfoElement {
-//   InfoElement({
-//     @required this.isLargeGridElement,
-//     @required this.img,
-//     @required this.rate,
-//     this.favoriteSelected = false,
-//     this.lightText = '',
-//     this.boltText = '',
-//     this.countMessages = 0,
-//     this.discount = 0,
-//     this.newPrice,
-//     this.oldPrice,
-//   });
-
-//   final bool isLargeGridElement;
-//   final bool favoriteSelected;
-//   final String img;
-//   final String lightText;
-//   final String boltText;
-//   final num newPrice;
-//   final num oldPrice;
-//   final double rate;
-//   final int countMessages;
-//   final int discount;
-// }
-
-class Promotion {
-  Promotion({
-    @required this.img,
-    @required this.discription,
-    this.type,
-    this.adress,
-    this.rate = 0.0,
-    this.favoriteSelected = false,
-    this.messages = 0,
-    this.discount = 0,
-    this.oldPrice = 0.0,
-    this.newPrice = 0.0,
-  });
-
-  final String img;
-  final String discription;
-  final String type;
-  final String adress;
-  final double rate;
-  final bool favoriteSelected;
-  final int messages;
-  final int discount;
-  final num oldPrice;
-  final num newPrice;
+  final bool isScrolling;
+  final Decoration indicator;
+  final Color indicatorColor;
+  final Color labelColor;
+  final TextStyle labelStyle;
+  final EdgeInsets labelPadding;
+  final TextStyle unselectedLabelStyle;
+  final Color unselectedLabelColor;
 }
 
 class Company {
@@ -105,7 +46,9 @@ class Company {
     @required this.type,
     @required this.name,
     this.adress,
+    this.web = '',
     this.menu = const <Menu>[],
+    this.news = const <News>[],
     this.rate = 0.0,
     this.favoriteSelected = false,
     this.messages = 0,
@@ -116,11 +59,69 @@ class Company {
   final String type;
   final String name;
   final String adress;
+  final String web;
   final List<Menu> menu;
+  final List<News> news;
   final double rate;
   final bool favoriteSelected;
   final int messages;
   final int discount;
+}
+
+class Menu {
+  Menu({
+    @required this.img,
+    @required this.name,
+    this.description = '',
+    this.newPrice = 0.0,
+    this.oldPrice = 0.0,
+  });
+
+  final String img;
+  final String name;
+  final String description;
+  final num newPrice;
+  final num oldPrice;
+}
+
+class News {
+  News({
+    @required this.date,
+    @required this.img,
+    this.name = '',
+    this.description = '',
+  });
+
+  final String date;
+  final String img;
+  final String name;
+  final String description;
+}
+
+class Promotion {
+  Promotion({
+    @required this.img,
+    @required this.company,
+    @required this.description,
+    this.type,
+    this.rate = 0.0,
+    this.favoriteSelected = false,
+    this.messages = 0,
+    this.discount = 0,
+    this.oldPrice = 0.0,
+    this.newPrice = 0.0,
+  });
+
+  final String img;
+  final Company company;
+  final String description;
+  final String type;
+  final double rate;
+  final bool favoriteSelected;
+  final int messages;
+  final int discount;
+  final num oldPrice;
+  final num newPrice;
 }
 
 class Review {
@@ -154,11 +155,25 @@ class Review {
   final String moderatorResponse;
 }
 
+// class VisitedCompany {
+//   final String date;
+//   final Company company;
+//   final User user;
+//   final double moneySpend;
+// }
+
+// class UsedPromo {
+//   final String date;
+//   final Promotion promotion;
+//   final User user;
+// }
+
 class User {
-  User({
+  const User({
     this.avatar = 'assets/png/face.png',
     @required this.name,
     @required this.birthday,
+    this.phone = '',
     this.about = '',
     this.points = 0,
     this.giftPoints = 0,
@@ -169,6 +184,7 @@ class User {
   final String avatar;
   final String name;
   final String birthday;
+  final String phone;
   final String about;
   final int points;
   final int giftPoints;
@@ -180,13 +196,13 @@ class InfoMarker {
   InfoMarker({
     @required this.id,
     @required this.position,
-    @required this.places,
+    @required this.companies,
     @required this.promotions,
   });
 
   final int id;
   final LatLng position;
-  final List<Company> places;
+  final List<Company> companies;
   final List<Promotion> promotions;
 }
 

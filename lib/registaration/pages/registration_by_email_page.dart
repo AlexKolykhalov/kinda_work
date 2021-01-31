@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/login/widgets/logo_part.dart';
 import 'package:kinda_work/registaration/widgets/registration_by_email_part.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
 import 'package:kinda_work/styles.dart';
 
 class RegistrationByEmailPage extends StatelessWidget {

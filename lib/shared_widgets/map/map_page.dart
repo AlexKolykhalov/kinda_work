@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map/plugin_api.dart';
-import 'package:kinda_work/styles.dart';
+import 'package:kinda_work/shared_widgets/list_view.dart';
+import 'package:kinda_work/shared_widgets/map/map_widgets.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/info_element/promotion_page.dart';
-import 'package:kinda_work/info_element/place_page.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/main/widgets/custom_grid.dart';
 import 'package:kinda_work/models.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/styles.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key key}) : super(key: key);
@@ -104,7 +102,7 @@ class _MapPageState extends State<MapPage> {
           });
           _displayBottomSheet(
             context,
-            infoMarker.places,
+            infoMarker.companies,
             infoMarker.promotions,
           );
         },
@@ -141,7 +139,7 @@ class _MapPageState extends State<MapPage> {
                         (BuildContext context, BoxConstraints constraints) {
                       return Center(
                         child: Text(
-                          (infoMarker.places.length +
+                          (infoMarker.companies.length +
                                   infoMarker.promotions.length)
                               .toString(),
                           style: TextStyle(
@@ -265,210 +263,76 @@ class _MapPageState extends State<MapPage> {
   }
 }
 
-class ZoomButtons extends StatelessWidget {
-  const ZoomButtons({
-    Key key,
-    @required this.mapController,
-  }) : super(key: key);
-
-  final MapController mapController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ZoomButton(
-          onTap: () {
-            if (mapController.zoom + 1 < 19.0) {
-              mapController.move(mapController.center, mapController.zoom + 1);
-            }
-          },
-          icon: Icons.add,
-        ),
-        SizedBox(height: size(context, 0.025)),
-        ZoomButton(
-          onTap: () {
-            if (mapController.zoom - 1 > 14.0) {
-              mapController.move(mapController.center, mapController.zoom - 1);
-            }
-          },
-          icon: Icons.remove,
-        ),
-        SizedBox(height: size(context, 0.05)),
-        ZoomButton(
-          onTap: () {
-            mapController.move(LatLng(53.909480, 27.544318), 16.0);
-          },
-          icon: Icons.near_me_outlined,
-        ),
-      ],
-    );
-  }
-}
-
-class ZoomButton extends StatelessWidget {
-  const ZoomButton({
-    Key key,
-    @required this.onTap,
-    @required this.icon,
-  }) : super(key: key);
-
-  final VoidCallback onTap;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: size(context, 0.065),
-        height: size(context, 0.065),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black38,
-                blurRadius: 5.0,
-              )
-            ]),
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Center(
-              child: Icon(
-                icon,
-                size: constraints.maxHeight * 0.65,
-                color: Colors.grey[600],
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
 void _displayBottomSheet(
   BuildContext context,
-  List<Company> listPlaces,
+  List<Company> listCompanies,
   List<Promotion> listPromotions,
 ) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) {
+      final double _hor = size(context, hor);
       return Container(
-        height: MediaQuery.of(context).size.height > 550
-            ? size(context, 0.74)
-            : size(context, 0.78),
+        height: size(context, 0.55),
         padding: EdgeInsets.symmetric(
-          horizontal: size(context, hor),
+          horizontal: _hor,
           vertical: size(context, 0.01),
         ),
         color: cGrey,
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Column(
-              children: [
-                Container(
-                  width: constraints.maxWidth * 0.12,
-                  height: constraints.maxHeight * 0.01,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[600],
-                    borderRadius: BorderRadius.circular(20.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: size(context, 0.08),
+                height: size(context, 0.007),
+                decoration: BoxDecoration(
+                  color: Colors.grey[600],
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+              SizedBox(height: _hor),
+              Row(
+                children: [
+                  Text(
+                    'Заведения',
+                    style: style3(context).copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: constraints.maxHeight * 0.02),
-                Row(
-                  children: [
-                    Text(
-                      'Заведения',
-                      style: style3(context).copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  SizedBox(width: _hor),
+                  Text(
+                    '${listCompanies.length} предложений',
+                    style: style4(context).copyWith(
+                      color: Colors.grey[600],
                     ),
-                    SizedBox(width: constraints.maxWidth * 0.03),
-                    Text(
-                      '${listPlaces.length} предложений',
-                      style: style4(context).copyWith(
-                        color: Colors.grey[600],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: constraints.maxHeight * 0.01),
-                Container(
-                  height: constraints.maxHeight * 0.38,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  PlacePage(),
-                        ),
-                      ),
-                      child: Container(
-                        width: constraints.maxWidth * 0.53,
-                        child:
-                            CustomGridViewElement(element: listPlaces[index]),
-                      ),
+                  )
+                ],
+              ),
+              SizedBox(height: _hor),
+              CustomHorizontalListViewCompanies(elements: listCompanies),
+              SizedBox(height: _hor),
+              Row(
+                children: [
+                  Text(
+                    'Акции',
+                    style: style3(context).copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    separatorBuilder: (context, index) => SizedBox(
-                      width: constraints.maxWidth * 0.03,
-                    ),
-                    itemCount: listPlaces.length,
                   ),
-                ),
-                Expanded(child: Container()),
-                Row(
-                  children: [
-                    Text(
-                      'Акции',
-                      style: style3(context).copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  SizedBox(width: size(context, hor)),
+                  Text(
+                    '${listPromotions.length} предложений',
+                    style: style4(context).copyWith(
+                      color: Colors.grey[600],
                     ),
-                    SizedBox(width: constraints.maxWidth * 0.03),
-                    Text(
-                      '${listPromotions.length} предложений',
-                      style: style4(context).copyWith(
-                        color: Colors.grey[600],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: constraints.maxHeight * 0.01),
-                Container(
-                  height: constraints.maxHeight * 0.46,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  PromotionPage(),
-                        ),
-                      ),
-                      child: Container(
-                        width: constraints.maxWidth * 0.53,
-                        child: CustomGridViewElement(
-                            element: listPromotions[index]),
-                      ),
-                    ),
-                    separatorBuilder: (context, index) =>
-                        SizedBox(width: constraints.maxWidth * 0.03),
-                    itemCount: listPromotions.length,
-                  ),
-                ),
-              ],
-            );
-          },
+                  )
+                ],
+              ),
+              SizedBox(height: _hor),
+              CustomHorizontalListViewPromos(elements: listPromotions),
+            ],
+          ),
         ),
       );
     },

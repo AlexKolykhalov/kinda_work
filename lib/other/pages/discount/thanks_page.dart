@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/other/other_page.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
 class ThanksPage extends StatelessWidget {
@@ -41,10 +40,7 @@ class ThanksPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: size(context, 0.025)),
-                    Text(
-                      text,
-                      style: style3(context),
-                    ),
+                    Text(text, style: style3(context)),
                   ],
                 ),
               ),

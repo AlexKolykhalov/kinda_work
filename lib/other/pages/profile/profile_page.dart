@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/other/pages/profile/edit_profile/edit_profile_page.dart';
-import 'package:kinda_work/other/pages/profile/edit_profile/fillout_profile.dart';
+import 'package:kinda_work/other/pages/profile/edit_profile/widgets.dart';
+import 'package:kinda_work/other/pages/profile/widgets.dart';
 import 'package:kinda_work/other/pages/review_page.dart';
 import 'package:kinda_work/repository.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 
+// TODO add final User user;
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  const ProfilePage({
+    Key key,
+    this.user = user1,
+  }) : super(key: key);
+
+  final User user;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -19,10 +29,23 @@ class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
+  Widget _general;
+  Widget _whereIWas;
+  Widget _profileReviews;
+  Widget _impressions;
+
+  int _index = 0;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _general = General(user: widget.user);
+    // TODO must be parameter user: widget.user
+    // & inside User must be whereIwas section
+    _whereIWas = WhereIWas();
+    _profileReviews = ProfileReviews();
+    _impressions = Impressions();
   }
 
   @override
@@ -68,16 +91,26 @@ class _ProfilePageState extends State<ProfilePage>
           ],
           bottom: AppBarBottom(
             tabController: _tabController,
-            bottomData: ['Общее', 'Где я был', 'Отзывы', 'Впечатления'],
+            onTap: (value) {
+              setState(() {
+                _index = value;
+              });
+            },
+            bottomData: [
+              'Общее',
+              'Где я был',
+              'Отзывы',
+              'Впечатления',
+            ],
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
+        body: IndexedStack(
+          index: _index,
           children: [
-            General(user: user1),
-            WhereIWas(),
-            ProfileReviews(),
-            Impressions()
+            _general,
+            _whereIWas,
+            _profileReviews,
+            _impressions,
           ],
         ),
       ),
@@ -85,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
-// TODO подумать как улучшить в плане динамической размерности
+// TODO постараться изменить StatefulWidget на StatelessWidget
 class General extends StatefulWidget {
   const General({
     Key key,
@@ -398,17 +431,73 @@ class _GeneralState extends State<General> {
 class WhereIWas extends StatelessWidget {
   const WhereIWas({Key key}) : super(key: key);
 
+  List<Widget> _getColumnElements(List elements, BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
+    return elements
+        .asMap()
+        .entries
+        .map(
+          (entry) => Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hor,
+                  vertical: _vert,
+                ),
+                child: Column(
+                  children: [
+                    ColumnElementGeneral(
+                      element: entry.value['object'],
+                      visitTime: entry.value['visit_time'],
+                      discountMoney: entry.value['discount_money'],
+                      discountPoints: entry.value['discount_points'],
+                      showArrow:
+                          entry.value['object'] is Company ? true : false,
+                    ),
+                    SizedBox(height: _vert),
+                    CustomButton(
+                      onTap: () => Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  ReviewPage(company: entry.value['object']),
+                        ),
+                      ),
+                      buttonText: entry.value['object'] is Company
+                          ? 'Оставить отзыв +110 баллов'
+                          : 'Оставить отзыв +55 баллов',
+                      buttonColor: cPink,
+                      buttonTextColor: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: entry.key != elements.length - 1,
+                child: Divider(
+                  thickness: 1.0,
+                  indent: _hor,
+                ),
+              )
+            ],
+          ),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: _vert),
           Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, hor),
-              vertical: size(context, vert),
-            ),
+            padding: EdgeInsets.symmetric(horizontal: _hor),
             child: Text(
               'Вы посетили',
               style: style3(context).copyWith(
@@ -418,14 +507,16 @@ class WhereIWas extends StatelessWidget {
             ),
           ),
           Column(
-            children: _getPlacesColumnElements(whereIWas),
+            children: _getColumnElements(
+                whereIWas
+                    .where((element) => element['object'] is Company)
+                    .toList(),
+                context),
           ),
           Divider(thickness: 1.0),
+          SizedBox(height: _vert),
           Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, hor),
-              vertical: size(context, vert),
-            ),
+            padding: EdgeInsets.symmetric(horizontal: _hor),
             child: Text(
               'Использованные акции',
               style: style3(context).copyWith(
@@ -435,286 +526,182 @@ class WhereIWas extends StatelessWidget {
             ),
           ),
           Column(
-            children: _getPromotionsColumnElements(whereIWas),
+            children: _getColumnElements(
+                whereIWas
+                    .where((element) => element['object'] is Promotion)
+                    .toList(),
+                context),
           ),
-          SizedBox(height: size(context, vert)),
         ],
       ),
     );
   }
-}
-
-List<Widget> _getWhereICouldBeElements(Map elements) {
-  return elements['places'].map<Widget>((place) {
-    // TODO think about it
-    return Builder(
-      builder: (context) => Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
-            child: Column(
-              children: [
-                ColumnElementGeneral(
-                  img: place['company'].img,
-                  type: place['company'].type,
-                  name: place['company'].name,
-                  adress: place['company'].adress,
-                  visitTime: place['visit_time'],
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: size(context, vert / 2)),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: CustomButton(
-                          onTap: null,
-                          buttonText: 'Я здесь не был',
-                          buttonColor: cGrey,
-                          buttonBorderColor: Colors.grey[600],
-                          buttonTextColor: Colors.black,
-                        ),
-                      ),
-                      SizedBox(width: size(context, hor)),
-                      Expanded(
-                        child: CustomButton(
-                          onTap: () => Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      ReviewPage(),
-                            ),
-                          ),
-                          buttonText: 'Оставить отзыв',
-                          buttonColor: cPink,
-                          buttonTextColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: elements['places'].indexOf(place) <
-                elements['places'].length - 1,
-            child: CustomDivider(),
-          ),
-        ],
-      ),
-    );
-  }).toList();
-}
-
-List<Widget> _getPlacesColumnElements(Map elements) {
-  return elements['places'].map<Widget>((place) {
-    return Builder(
-      builder: (context) => Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
-            child: Column(
-              children: [
-                ColumnElementGeneral(
-                  img: place['company'].img,
-                  type: place['company'].type,
-                  name: place['company'].name,
-                  adress: place['company'].adress,
-                  visitTime: place['visit_time'],
-                  discountMoney: place['discount_money'],
-                  discountPoints: place['discount_points'],
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: size(context, vert / 2)),
-                  child: CustomButton(
-                    onTap: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            ReviewPage(),
-                      ),
-                    ),
-                    buttonText: 'Оставить отзыв +110 баллов',
-                    buttonColor: cPink,
-                    buttonTextColor: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: elements['places'].indexOf(place) <
-                elements['places'].length - 1,
-            child: CustomDivider(),
-          ),
-        ],
-      ),
-    );
-  }).toList();
-}
-
-List<Widget> _getPromotionsColumnElements(Map elements) {
-  return elements['promotions'].map<Widget>((promotion) {
-    return Builder(
-      builder: (context) => Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
-            child: Column(
-              children: [
-                ColumnElementGeneral(
-                  img: promotion['promotion'].img,
-                  type: promotion['promotion'].type,
-                  name: promotion['promotion'].discription,
-                  adress: promotion['promotion'].adress,
-                  visitTime: promotion['visit_time'],
-                  showArrow: false,
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: size(context, vert / 2)),
-                  child: CustomButton(
-                    onTap: null,
-                    buttonText: 'Оставить отзыв +55 баллов',
-                    buttonColor: cPink,
-                    buttonTextColor: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-            visible: elements['promotions'].indexOf(promotion) <
-                elements['promotions'].length - 1,
-            child: CustomDivider(),
-          ),
-        ],
-      ),
-    );
-  }).toList();
 }
 
 class ProfileReviews extends StatelessWidget {
   const ProfileReviews({Key key}) : super(key: key);
+  // TODO add BLoC and get two List
+  // places & promos
+  List<Widget> _getColumnElements(List elements, BuildContext context) {
+    return elements
+        .asMap()
+        .entries
+        .map(
+          (entry) => Column(
+            children: [
+              ColumnElementProfileReviews(review: entry.value),
+              Visibility(
+                visible: entry.key != elements.length - 1,
+                child: Divider(indent: size(context, hor), thickness: 1.0),
+              ),
+            ],
+          ),
+        )
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
+    final TextStyle _style = style3(context).copyWith(
+      color: Colors.grey[600],
+      fontWeight: FontWeight.bold,
+    );
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: _vert),
           Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, hor),
-              vertical: size(context, vert),
-            ),
-            child: Text(
-              'Отзывы о заведениях',
-              style: style3(context).copyWith(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            padding: EdgeInsets.symmetric(horizontal: _hor),
+            child: Text('Отзывы о заведениях', style: _style),
           ),
-          Column(children: _getPlacesReviews(reviews)),
+          Column(
+            children: _getColumnElements(
+                reviews
+                    .where((element) =>
+                        element.objectReview is Company &&
+                        element.author == user1)
+                    .toList(),
+                context),
+          ),
           Divider(thickness: 1.0),
+          SizedBox(height: _vert),
           Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: size(context, hor),
-              vertical: size(context, vert),
-            ),
-            child: Text(
-              'Отзывы об акциях',
-              style: style3(context).copyWith(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            padding: EdgeInsets.symmetric(horizontal: _hor),
+            child: Text('Отзывы об акциях', style: _style),
           ),
-          Column(children: _getPromotionsReviews(reviews)),
+          Column(
+            children: _getColumnElements(
+                reviews
+                    .where((element) =>
+                        element.objectReview is Promotion &&
+                        element.author == user1)
+                    .toList(),
+                context),
+          ),
         ],
       ),
     );
   }
-}
-
-_getPlacesReviews(List reviews) {
-  List _placesReviews =
-      reviews.where((element) => element.objectReview is Company).toList();
-
-  return _placesReviews.map<Widget>((review) {
-    bool _isVisible =
-        _placesReviews.indexOf(review) < _placesReviews.length - 1;
-
-    return ColumnElementProfileReviews(
-      type: review.objectReview.type,
-      name: review.objectReview.name,
-      text: review.text,
-      service: review.service,
-      kitchen: review.kitchen,
-      priceQuality: review.priceQuality,
-      ambiance: review.ambiance,
-      managerResponse: review.managerResponse,
-      reviewStatus: review.reviewStatus,
-      reviewPoints: review.reviewPoints,
-      moderatorResponse: review.moderatorResponse,
-      isVisible: _isVisible,
-    );
-  }).toList();
-}
-
-_getPromotionsReviews(List reviews) {
-  List _promotionsReviews =
-      reviews.where((element) => element.objectReview is Promotion).toList();
-  return _promotionsReviews.map((review) {
-    bool _isVisible =
-        _promotionsReviews.indexOf(review) < _promotionsReviews.length - 1;
-
-    return ColumnElementProfileReviews(
-      type: review.objectReview.type,
-      name: review.objectReview.discription,
-      text: review.text,
-      promotionRate: review.objectReview.rate,
-      managerResponse: review.managerResponse,
-      reviewStatus: review.reviewStatus,
-      reviewPoints: review.reviewPoints,
-      moderatorResponse: review.moderatorResponse,
-      isVisible: _isVisible,
-    );
-  }).toList();
 }
 
 class Impressions extends StatelessWidget {
   const Impressions({Key key}) : super(key: key);
 
+  List<Widget> _getColumnElements(List elements, BuildContext context) {
+    final double _hor = size(context, hor);
+    return elements
+        .asMap()
+        .entries
+        .map(
+          (entry) => Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hor,
+                  vertical: size(context, vert),
+                ),
+                child: Column(
+                  children: [
+                    ColumnElementGeneral(
+                      element: entry.value['object'],
+                      visitTime: entry.value['visit_time'],
+                      discountMoney: entry.value['discount_money'],
+                      discountPoints: entry.value['discount_points'],
+                    ),
+                    SizedBox(height: _hor),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            onTap: null,
+                            buttonText: 'Я здесь не был',
+                            buttonColor: cGrey,
+                            buttonBorderColor: Colors.grey[600],
+                            buttonTextColor: Colors.black,
+                          ),
+                        ),
+                        SizedBox(width: _hor),
+                        Expanded(
+                          child: CustomButton(
+                            onTap: () => Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        ReviewPage(
+                                  company: entry.value['object'],
+                                ),
+                              ),
+                            ),
+                            buttonText: 'Оставить отзыв',
+                            buttonColor: cPink,
+                            buttonTextColor: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: entry.key != elements.length - 1,
+                child: Divider(
+                  indent: _hor,
+                  thickness: 1.0,
+                ),
+              ),
+            ],
+          ),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: size(context, vert),
-        ),
+        padding: EdgeInsets.symmetric(vertical: _vert),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size(context, hor),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: _hor),
               child: Text(
                 'Ниже указаны заведения, в которых вы были, но не пользовались скидкой на посещение или акцией данных заведений. Вы все равно можете оставить отзыв об этом посещении.',
                 style: style4(context).copyWith(color: Colors.grey[600]),
               ),
             ),
+            SizedBox(height: _vert),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: size(context, hor),
-                    vertical: size(context, vert),
+                    horizontal: _hor,
                   ),
                   child: Text(
                     'Вы могли посетить',
@@ -725,7 +712,12 @@ class Impressions extends StatelessWidget {
                   ),
                 ),
                 Column(
-                  children: _getWhereICouldBeElements(whereIWas),
+                  children: _getColumnElements(
+                    whereIWas
+                        .where((element) => element['object'] is Company)
+                        .toList(),
+                    context,
+                  ),
                 ),
                 Divider(thickness: 1.0),
               ],
@@ -733,287 +725,6 @@ class Impressions extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ColumnElementGeneral extends StatelessWidget {
-  const ColumnElementGeneral({
-    Key key,
-    @required this.img,
-    @required this.type,
-    @required this.name,
-    @required this.visitTime,
-    this.adress,
-    this.discountMoney,
-    this.discountPoints,
-    this.showArrow = true,
-  }) : super(key: key);
-
-  final String img;
-  final String type;
-  final String name;
-  final String adress;
-  final String visitTime;
-  final int discountMoney;
-  final int discountPoints;
-  final bool showArrow;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: size(context, 0.065),
-              height: size(context, 0.065),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(img),
-                ),
-              ),
-            ),
-            SizedBox(width: size(context, 0.015)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: size(context, 0.008)),
-                    child: Text(
-                      type,
-                      style: style4(context).copyWith(color: Colors.grey[600]),
-                    ),
-                  ),
-                  Text(
-                    name,
-                    style: style2(context).copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: size(context, 0.008)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Visibility(
-                          visible: adress != null,
-                          child: Text(
-                            adress ?? '',
-                            style: style4(context),
-                          ),
-                        ),
-                        Text(
-                          visitTime,
-                          style: style4(context),
-                        ),
-                        Visibility(
-                          visible:
-                              discountMoney != null && discountPoints != null,
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${discountMoney.toString()} р. ',
-                                  style: style4(context).copyWith(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '(${discountPoints.toString()} баллов)',
-                                  style: style4(context).copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: showArrow,
-              child: CustomRedRightArrow(onPressed: () => null),
-            )
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class ColumnElementProfileReviews extends StatefulWidget {
-  const ColumnElementProfileReviews({
-    Key key,
-    @required this.type,
-    @required this.name,
-    @required this.text,
-    this.service,
-    this.kitchen,
-    this.priceQuality,
-    this.ambiance,
-    this.promotionRate,
-    this.managerResponse,
-    @required this.reviewStatus,
-    this.reviewPoints,
-    this.moderatorResponse,
-    @required this.isVisible,
-  }) : super(key: key);
-
-  final String type;
-  final String name;
-  final String text;
-  final int service;
-  final int kitchen;
-  final int priceQuality;
-  final int ambiance;
-  final double promotionRate;
-  final String managerResponse;
-  final ReviewStatus reviewStatus;
-  final int reviewPoints;
-  final String moderatorResponse;
-  final bool isVisible;
-
-  @override
-  _ColumnElementProfileReviewsState createState() =>
-      _ColumnElementProfileReviewsState();
-}
-
-class _ColumnElementProfileReviewsState
-    extends State<ColumnElementProfileReviews> {
-  Widget _widgetTextBadge;
-
-  @override
-  void didChangeDependencies() {
-    if (widget.reviewStatus == ReviewStatus.moderation) {
-      _widgetTextBadge = TextBadge(
-        text: 'Модерация',
-        textColor: Colors.white,
-        backgroundColor: Colors.black.withOpacity(0.75),
-      );
-    }
-    if (widget.reviewStatus == ReviewStatus.apply) {
-      _widgetTextBadge = TextBadge(
-        text: '${widget.reviewPoints} баллов',
-        textColor: Colors.white,
-        backgroundColor: cPink,
-      );
-    }
-    if (widget.reviewStatus == ReviewStatus.deny) {
-      _widgetTextBadge = Container();
-    }
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.type,
-                    style: style4(context).copyWith(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  _widgetTextBadge,
-                ],
-              ),
-              Text(
-                widget.name,
-                style: style1(context).copyWith(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size(context, 0.008)),
-                child: Text(
-                  '(посещение 20 сентября 2016)',
-                  style: style4(context).copyWith(
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ),
-              Text(widget.text, style: style2(context)),
-              widget.promotionRate != null
-                  ? Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: size(context, vert)),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: size(context, 0.01),
-                            vertical: size(context, 0.006),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: RateBadge(
-                            rate: widget.promotionRate,
-                            textColor: Colors.white,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: size(context, vert)),
-                      child: QualityRatingScale(
-                        service: widget.service,
-                        kitchen: widget.kitchen,
-                        priceQualityRatio: widget.priceQuality,
-                        ambiance: widget.ambiance,
-                      ),
-                    ),
-              widget.managerResponse != null
-                  ? ManagerResponse(response: widget.managerResponse)
-                  : Container(),
-              widget.moderatorResponse != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Отказано в доступе',
-                          style: style3(context).copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: cPink,
-                          ),
-                        ),
-                        Text(
-                          widget.moderatorResponse,
-                          style: style4(context),
-                        ),
-                      ],
-                    )
-                  : Container()
-            ],
-          ),
-        ),
-        Visibility(
-          visible: widget.isVisible,
-          child: Divider(
-            indent: size(context, hor),
-            thickness: 1.0,
-          ),
-        ),
-      ],
     );
   }
 }

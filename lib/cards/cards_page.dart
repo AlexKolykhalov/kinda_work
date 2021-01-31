@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
 import 'package:kinda_work/styles.dart';
 
 class CardsPage extends StatelessWidget {

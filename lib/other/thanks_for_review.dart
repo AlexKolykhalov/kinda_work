@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 
 class ThanksForReviewPage extends StatelessWidget {
   const ThanksForReviewPage({Key key}) : super(key: key);
@@ -9,43 +10,47 @@ class ThanksForReviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('-->ThanksForReviewPage');
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
+    final double _height = size(context, 0.01);
+    final TextStyle _style2 = style2(context);
+    final TextStyle _style3 = style3(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: size(context, hor),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: _hor),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: size(context, 0.05)),
+                  SizedBox(height: size(context, 0.04)),
                   Text(
                     'Спасибо за ваш отзыв!',
                     style: style1(context).copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: size(context, 0.01)),
-                  Text(
-                    'Скоро мы его опубликуем. Укажите следующую информацию и получите еще баллы.',
-                    style: style3(context),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: _hor / 2),
+                    child: Text(
+                      'Скоро мы его опубликуем. Укажите следующую информацию и получите еще баллы.',
+                      style: _style3,
+                    ),
                   ),
-                  SizedBox(height: size(context, 0.02)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Какого рода посещение?',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '+5 баллов',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           color: cPink,
                           fontWeight: FontWeight.bold,
                         ),
@@ -55,33 +60,31 @@ class ThanksForReviewPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Друзья',
-                        style: style2(context),
-                      ),
+                      Text('Друзья', style: _style2),
                       CustomRedRightArrow(onPressed: null),
                     ],
                   ),
                 ],
               ),
             ),
-            Divider(thickness: 1.0),
+            Divider(thickness: 1.0, height: 0.0),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+              padding: EdgeInsets.symmetric(horizontal: _hor),
               child: Column(
                 children: [
+                  SizedBox(height: _height),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Какой уровень цен?',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '+5 баллов',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           color: cPink,
                           fontWeight: FontWeight.bold,
                         ),
@@ -91,19 +94,19 @@ class ThanksForReviewPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Выбрать',
-                        style: style2(context),
-                      ),
+                      Text('Выбрать', style: _style2),
                       CustomRedRightArrow(onPressed: null),
                     ],
                   ),
                 ],
               ),
             ),
-            Divider(thickness: 1.0),
+            Divider(thickness: 1.0, height: 0.0),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+              padding: EdgeInsets.symmetric(
+                horizontal: _hor,
+                vertical: _height,
+              ),
               child: Column(
                 children: [
                   Row(
@@ -111,30 +114,30 @@ class ThanksForReviewPage extends StatelessWidget {
                     children: [
                       Text(
                         'Фото заведения',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '+25 баллов',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           color: cPink,
                           fontWeight: FontWeight.bold,
                         ),
                       )
                     ],
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: size(context, 0.01)),
-                    child: ImageListView(),
-                  ),
+                  SizedBox(height: _height),
+                  ImageListView(),
                 ],
               ),
             ),
-            Divider(thickness: 1.0),
+            Divider(thickness: 1.0, height: 0.0),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+              padding: EdgeInsets.symmetric(
+                horizontal: _hor,
+                vertical: _height,
+              ),
               child: Column(
                 children: [
                   Row(
@@ -142,25 +145,26 @@ class ThanksForReviewPage extends StatelessWidget {
                     children: [
                       Text(
                         'Фото чека',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '+25 баллов',
-                        style: style3(context).copyWith(
+                        style: _style3.copyWith(
                           color: cPink,
                           fontWeight: FontWeight.bold,
                         ),
                       )
                     ],
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: size(context, 0.01)),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: _height,
+                    ),
                     child: Text(
                       'Для контроля работы системы и решения спорных вопросов',
-                      style: style3(context).copyWith(color: Colors.grey[600]),
+                      style: _style3.copyWith(color: Colors.grey[600]),
                     ),
                   ),
                   ImageListView(),
@@ -170,8 +174,8 @@ class ThanksForReviewPage extends StatelessWidget {
             Expanded(child: Container()),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: size(context, hor),
-                vertical: size(context, vert),
+                horizontal: _hor,
+                vertical: _vert,
               ),
               child: CustomButton(
                 onTap: null,

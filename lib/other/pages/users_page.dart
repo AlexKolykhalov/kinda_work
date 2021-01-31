@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';
 
 List _users = [
@@ -36,6 +38,9 @@ class UsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('-->UsersPage');
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
+    final double _heightImg = size(context, 0.07);
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -43,10 +48,10 @@ class UsersPage extends StatelessWidget {
           title: 'Пользователи',
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: size(context, vert)),
+          padding: EdgeInsets.symmetric(vertical: _vert),
           child: ListView.separated(
             separatorBuilder: (context, index) => (index < _users.length - 1)
-                ? Divider(thickness: 1, indent: size(context, hor))
+                ? Divider(thickness: 1, indent: _hor)
                 : Divider(thickness: 1),
             itemCount: _users.length + 1,
             itemBuilder: (context, index) => (index < _users.length)
@@ -54,16 +59,15 @@ class UsersPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size(context, hor)),
+                        padding: EdgeInsets.symmetric(horizontal: _hor),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
                                 Container(
-                                  width: 50.0,
-                                  height: 50.0,
+                                  width: _heightImg,
+                                  height: _heightImg,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
@@ -72,21 +76,16 @@ class UsersPage extends StatelessWidget {
                                             AssetImage(_users[index]['img'])),
                                   ),
                                 ),
-                                SizedBox(width: 10.0),
-                                Text(_users[index]['name']),
+                                SizedBox(width: _hor),
+                                Text(
+                                  _users[index]['name'],
+                                  style: style3(context),
+                                ),
                               ],
                             ),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
+                            CustomRedRightArrow(
                               onPressed: () =>
                                   _displayBottomSheet(context, _users[index]),
-                              icon: Align(
-                                alignment: Alignment.centerRight,
-                                child: Icon(Icons.keyboard_arrow_right,
-                                    color: cPink),
-                              ),
                             ),
                           ],
                         ),
@@ -109,12 +108,10 @@ void _displayBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) {
-      Size _size = MediaQuery.of(context).size;
+      final double _hor = size(context, hor);
       return Container(
-        height: _size.height * 0.45,
-        padding: EdgeInsets.symmetric(
-          horizontal: size(context, hor),
-        ),
+        height: size(context, 0.45),
+        padding: EdgeInsets.symmetric(horizontal: _hor),
         color: cGrey,
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -143,22 +140,16 @@ void _displayBottomSheet(
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        0.0,
-                        _size.height * 0.02,
-                        0.0,
-                        _size.height * 0.015,
-                      ),
-                      child: Text(user['name'],
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: constraints.maxHeight * 0.065)),
+                    SizedBox(height: _hor),
+                    Text(
+                      user['name'],
+                      style:
+                          style1(context).copyWith(fontWeight: FontWeight.bold),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: _size.height * 0.04),
-                      child: Text(user['birthday'],
-                          style: TextStyle(fontSize: 15.0)),
+                    SizedBox(height: _hor / 2),
+                    Text(
+                      user['birthday'],
+                      style: style3(context),
                     ),
                   ],
                 ),

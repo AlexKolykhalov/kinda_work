@@ -5,15 +5,18 @@ import 'package:kinda_work/cards/cards_page.dart';
 import 'package:kinda_work/catalog/catalog_page.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/BLoC/bloc/search_result_bloc.dart';
-import 'package:kinda_work/main/widgets/bottom_buttons.dart';
-import 'package:kinda_work/main/widgets/custom_grid.dart';
-import 'package:kinda_work/main/widgets/features_list.dart';
+import 'package:kinda_work/main/BLoC/search_result_bloc.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/badges.dart';
+import 'package:kinda_work/shared_widgets/grid_view.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/other/other_page.dart';
 import 'package:kinda_work/promo/promos_page.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/list_view.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
+import 'package:kinda_work/shared_widgets/slider.dart';
 import 'package:kinda_work/styles.dart';
 
 double bottomAppHeight = 0.0;
@@ -182,6 +185,8 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('-->MainPage');
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return Navigator(
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
@@ -222,80 +227,79 @@ class MainPage extends StatelessWidget {
                         ),
                       );
                     }
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(size(context, hor)),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: CustomSlider(images: sliderImages)),
+                    return Stack(
+                      children: [
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(_hor),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    child: CustomSlider(images: sliderImages)),
+                              ),
+                              Sections(
+                                padding: EdgeInsets.only(left: _hor),
+                                elements: sectionElements,
+                              ),
+                              //TODO do description for this widget & widgets at all
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: _hor),
+                                child: Column(
+                                  children: [
+                                    CustomGridViewTitle(
+                                      padding: EdgeInsets.only(top: _vert),
+                                      title: 'Популярные места',
+                                      textTotalAmount: '5369 из 15600',
+                                    ),
+                                    CustomGridView(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: _vert),
+                                      elements: popularCompanies,
+                                      mainAxisSpacing: _hor,
+                                      crossAxisSpacing: _hor,
+                                    ),
+                                    CustomButton(
+                                      onTap: null,
+                                      buttonText: 'Смотреть все предложения',
+                                      buttonColor: cGrey,
+                                      buttonTextColor: cIndigo,
+                                      buttonBorderColor: cIndigo,
+                                    ),
+                                    CustomGridViewTitle(
+                                      padding: EdgeInsets.only(top: _vert),
+                                      title: 'Популярные акции',
+                                      textTotalAmount: '5090',
+                                    ),
+                                    CustomGridView(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: _vert),
+                                      elements: popularPromotions,
+                                      mainAxisSpacing: _hor,
+                                      crossAxisSpacing: _hor,
+                                    ),
+                                    CustomButton(
+                                      margin: EdgeInsets.only(bottom: _vert),
+                                      onTap: null,
+                                      buttonText: 'Смотреть все предложения',
+                                      buttonColor: cGrey,
+                                      buttonTextColor: cIndigo,
+                                      buttonBorderColor: cIndigo,
+                                    ),
+                                    SizedBox(height: size(context, 0.085)),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          Sections(
-                            padding: EdgeInsets.only(left: size(context, hor)),
-                            elements: sectionsElements,
+                        ),
+                        Positioned(
+                          bottom: _vert,
+                          child: BottomButtons(
+                            padding: EdgeInsets.symmetric(horizontal: _hor),
                           ),
-                          //TODO do discription for this widget & widgets at all
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: size(context, hor),
-                            ),
-                            child: Column(
-                              children: [
-                                CustomGridViewTitle(
-                                  padding:
-                                      EdgeInsets.only(top: size(context, vert)),
-                                  title: 'Популярные места',
-                                  textTotalAmount: '5369 из 15600',
-                                ),
-                                CustomGridView(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: size(context, 0.03)),
-                                  elements: popularPlaces,
-                                  mainAxisSpacing: size(context, 0.02),
-                                  crossAxisSpacing: size(context, 0.02),
-                                ),
-                                CustomButton(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: size(context, vert)),
-                                  onTap: null,
-                                  buttonText: 'Смотреть все предложения',
-                                  buttonColor: cGrey,
-                                  buttonTextColor: cIndigo,
-                                  buttonBorderColor: cIndigo,
-                                ),
-                                CustomGridViewTitle(
-                                  padding:
-                                      EdgeInsets.only(top: size(context, vert)),
-                                  title: 'Популярные акции',
-                                  textTotalAmount: '5090',
-                                ),
-                                CustomGridView(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: size(context, 0.03)),
-                                  elements: popularPromotions,
-                                  mainAxisSpacing: size(context, 0.02),
-                                  crossAxisSpacing: size(context, 0.02),
-                                ),
-                                CustomButton(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: size(context, vert)),
-                                  onTap: null,
-                                  buttonText: 'Смотреть все предложения',
-                                  buttonColor: cGrey,
-                                  buttonTextColor: cIndigo,
-                                  buttonBorderColor: cIndigo,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: size(context, 0.04)),
-                                  child: BottomButtons(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -354,10 +358,11 @@ class CompanyWithMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: CompanyPart(
             type: company.type,
             name: company.name,
@@ -367,9 +372,10 @@ class CompanyWithMenu extends StatelessWidget {
           ),
         ),
         Container(
-            padding: EdgeInsets.symmetric(vertical: size(context, hor)),
-            margin: EdgeInsets.only(left: size(context, hor)),
-            child: MenuPart(menu: company.menu)),
+          padding: EdgeInsets.symmetric(vertical: _hor),
+          margin: EdgeInsets.only(left: _hor),
+          child: MenuPart(menu: company.menu),
+        ),
       ],
     );
   }
@@ -457,8 +463,9 @@ class MenuPart extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => MenuElement(element: menu[index]),
-        separatorBuilder: (context, index) =>
-            SizedBox(width: size(context, hor)),
+        separatorBuilder: (context, index) => SizedBox(
+          width: size(context, hor),
+        ),
         itemCount: menu.length,
       ),
     );
@@ -578,13 +585,15 @@ class SearchResultPromotions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: size(context, hor),
-            vertical: size(context, vert),
+            horizontal: _hor,
+            vertical: _vert,
           ),
           child: Text(
             'Акции',
@@ -607,7 +616,7 @@ class SearchResultPromotions extends StatelessWidget {
                           visible: entry.key != promotions.length - 1,
                           child: Divider(
                               height: size(context, 0.035),
-                              indent: size(context, hor),
+                              indent: _hor,
                               thickness: 1.0),
                         )
                       ],
@@ -630,9 +639,10 @@ class SearchPromotions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
     return Container(
       height: size(context, 0.13),
-      padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+      padding: EdgeInsets.symmetric(horizontal: _hor),
       child: Stack(
         children: [
           Container(
@@ -649,13 +659,14 @@ class SearchPromotions extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                 ),
-                SizedBox(width: size(context, hor)),
+                SizedBox(width: _hor),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        element.discription,
+                        element.description,
                         style: style3(context),
                       ),
                       Row(
@@ -708,13 +719,15 @@ class SearchResultCompanies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: size(context, hor),
-            vertical: size(context, vert),
+            horizontal: _hor,
+            vertical: _vert,
           ),
           child: Text(
             'Компании',
@@ -736,7 +749,7 @@ class SearchResultCompanies extends StatelessWidget {
                         visible: entry.key != companies.length - 1,
                         child: Divider(
                             height: size(context, 0.035),
-                            indent: size(context, hor),
+                            indent: _hor,
                             thickness: 1.0),
                       )
                     ],
@@ -834,13 +847,15 @@ class SearchResultTypeOfCompanies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: size(context, hor),
-            vertical: size(context, vert),
+            horizontal: _hor,
+            vertical: _vert,
           ),
           child: Text(
             'Тип заведения',
@@ -862,7 +877,7 @@ class SearchResultTypeOfCompanies extends StatelessWidget {
                       visible: entry.key != typeCompanies.length - 1,
                       child: Divider(
                           // height: size(context, 0.035),
-                          indent: size(context, hor),
+                          indent: _hor,
                           thickness: 1.0),
                     ),
                   ],

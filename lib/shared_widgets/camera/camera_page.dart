@@ -7,9 +7,9 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/pages/discount/discount_calculator_page.dart';
-import 'package:kinda_work/main/pages/discount/discount_details_page.dart';
-import 'package:kinda_work/main/pages/camera/scanner_utils.dart';
+import 'package:kinda_work/other/pages/discount/discount_calculator_page.dart';
+import 'package:kinda_work/other/pages/discount/discount_details_page.dart';
+import 'package:kinda_work/shared_widgets/camera/scanner_utils.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key key, @required this.size}) : super(key: key);

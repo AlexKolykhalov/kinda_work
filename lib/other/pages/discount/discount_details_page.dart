@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/main_page.dart';
-import 'package:kinda_work/main/pages/discount/discount_conditions.dart';
-import 'package:kinda_work/main/pages/discount/thanks_page.dart';
-import 'package:kinda_work/main/pages/discount/visit_history_page.dart';
+import 'package:kinda_work/other/pages/discount/discount_conditions_page.dart';
+import 'package:kinda_work/other/pages/discount/thanks_page.dart';
+import 'package:kinda_work/other/pages/discount/visit_history_page.dart';
 import 'package:kinda_work/repository.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/shared_widgets/text_fields.dart';
 import 'package:kinda_work/styles.dart';
 
 class DiscountDetailsPage extends StatefulWidget {

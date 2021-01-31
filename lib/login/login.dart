@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/login/widgets/email_pass_part.dart';
 import 'package:kinda_work/login/widgets/logo_part.dart';
 import 'package:kinda_work/login/widgets/registration_part.dart';

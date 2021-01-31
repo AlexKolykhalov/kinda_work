@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/registaration/pages/registration_by_sms_page.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/shared_widgets/text_fields.dart';
 import 'package:kinda_work/styles.dart';
 
 class RegistrationDataPart extends StatelessWidget {
@@ -21,19 +22,21 @@ class RegistrationDataPart extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: size(context, 0.02)),
             child: Container(
-                // TODO refactoring with phoneTextFieldWidget
                 //TODO make propper phone number fotmatter
                 child: PhoneTextField()),
           ),
           CustomButton(
-            onTap: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    RegistrationBySmsPage(),
-              ),
-            ),
+            onTap: () {
+              final Widget _registrationBySmsPage = RegistrationBySmsPage();
+              return Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: Duration(seconds: 0),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      _registrationBySmsPage,
+                ),
+              );
+            },
             buttonText: 'Получить СМС с кодом',
             buttonTextColor: Colors.white,
             buttonColor: cPink,

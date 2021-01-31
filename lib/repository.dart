@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kinda_work/main/pages/beauty/beauty.dart';
-import 'package:kinda_work/main/pages/restaurants_cafe_page.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:kinda_work/main/pages/beauty.dart';
+import 'package:kinda_work/main/pages/restaurants_cafe_page.dart';
 import 'package:kinda_work/models.dart';
 
 enum ReviewStatus {
@@ -11,12 +11,51 @@ enum ReviewStatus {
   deny,
 }
 
-User user1 = User(
+// TODO сделать как Историю посещений и
+// записать в класс User
+List whereIWas = [
+  {
+    'object': kventin,
+    'visit_time': '20 сентября 2016',
+    'discount_money': 10,
+    'discount_points': 100,
+  },
+  {
+    'object': djomalungma,
+    'visit_time': '20 сентября 2016',
+    'discount_money': 25,
+    'discount_points': 330,
+  },
+  {
+    'object': tochka,
+    'visit_time': '20 сентября 2016',
+    'discount_money': 81,
+    'discount_points': 30,
+  },
+  {
+    'object': promo2,
+    'visit_time': '20 сентября 2016',
+    'discount_money': 0,
+    'discount_points': 0,
+  }
+];
+
+const User user1 = User(
   name: 'Фредди Макгрегор',
   birthday: '04.06.1980',
+  phone: '(375) 580 32 69',
   about: 'О да, я супер крут!',
   points: 2500,
   giftPoints: 152,
+);
+
+const User user2 = User(
+  name: 'Jonh Denson',
+  birthday: '04.06.1960',
+  phone: '(375) 552 02 32',
+  about: 'Cупер puper крут!',
+  points: 2950,
+  giftPoints: 112,
 );
 
 Company kventin = Company(
@@ -24,23 +63,45 @@ Company kventin = Company(
   type: 'Квест-комнаты',
   name: 'Kventin',
   adress: 'г. Минск, ул. Кульман, 9',
+  web: 'www.kventin.by',
   menu: [
+    // TODO сделать разбиение блюд на категории, например
+    // Суши, Мороженое, в свою очередь
+    // Суши относятся к Холодным закускам, а Мороженое - к Десертам
     Menu(
       img: 'assets/png/grid/1.png',
       name: 'Суши Калифорния',
+      description: 'Лосось - 500 гр., рис - 500 гр.',
       newPrice: 240,
       oldPrice: 275,
     ),
     Menu(
       img: 'assets/png/grid/2.png',
       name: 'Суши Филадельфия',
+      description: '',
       oldPrice: 275,
     ),
     Menu(
       img: 'assets/png/grid/3.png',
       name: 'Суши Ням-Ням',
+      description: '',
       newPrice: 240,
       oldPrice: 275,
+    ),
+  ],
+  news: [
+    News(
+      date: '01.03.18',
+      img: 'assets/png/grid/1.png',
+      name: 'Kventin',
+      description: 'Самые вкусные пельмени у нас!',
+    ),
+    News(
+      date: '08.03.18',
+      img: 'assets/png/grid/2.png',
+      name: 'Kventin',
+      description:
+          'Поздравляем дорогих женщин с 8 марта! Желаем счастья, здоровья и всевозможных благ! И больших творческих успехов!!!',
     ),
   ],
   favoriteSelected: true,
@@ -77,7 +138,7 @@ Company tochka = Company(
   messages: 123,
 );
 
-Company sherlock = Company(
+Company djomalungma = Company(
     img: 'assets/png/grid/3.png',
     type: 'Кофейня',
     name: 'Джомалунгма-Суши Супер-пупер бар и лаундж',
@@ -106,32 +167,55 @@ Company sherlock = Company(
     favoriteSelected: true,
     discount: 10);
 
-Promotion promo = Promotion(
+Promotion promo1 = Promotion(
   img: 'assets/png/grid/1.png',
+  type: 'Акция',
+  company: kventin,
+  description:
+      'Ужин в "Kvintin" за 30 руб. для двоих, сеты для одного и для компании от 20 руб.',
   discount: 35,
-  type: 'Кафе, бар, караоке',
-  adress: 'г. Минск, ул. Кульман, 9',
-  discription:
-      'Ужин в "Loft Cafe" за 30 руб. для двоих, сеты для одного и для компании от 20 руб.',
   rate: 8.0,
   oldPrice: 15000,
   newPrice: 14500,
 );
 
-List<Company> popularPlaces = [
+Promotion promo2 = Promotion(
+  img: 'assets/png/grid/1.png',
+  type: 'Акция',
+  company: tochka,
+  description: 'Ужин в "Т.О.Ч.К.А" за 50 руб. для двоих.',
+  discount: 10,
+  rate: 8.0,
+  oldPrice: 200,
+  newPrice: 180,
+);
+
+Promotion promo3 = Promotion(
+  img: 'assets/png/grid/2.png',
+  type: 'Акция',
+  company: tochka,
+  description: 'Ужин в "Т.О.Ч.К.А" за треть',
+  discount: 33,
+  rate: 8.6,
+  oldPrice: 5000,
+  newPrice: 2500,
+);
+
+List<Company> popularCompanies = [
   kventin,
   tochka,
-  sherlock,
+  djomalungma,
 ];
 
 List<Promotion> popularPromotions = [
-  promo,
-  promo,
+  promo1,
+  promo2,
+  promo3,
 ];
 
 Map searchResult = {
-  'companies': [kventin, tochka, sherlock],
-  'promotions': [promo, promo],
+  'companies': [kventin, tochka, djomalungma],
+  'promotions': [promo1, promo2, promo3],
   'type_companies': [
     '&Суши&',
     '&Суши&-ресторан',
@@ -141,20 +225,16 @@ Map searchResult = {
   ],
 };
 
-List<Map<String, dynamic>> sectionsElements = [
+List<Map<String, dynamic>> sectionElements = [
   {
     'img': 'assets/png/features/1.png',
     'text': 'Рестораны и кафе',
-    'page': RestaurantsCafe(
-      currentIndex: 1,
-    ),
+    'page': RestaurantsCafe(),
   },
   {
     'img': 'assets/png/features/2.png',
     'text': 'Красота',
-    'page': Beauty(
-      currentIndex: 1,
-    ),
+    'page': Beauty(),
   },
   {
     'img': 'assets/png/features/3.png',
@@ -177,25 +257,26 @@ List<InfoMarker> listInfoMarkers = [
   InfoMarker(
     id: 1,
     position: LatLng(53.912180, 27.545018),
-    places: [
+    companies: [
       kventin,
       tochka,
     ],
     promotions: [
-      promo,
-      promo,
+      promo1,
+      promo2,
+      promo3,
     ],
   ),
   InfoMarker(
     id: 2,
     position: LatLng(53.911080, 27.541718),
-    places: [],
+    companies: [],
     promotions: [],
   ),
   InfoMarker(
     id: 3,
     position: LatLng(53.908580, 27.546318),
-    places: [],
+    companies: [],
     promotions: [],
   ),
 ];
@@ -297,13 +378,7 @@ List bookingData = [
     'booking_date': '20 июля 2020, 20:30',
     'booking_details': 'Столик, 4 человека',
     'status': 0,
-    'company': Company(
-      img: 'assets/png/grid/1.png',
-      name: 'Джомалунгма Су&ши&',
-      type: 'Ресторан',
-      adress: 'г. Минск, ул. Кульмана, 9',
-      rate: 1.0,
-    ),
+    'company': djomalungma,
     'unseen': true,
   },
   {
@@ -313,13 +388,7 @@ List bookingData = [
     'booking_date': '20 июля 2020, 20:30',
     'booking_details': 'Столик, 2 человека',
     'status': 1,
-    'company': Company(
-      img: 'assets/png/grid/1.png',
-      name: 'Джомалунгма Су&ши&',
-      type: 'Ресторан',
-      adress: 'г. Минск, ул. Кульмана, 9',
-      rate: 1.0,
-    ),
+    'company': kventin,
     'unseen': false,
   },
   {
@@ -329,13 +398,67 @@ List bookingData = [
     'booking_date': '20 июля 2020, 20:30',
     'booking_details': '2 столика, 8 человек',
     'status': 0,
-    'company': Company(
-      img: 'assets/png/grid/1.png',
-      name: 'Джомалунгма Су&ши&',
-      type: 'Ресторан',
-      adress: 'г. Минск, ул. Кульмана, 9',
-      rate: 1.0,
-    ),
+    'company': tochka,
+    'unseen': false,
+  },
+  {
+    'date': '21.06.17',
+    'name': 'Роман Красновский',
+    'phone': '+375 (940) 677-60-91',
+    'booking_date': '20 июля 2020, 20:30',
+    'booking_details': '2 столика, 8 человек',
+    'status': 0,
+    'company': tochka,
+    'unseen': false,
+  },
+  {
+    'date': '21.06.17',
+    'name': 'Роман Красновский',
+    'phone': '+375 (940) 677-60-91',
+    'booking_date': '20 июля 2020, 20:30',
+    'booking_details': '2 столика, 8 человек',
+    'status': 0,
+    'company': tochka,
+    'unseen': false,
+  },
+  {
+    'date': '21.06.17',
+    'name': 'Роман Красновский',
+    'phone': '+375 (940) 677-60-91',
+    'booking_date': '20 июля 2020, 20:30',
+    'booking_details': '2 столика, 8 человек',
+    'status': 0,
+    'company': tochka,
+    'unseen': false,
+  },
+  {
+    'date': '21.06.17',
+    'name': 'Роман Красновский',
+    'phone': '+375 (940) 677-60-91',
+    'booking_date': '20 июля 2020, 20:30',
+    'booking_details': '2 столика, 8 человек',
+    'status': 0,
+    'company': tochka,
+    'unseen': false,
+  },
+  {
+    'date': '21.06.17',
+    'name': 'Роман Красновский',
+    'phone': '+375 (940) 677-60-91',
+    'booking_date': '20 июля 2020, 20:30',
+    'booking_details': '2 столика, 8 человек',
+    'status': 0,
+    'company': tochka,
+    'unseen': false,
+  },
+  {
+    'date': '21.06.17',
+    'name': 'Роман Красновский',
+    'phone': '+375 (940) 677-60-91',
+    'booking_date': '20 июля 2020, 20:30',
+    'booking_details': '2 столика, 8 человек',
+    'status': 0,
+    'company': tochka,
     'unseen': false,
   },
 ];
@@ -369,7 +492,7 @@ List<Review> reviews = [
   ),
   Review(
       date: '12.10.18',
-      objectReview: sherlock,
+      objectReview: djomalungma,
       text: 'Так себе...',
       author: user1,
       service: 6,
@@ -382,7 +505,7 @@ List<Review> reviews = [
           'Отзыв был не опубликован, так как у модератора возникли мотивированные сомнения, по всем вопросам просим обращать по адресу zabava@mail.com'),
   Review(
     date: '12.10.18',
-    objectReview: promo,
+    objectReview: promo1,
     text: 'Было неплохо, но могла быть лучше...',
     author: user1,
     service: 6,
@@ -394,60 +517,3 @@ List<Review> reviews = [
     reviewPoints: 55,
   ),
 ];
-
-Map whereIWas = {
-  'places': [
-    {
-      'company': Company(
-        img: 'assets/png/grid/1.png',
-        name: 'Kventin',
-        type: 'Квест-комнаты',
-        adress: 'г. Минск, ул. Кульман, 9',
-        rate: 8.0,
-      ),
-      'visit_time': '20 сентября 2016',
-      'discount_money': 80,
-      'discount_points': 130,
-    },
-    {
-      'company': Company(
-        img: 'assets/png/grid/2.png',
-        name: 'Джомалунгма',
-        type: 'Ресторан',
-        adress: 'г. Минск, ул. Кульман, 9',
-        rate: 8.0,
-      ),
-      'visit_time': '20 сентября 2016',
-      'discount_money': 80,
-      'discount_points': 130,
-    },
-    {
-      'company': Company(
-        img: 'assets/png/grid/1.png',
-        name: 'Kventin',
-        type: 'Квест-комнаты',
-        adress: 'г. Минск, ул. Кульман, 9',
-        rate: 8.0,
-      ),
-      'visit_time': '20 сентября 2016',
-      'discount_money': 80,
-      'discount_points': 130,
-    },
-  ],
-  'promotions': [
-    {
-      'promotion': Promotion(
-        img: 'assets/png/grid/1.png',
-        discount: 35,
-        discription:
-            'Ужин в "Loft Cafe" за 30 руб. для двоих, сеты для одного и для компании от 20 руб.',
-        rate: 8.0,
-        newPrice: 0,
-        oldPrice: 0,
-        type: 'Кафе, бар, караоке',
-        adress: 'г. Минск, ул. Кульман, 9',
-      ),
-      'visit_time': '20 сентября 2016',
-    }
-  ],
-};

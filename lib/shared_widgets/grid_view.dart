@@ -1,9 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:kinda_work/models.dart';
+import 'package:kinda_work/info_element/pages/company_page.dart';
+import 'package:kinda_work/info_element/pages/promotion_page.dart';
 
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/models.dart';
 import 'package:kinda_work/constants.dart';
+import 'package:kinda_work/shared_widgets/badges.dart';
 import 'package:kinda_work/styles.dart';
+
+class CustomGridViewTitle extends StatelessWidget {
+  const CustomGridViewTitle({
+    Key key,
+    @required this.title,
+    @required this.textTotalAmount,
+    this.padding,
+    this.margin,
+  }) : super(key: key);
+
+  final String title;
+  final String textTotalAmount;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding,
+      margin: margin,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Text(
+              title,
+              style: style2(context).copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: size(context, hor)),
+            Text(
+              textTotalAmount,
+              style: style4(context).copyWith(color: Colors.grey[600]),
+            ),
+          ]),
+          Text(
+            'Все',
+            style: style2(context).copyWith(
+              color: cPink,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
 
 class CustomGridView extends StatelessWidget {
   const CustomGridView({
@@ -103,44 +154,59 @@ class CustomGridViewElement extends StatelessWidget {
     // print('-->CustomGridViewElement');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Container(
-                child: Column(children: [
-                  Container(
-                    height: constraints.maxHeight * 0.6,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(element.img),
+        return GestureDetector(
+          onTap: () {
+            final Widget _elementPage = element is Company
+                ? CompanyPage(company: element)
+                : PromotionPage(promotion: element);
+            return Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    _elementPage,
+              ),
+            );
+          },
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Container(
+                  child: Column(children: [
+                    Container(
+                      height: constraints.maxHeight * 0.6,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(element.img),
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(color: Colors.white),
-                      child: element is Company
-                          ? CompanyInfo(element: element)
-                          : PromotionInfo(element: element),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: element is Company
+                            ? CompanyInfo(element: element)
+                            : PromotionInfo(element: element),
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
               ),
-            ),
-            Positioned(
-              top: 5.0,
-              right: 5.0,
-              child: FavoriteBadge(favorite: element.favoriteSelected),
-            ),
-            Positioned(
-              top: constraints.maxHeight * 0.6 - size(context, 0.023),
-              left: 8.0,
-              child: DiscountBadge(discount: element.discount),
-            ),
-          ],
+              Positioned(
+                top: 5.0,
+                right: 5.0,
+                child: FavoriteBadge(favorite: element.favoriteSelected),
+              ),
+              Positioned(
+                top: constraints.maxHeight * 0.6 - size(context, 0.023),
+                left: 8.0,
+                child: DiscountBadge(discount: element.discount),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -209,7 +275,7 @@ class PromotionInfo extends StatelessWidget {
                 builder: (BuildContext context,
                     BoxConstraints containerConstraints1) {
                   return Text(
-                    element.discription,
+                    element.description,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: TextStyle(

@@ -16,14 +16,17 @@ class RegistrationPart extends StatelessWidget {
         children: [
           Text('Еще не зарегистрировались?', style: style2(context)),
           GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 0),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    RegistrationPage(),
-              ),
-            ),
+            onTap: () {
+              final Widget _registrationPage = RegistrationPage();
+              return Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: Duration(seconds: 0),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      _registrationPage,
+                ),
+              );
+            },
             child: Text(
               'Зарегистрироваться',
               style: style2(context).copyWith(color: cPink),

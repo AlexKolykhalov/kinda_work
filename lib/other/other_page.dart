@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/pages/discount/discount_calculator_page.dart';
-import 'package:kinda_work/main/pages/discount/visit_history_page.dart';
 import 'package:kinda_work/other/pages/add_company_page.dart';
 import 'package:kinda_work/other/pages/booking_page.dart';
+import 'package:kinda_work/other/pages/discount/discount_calculator_page.dart';
+import 'package:kinda_work/other/pages/discount/visit_history_page.dart';
 import 'package:kinda_work/other/pages/favorites_page.dart';
 import 'package:kinda_work/other/pages/offer_page.dart';
 import 'package:kinda_work/other/pages/profile/profile_page.dart';
 import 'package:kinda_work/other/pages/users_page.dart';
 import 'package:kinda_work/repository.dart';
+import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';
-import 'package:kinda_work/shared_widgets.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 
 class OtherPage extends StatelessWidget {
   const OtherPage({Key key}) : super(key: key);
@@ -18,6 +21,8 @@ class OtherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('-->OtherPage');
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
     return Navigator(
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
@@ -31,7 +36,7 @@ class OtherPage extends StatelessWidget {
               ),
               body: SingleChildScrollView(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: size(context, vert)),
+                  padding: EdgeInsets.symmetric(vertical: _vert),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -39,21 +44,28 @@ class OtherPage extends StatelessWidget {
                       Divider(thickness: 1.0),
                       BusinessPart(),
                       Divider(thickness: 1.0),
-                      SizedBox(height: size(context, vert)),
-                      BottomPart(),
-                      Divider(thickness: 1.0),
-                      SizedBox(height: size(context, vert)),
-                      CustomButton(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: size(context, hor)),
-                        onTap: () => Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    AddCompanyPage(),
-                          ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: _vert),
+                        child: Column(
+                          children: [
+                            BottomPart(),
+                            Divider(thickness: 1.0),
+                          ],
                         ),
+                      ),
+                      CustomButton(
+                        margin: EdgeInsets.symmetric(horizontal: _hor),
+                        onTap: () {
+                          final _addCompanyPage = AddCompanyPage();
+                          return Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      _addCompanyPage,
+                            ),
+                          );
+                        },
                         buttonText: 'Добавить компанию',
                         buttonColor: cGrey,
                         buttonBorderColor: Colors.grey[600],
@@ -76,134 +88,139 @@ class TopPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final TextStyle _style2 = style2(context);
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.person_outline),
-                  SizedBox(width: 10.0),
+                  SizedBox(width: _hor),
                   Text(
                     'Профиль',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
+                    style: _style2.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        ProfilePage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _profilePage = ProfilePage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _profilePage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-        Divider(
-          thickness: 1.0,
-          indent: size(context, hor),
-        ),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.favorite_outline),
-                  SizedBox(width: 10.0),
+                  SizedBox(width: _hor),
                   Text(
                     'Избранное',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
+                    style: _style2.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        FavoritesPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _favoritesPage = FavoritesPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _favoritesPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.account_box),
-                  SizedBox(width: 10.0),
+                  SizedBox(width: _hor),
                   Text(
                     'Регион',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
+                    style: _style2.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               Row(
                 children: [
-                  Text(
-                    'Минск',
-                    style: style2(context),
-                  ),
+                  Text('Минск', style: style2(context)),
                   CustomRedRightArrow(
-                    onPressed: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 0),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            FavoritesPage(),
-                      ),
-                    ),
+                    onPressed: () {
+                      final Widget _favoritesPage = FavoritesPage();
+                      return Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: Duration(seconds: 0),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  _favoritesPage,
+                        ),
+                      );
+                    },
                   ),
                 ],
               )
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.info_outlined),
-                  SizedBox(width: 10.0),
+                  SizedBox(width: _hor),
                   Text(
                     'Как это работает',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
+                    style: _style2.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        FavoritesPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _favoritesPage = FavoritesPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _favoritesPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -220,17 +237,16 @@ class BusinessPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
+    final double _hor = size(context, hor);
+    final double _vert = size(context, vert);
+    final double _heightImg = size(context, 0.015);
+    final TextStyle _style2 =
+        style2(context).copyWith(fontWeight: FontWeight.bold);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            size(context, hor),
-            size(context, vert),
-            0.0,
-            size(context, vert),
-          ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: _hor, vertical: _vert),
           child: Text(
             'Бизнес',
             style: style3(context).copyWith(
@@ -240,123 +256,107 @@ class BusinessPart extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Text(
-                    'История посещений',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+              Text('История посещений', style: _style2),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        VisitHistoryPage(historyVisits: historyVisitsManyUsers),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _visitHistoryPage =
+                      VisitHistoryPage(historyVisits: historyVisitsManyUsers);
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _visitHistoryPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Пользователи',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+              Text('Пользователи', style: _style2),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        UsersPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _userPage = UsersPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _userPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Бронирование',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+              Text('Бронирование', style: _style2),
               Row(
                 children: [
                   Container(
-                    width: _size.height * 0.015,
-                    height: _size.height * 0.015,
+                    width: _heightImg,
+                    height: _heightImg,
                     decoration: BoxDecoration(
-                        color: cPink,
-                        borderRadius: BorderRadius.circular(50.0)),
+                      shape: BoxShape.circle,
+                      color: cPink,
+                    ),
                   ),
                   CustomRedRightArrow(
-                    onPressed: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 0),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            BookingPage(),
-                      ),
-                    ),
+                    onPressed: () {
+                      final Widget _bookingPage = BookingPage();
+                      return Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: Duration(seconds: 0),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  _bookingPage,
+                        ),
+                      );
+                    },
                   ),
                 ],
               )
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Калькулятор скидки',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+              Text('Калькулятор скидки', style: _style2),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        DiscountCalculatorPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _discountCalculatorPage =
+                      DiscountCalculatorPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _discountCalculatorPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -371,93 +371,93 @@ class BottomPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
+    final TextStyle _style2 =
+        style2(context).copyWith(fontWeight: FontWeight.bold);
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.mail_outline),
-                  SizedBox(width: 10.0),
-                  Text(
-                    'Обратная связь',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  SizedBox(width: _hor),
+                  Text('Обратная связь', style: _style2),
                 ],
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        FavoritesPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _favoritesPage = FavoritesPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _favoritesPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.work_outline),
-                  SizedBox(width: 10.0),
-                  Text(
-                    'Оферта',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  SizedBox(width: _hor),
+                  Text('Оферта', style: _style2),
                 ],
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        OfferPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _offerPage = OfferPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _offerPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
-        Divider(thickness: 1.0, indent: size(context, hor)),
+        Divider(thickness: 1.0, indent: _hor),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: size(context, hor)),
+          padding: EdgeInsets.symmetric(horizontal: _hor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   Icon(Icons.file_copy_outlined),
-                  SizedBox(width: 10.0),
-                  Text(
-                    'Конфиденциальность',
-                    style:
-                        style2(context).copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  SizedBox(width: _hor),
+                  Text('Конфиденциальность', style: _style2),
                 ],
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        FavoritesPage(),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _favoritesPage = FavoritesPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _favoritesPage,
+                    ),
+                  );
+                },
               ),
             ],
           ),
