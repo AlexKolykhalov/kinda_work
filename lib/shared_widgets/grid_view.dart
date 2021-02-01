@@ -198,7 +198,7 @@ class CustomGridViewElement extends StatelessWidget {
               Positioned(
                 top: 5.0,
                 right: 5.0,
-                child: FavoriteBadge(favorite: element.favoriteSelected),
+                child: FavoriteBadge(favorite: element.favorite),
               ),
               Positioned(
                 top: constraints.maxHeight * 0.6 - size(context, 0.023),

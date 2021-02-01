@@ -104,7 +104,7 @@ Company kventin = Company(
           'Поздравляем дорогих женщин с 8 марта! Желаем счастья, здоровья и всевозможных благ! И больших творческих успехов!!!',
     ),
   ],
-  favoriteSelected: true,
+  favorite: true,
   messages: 36,
   discount: 50,
 );
@@ -164,7 +164,7 @@ Company djomalungma = Company(
       ),
     ],
     rate: 5.8,
-    favoriteSelected: true,
+    favorite: true,
     discount: 10);
 
 Promotion promo1 = Promotion(

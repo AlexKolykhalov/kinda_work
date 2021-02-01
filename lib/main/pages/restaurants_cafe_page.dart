@@ -46,10 +46,10 @@ class RestaurantsCafe extends StatelessWidget {
                     CustomButton(
                       margin: EdgeInsets.only(bottom: _vert),
                       onTap: null,
-                      buttonText: 'Смотреть все предложения',
-                      buttonColor: cGrey,
-                      buttonTextColor: cIndigo,
-                      buttonBorderColor: cIndigo,
+                      text: 'Смотреть все предложения',
+                      color: cGrey,
+                      textColor: cIndigo,
+                      borderColor: cIndigo,
                     ),
                     CustomGridViewTitle(
                       title: 'Популярные акции',
@@ -63,10 +63,10 @@ class RestaurantsCafe extends StatelessWidget {
                     ),
                     CustomButton(
                       onTap: null,
-                      buttonText: 'Смотреть все предложения',
-                      buttonColor: cGrey,
-                      buttonTextColor: cIndigo,
-                      buttonBorderColor: cIndigo,
+                      text: 'Смотреть все предложения',
+                      color: cGrey,
+                      textColor: cIndigo,
+                      borderColor: cIndigo,
                     ),
                     SizedBox(
                       height: size(context, 0.085),

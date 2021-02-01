@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//TODO delete all "c"
-//https://dart.dev/guides/language/effective-dart/style#dont-use-prefix-letters
 
 //padding
 const double hor = 0.02;
@@ -13,15 +11,16 @@ const cPink = Color(0xFFE91E63);
 const cIndigo = Color(0xFF3F51B5);
 
 //svg icons
-Widget cLeftArrow = SvgPicture.asset('assets/svg/left_arrow.svg');
-Widget cSearchIcon = SvgPicture.asset('assets/svg/search.svg');
-Widget cQrCodeIcon = SvgPicture.asset('assets/svg/qrcode.svg');
-Widget cLocationIcon = SvgPicture.asset('assets/svg/location.svg');
-Widget cScanBarCodeIcon = SvgPicture.asset('assets/svg/codescan.svg');
-Widget cService =
+final Widget svgLeftArrow = SvgPicture.asset('assets/svg/left_arrow.svg');
+final Widget svgSearchIcon = SvgPicture.asset('assets/svg/search.svg');
+final Widget svgQrCodeIcon = SvgPicture.asset('assets/svg/qrcode.svg');
+final Widget svgLocationIcon = SvgPicture.asset('assets/svg/location.svg');
+final Widget svgScanBarCodeIcon = SvgPicture.asset('assets/svg/codescan.svg');
+final Widget svgService =
     SvgPicture.asset('assets/svg/restaurant_icons/restaurant.svg');
-Widget cKitchen = SvgPicture.asset('assets/svg/restaurant_icons/fork.svg');
-Widget cPriceQuality =
+final Widget svgKitchen =
+    SvgPicture.asset('assets/svg/restaurant_icons/fork.svg');
+final Widget svgPriceQuality =
     SvgPicture.asset('assets/svg/restaurant_icons/invoice.svg');
-Widget cAmbiance =
+final Widget svgAmbiance =
     SvgPicture.asset('assets/svg/restaurant_icons/happiness.svg');

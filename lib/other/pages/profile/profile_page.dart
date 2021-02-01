@@ -12,7 +12,6 @@ import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 
-// TODO add final User user;
 class ProfilePage extends StatefulWidget {
   const ProfilePage({
     Key key,
@@ -62,31 +61,27 @@ class _ProfilePageState extends State<ProfilePage>
           height: appBarHeight(context),
           title: 'Профиль',
           actions: [
-            FlatButton(
-              onPressed: () => null,
-              minWidth: size(context, 0.07),
-              padding: EdgeInsets.zero,
-              child: Icon(
+            CustomFlatButton(
+              icon: Icon(
                 Icons.exit_to_app,
                 color: cPink,
-                size: size(context, 0.035),
               ),
             ),
-            FlatButton(
-              onPressed: () => Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      EditProfilePage(),
-                ),
-              ),
-              minWidth: size(context, 0.07),
-              padding: EdgeInsets.zero,
-              child: Icon(
+            CustomFlatButton(
+              icon: Icon(
                 Icons.edit_outlined,
                 color: cPink,
-                size: size(context, 0.035),
               ),
+              onPressed: () {
+                final Widget _editProfilePage = EditProfilePage();
+                return Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        _editProfilePage,
+                  ),
+                );
+              },
             ),
           ],
           bottom: AppBarBottom(
@@ -102,6 +97,8 @@ class _ProfilePageState extends State<ProfilePage>
               'Отзывы',
               'Впечатления',
             ],
+            isScrollable: true,
+            labelPadding: null,
           ),
         ),
         body: IndexedStack(
@@ -260,14 +257,18 @@ class _GeneralState extends State<General> {
                                   ),
                                 ),
                                 CustomRedRightArrow(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          EditProfilePage(),
-                                    ),
-                                  ),
+                                  onPressed: () {
+                                    final Widget _editProfilePage =
+                                        EditProfilePage();
+                                    return Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            _editProfilePage,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -457,19 +458,23 @@ class WhereIWas extends StatelessWidget {
                     ),
                     SizedBox(height: _vert),
                     CustomButton(
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  ReviewPage(company: entry.value['object']),
-                        ),
-                      ),
-                      buttonText: entry.value['object'] is Company
+                      onTap: () {
+                        final Widget _reviewPage =
+                            ReviewPage(company: entry.value['object']);
+                        return Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    _reviewPage,
+                          ),
+                        );
+                      },
+                      text: entry.value['object'] is Company
                           ? 'Оставить отзыв +110 баллов'
                           : 'Оставить отзыв +55 баллов',
-                      buttonColor: cPink,
-                      buttonTextColor: Colors.white,
+                      color: cPink,
+                      textColor: Colors.white,
                     )
                   ],
                 ),
@@ -637,28 +642,31 @@ class Impressions extends StatelessWidget {
                         Expanded(
                           child: CustomButton(
                             onTap: null,
-                            buttonText: 'Я здесь не был',
-                            buttonColor: cGrey,
-                            buttonBorderColor: Colors.grey[600],
-                            buttonTextColor: Colors.black,
+                            text: 'Я здесь не был',
+                            color: cGrey,
+                            borderColor: Colors.grey[600],
+                            textColor: Colors.black,
                           ),
                         ),
                         SizedBox(width: _hor),
                         Expanded(
                           child: CustomButton(
-                            onTap: () => Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        ReviewPage(
-                                  company: entry.value['object'],
+                            onTap: () {
+                              final Widget _reviewPage = ReviewPage(
+                                company: entry.value['object'],
+                              );
+                              return Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      _reviewPage,
                                 ),
-                              ),
-                            ),
-                            buttonText: 'Оставить отзыв',
-                            buttonColor: cPink,
-                            buttonTextColor: Colors.white,
+                              );
+                            },
+                            text: 'Оставить отзыв',
+                            color: cPink,
+                            textColor: Colors.white,
                           ),
                         ),
                       ],

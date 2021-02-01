@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/shared_widgets/app_bars.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/shared_widgets/grid_view.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/repository.dart';
@@ -44,7 +45,14 @@ class _FavoritesPageState extends State<FavoritesPage>
           appBar: CustomAppBar(
             height: appBarHeight(context),
             title: 'Избранное',
-            actions: [Icon(Icons.delete_outline, color: cPink)],
+            actions: [
+              CustomFlatButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: cPink,
+                ),
+              ),
+            ],
             bottom: AppBarBottom(
               tabController: _tabController,
               onTap: (value) {
@@ -52,7 +60,11 @@ class _FavoritesPageState extends State<FavoritesPage>
                   _index = value;
                 });
               },
-              bottomData: ['Все', 'Заведения', 'Акции'],
+              bottomData: [
+                'Все',
+                'Заведения',
+                'Акции',
+              ],
             ),
           ),
           body: IndexedStack(
@@ -98,7 +110,7 @@ class All extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: _vert),
             child: CustomGridView(
               elements: popularCompanies
-                  .where((element) => element.favoriteSelected)
+                  .where((element) => element.favorite)
                   .toList(),
               mainAxisSpacing: _hor,
               crossAxisSpacing: _hor,
@@ -112,7 +124,7 @@ class All extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: _vert),
             child: CustomGridView(
               elements: popularPromotions
-                  .where((element) => element.favoriteSelected)
+                  .where((element) => element.favorite)
                   .toList(),
               mainAxisSpacing: _hor,
               crossAxisSpacing: _hor,

@@ -40,9 +40,9 @@ class RegistrationByEmailPart extends StatelessWidget {
                 ),
               );
             },
-            buttonText: 'Зарегистрироваться',
-            buttonTextColor: Colors.white,
-            buttonColor: cPink,
+            text: 'Зарегистрироваться',
+            textColor: Colors.white,
+            color: cPink,
           ),
         ],
       ),

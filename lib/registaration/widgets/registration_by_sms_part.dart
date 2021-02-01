@@ -41,9 +41,9 @@ class RegistrationBySmsPart extends StatelessWidget {
                 ),
               );
             },
-            buttonText: 'Отправить код',
-            buttonTextColor: Colors.white,
-            buttonColor: cPink,
+            text: 'Отправить код',
+            textColor: Colors.white,
+            color: cPink,
           ),
         ],
       ),

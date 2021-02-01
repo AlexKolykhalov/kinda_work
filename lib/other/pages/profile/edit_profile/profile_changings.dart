@@ -36,9 +36,9 @@ class ProfileChangings extends StatelessWidget {
         ),
         CustomButton(
           onTap: () => null,
-          buttonText: 'Сохранить изменения',
-          buttonColor: cPink,
-          buttonTextColor: Colors.white,
+          text: 'Сохранить изменения',
+          color: cPink,
+          textColor: Colors.white,
         )
       ],
     ));

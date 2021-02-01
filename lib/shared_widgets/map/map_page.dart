@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/shared_widgets/list_view.dart';
 import 'package:kinda_work/shared_widgets/map/map_widgets.dart';
 import 'package:latlong/latlong.dart';
@@ -232,7 +233,7 @@ class _MapPageState extends State<MapPage> {
         appBar: CustomAppBar(
           height: appBarHeight(context),
           title: 'Красота',
-          actions: [cSearchIcon],
+          actions: [CustomFlatButton(icon: svgSearchIcon)],
         ),
         body: FlutterMap(
             mapController: _mapController,

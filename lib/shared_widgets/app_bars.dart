@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/BLoC/search_result_bloc.dart';
 import 'package:kinda_work/models.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -39,9 +40,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leading: Visibility(
         visible: showBackArrow,
-        child: FlatButton(
-          onPressed: () => Navigator.pop(context),
-          child: Container(width: size(context, 0.035), child: cLeftArrow),
+        child: CustomFlatButton(
+          icon: svgLeftArrow,
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       actions: actions,
@@ -133,7 +134,7 @@ class _CustomAppBarWithSearchState extends State<CustomAppBarWithSearch> {
                     decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.all(constraints.maxWidth * 0.02),
-                          child: cSearchIcon,
+                          child: svgSearchIcon,
                         ),
                         isCollapsed: true,
                         hintText: 'Поиск',

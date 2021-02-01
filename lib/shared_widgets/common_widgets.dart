@@ -3,10 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kinda_work/shared_widgets/map/map_page.dart';
 import 'package:latlong/latlong.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import 'package:kinda_work/shared_widgets/camera/camera_page.dart';
+import 'package:kinda_work/shared_widgets/map/map_page.dart';
 import 'package:kinda_work/shared_widgets/badges.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/styles.dart';
@@ -18,21 +19,21 @@ class CustomButton extends StatelessWidget {
     this.padding,
     this.margin,
     @required this.onTap,
-    @required this.buttonText,
-    @required this.buttonColor,
-    this.buttonBorderColor = Colors.transparent,
-    @required this.buttonTextColor,
-    this.isBoldButtonText = true,
+    @required this.text,
+    @required this.color,
+    @required this.textColor,
+    this.borderColor = Colors.transparent,
+    this.fontWeight = FontWeight.bold,
   }) : super(key: key);
 
-  final VoidCallback onTap;
   final EdgeInsets padding;
   final EdgeInsets margin;
-  final String buttonText;
-  final Color buttonTextColor;
-  final bool isBoldButtonText;
-  final Color buttonColor;
-  final Color buttonBorderColor;
+  final VoidCallback onTap;
+  final String text;
+  final Color color;
+  final Color textColor;
+  final Color borderColor;
+  final FontWeight fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +47,42 @@ class CustomButton extends StatelessWidget {
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
-            color: buttonColor,
+            color: color,
             borderRadius: BorderRadius.circular(5.0),
-            border: Border.all(color: buttonBorderColor)),
+            border: Border.all(color: borderColor)),
         child: Center(
           child: Text(
-            buttonText,
+            text,
             style: style2(context).copyWith(
-              color: buttonTextColor,
-              fontWeight: (isBoldButtonText) ? FontWeight.bold : null,
+              color: textColor,
+              fontWeight: fontWeight,
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CustomFlatButton extends StatelessWidget {
+  const CustomFlatButton({
+    Key key,
+    @required this.icon,
+    this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+  final Widget icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: onPressed,
+      padding: EdgeInsets.zero,
+      minWidth: size(context, 0.035),
+      child: Container(
+        width: size(context, 0.035),
+        child: icon,
       ),
     );
   }
@@ -102,7 +127,7 @@ class BottomButtons extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: cQrCodeIcon,
+                child: svgQrCodeIcon,
               )),
           Container(
             width: size(context, 0.21),
@@ -119,13 +144,16 @@ class BottomButtons extends StatelessWidget {
               ],
             ),
             child: GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      MapPage(),
-                ),
-              ),
+              onTap: () {
+                final Widget _mapPage = MapPage();
+                return Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        _mapPage,
+                  ),
+                );
+              },
               child: Padding(
                   padding: EdgeInsets.all(size(context, 0.015)),
                   child: Row(
@@ -134,7 +162,7 @@ class BottomButtons extends StatelessWidget {
                       Container(
                         width: 25.0,
                         height: 25.0,
-                        child: cLocationIcon,
+                        child: svgLocationIcon,
                       ),
                       Text(
                         'На карте',
@@ -148,13 +176,15 @@ class BottomButtons extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => null
-                  // TODO camera page
-                  //CameraPage(size: size),
-                  ),
-            ),
+            onTap: () {
+              // TODO camera page
+              final Widget _cameraPage =
+                  CameraPage(size: MediaQuery.of(context).size);
+              return Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => _cameraPage),
+              );
+            },
             child: Container(
               width: _h,
               height: _h,
@@ -170,7 +200,7 @@ class BottomButtons extends StatelessWidget {
                   ),
                 ],
               ),
-              child: cScanBarCodeIcon,
+              child: svgScanBarCodeIcon,
             ),
           )
         ],
@@ -528,7 +558,7 @@ void displayRating(BuildContext context) {
                           Row(
                             children: [
                               Container(
-                                  width: 20.0, height: 20.0, child: cService),
+                                  width: 20.0, height: 20.0, child: svgService),
                               SizedBox(width: 10.0),
                               Text('Обслуживание'),
                             ],
@@ -542,7 +572,7 @@ void displayRating(BuildContext context) {
                           Row(
                             children: [
                               Container(
-                                  width: 20.0, height: 20.0, child: cKitchen),
+                                  width: 20.0, height: 20.0, child: svgKitchen),
                               SizedBox(width: 10.0),
                               Text('Кухня'),
                             ],
@@ -558,7 +588,7 @@ void displayRating(BuildContext context) {
                               Container(
                                   width: 20.0,
                                   height: 20.0,
-                                  child: cPriceQuality),
+                                  child: svgPriceQuality),
                               SizedBox(width: 10.0),
                               Text('Цена/Качество'),
                             ],
@@ -572,7 +602,9 @@ void displayRating(BuildContext context) {
                           Row(
                             children: [
                               Container(
-                                  width: 20.0, height: 20.0, child: cAmbiance),
+                                  width: 20.0,
+                                  height: 20.0,
+                                  child: svgAmbiance),
                               SizedBox(width: 10.0),
                               Text('Атмосфера'),
                             ],
@@ -670,7 +702,7 @@ class QualityRatingScale extends StatelessWidget {
                 visible: service != null,
                 child: Row(
                   children: [
-                    SizedBox(width: size(context, 0.03), child: cService),
+                    SizedBox(width: size(context, 0.03), child: svgService),
                     SizedBox(width: size(context, 0.003)),
                     RateBadge(rate: service, textColor: Colors.green),
                   ],
@@ -681,7 +713,7 @@ class QualityRatingScale extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(width: size(context, 0.01)),
-                    SizedBox(width: size(context, 0.023), child: cKitchen),
+                    SizedBox(width: size(context, 0.023), child: svgKitchen),
                     SizedBox(width: size(context, 0.003)),
                     RateBadge(rate: kitchen, textColor: Colors.green),
                   ],
@@ -692,7 +724,8 @@ class QualityRatingScale extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(width: size(context, 0.01)),
-                    SizedBox(width: size(context, 0.023), child: cPriceQuality),
+                    SizedBox(
+                        width: size(context, 0.023), child: svgPriceQuality),
                     SizedBox(width: size(context, 0.003)),
                     RateBadge(rate: priceQualityRatio, textColor: Colors.green),
                   ],
@@ -703,7 +736,7 @@ class QualityRatingScale extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(width: size(context, 0.01)),
-                    SizedBox(width: size(context, 0.023), child: cAmbiance),
+                    SizedBox(width: size(context, 0.023), child: svgAmbiance),
                     SizedBox(width: size(context, 0.003)),
                     RateBadge(rate: ambiance, textColor: Colors.green),
                   ],

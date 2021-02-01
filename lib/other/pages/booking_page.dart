@@ -100,14 +100,18 @@ class BookingListViewElement extends StatelessWidget {
                 ),
               ),
               CustomRedRightArrow(
-                onPressed: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(seconds: 0),
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        BookingPageDetails(booking: booking),
-                  ),
-                ),
+                onPressed: () {
+                  final Widget _bookingPageDetails =
+                      BookingPageDetails(booking: booking);
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(seconds: 0),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _bookingPageDetails,
+                    ),
+                  );
+                },
               )
             ],
           )

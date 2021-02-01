@@ -4,12 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/discount/discount_calculator_page.dart';
 import 'package:kinda_work/other/pages/discount/discount_details_page.dart';
 import 'package:kinda_work/shared_widgets/camera/scanner_utils.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
+import 'package:kinda_work/styles.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key key, @required this.size}) : super(key: key);
@@ -21,22 +22,32 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
-  final BarcodeDetector _barcodeDetector =
-      FirebaseVision.instance.barcodeDetector();
-  final Size _searchBoxSize = Size(320, 144);
+  final _barcodeDetector = FirebaseVision.instance.barcodeDetector();
+
   CameraController _cameraController;
-  // Rect _validRect;
-  // Rect _barcodeBoundingBox;
-  // Rect _intersectionRect;
+  Rect _validRect;
+  Rect _barcodeBoundingBox;
+  Rect _intersectionRect;
   Size _previewSize;
+  double _hor;
+  double _vert;
+  double _appBarHeight;
 
   @override
   void initState() {
     super.initState();
     _initCameraAndScanner();
-    // _validRect = Rect.zero;
-    // _barcodeBoundingBox = Rect.zero;
-    // _intersectionRect = Rect.zero;
+    _validRect = Rect.zero;
+    _barcodeBoundingBox = Rect.zero;
+    _intersectionRect = Rect.zero;
+  }
+
+  @override
+  void didChangeDependencies() {
+    _hor = size(context, hor);
+    _vert = size(context, vert);
+    _appBarHeight = appBarHeight(context);
+    super.didChangeDependencies();
   }
 
   @override
@@ -69,7 +80,7 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _initImageStreaming(int sensorOrientation) async {
     bool isDetecting = false;
-    final MediaQueryData data = MediaQuery.of(context);
+    // final MediaQueryData data = MediaQuery.of(context);
 
     _cameraController.startImageStream((CameraImage image) {
       if (isDetecting) {
@@ -86,7 +97,6 @@ class _CameraPageState extends State<CameraPage> {
         (dynamic result) {
           _handleResult(
             barcodes: result,
-            data: data,
             imageSize: Size(image.width.toDouble(), image.height.toDouble()),
           );
         },
@@ -96,16 +106,16 @@ class _CameraPageState extends State<CameraPage> {
 
   void _handleResult({
     @required List<Barcode> barcodes,
-    @required MediaQueryData data,
     @required Size imageSize,
   }) {
     if (!_cameraController.value.isStreamingImages) {
       return;
     }
 
-    final EdgeInsets padding = data.padding;
+    final MediaQueryData _mq = MediaQuery.of(context);
+    final _searchBoxSize = Size(320, 144);
     final double maxLogicalHeight =
-        data.size.height - padding.top - padding.bottom;
+        _mq.size.height - _mq.padding.top - _mq.padding.bottom;
 
     final double imageHeight = defaultTargetPlatform == TargetPlatform.iOS
         ? imageSize.height
@@ -128,24 +138,30 @@ class _CameraPageState extends State<CameraPage> {
       final Rect intersection = validRect.intersect(barcode.boundingBox);
       final bool doesContain = intersection == barcode.boundingBox;
 
-      // setState(() {
-      //   _validRect = validRect;
-      //   _intersectionRect = intersection;
-      //   _barcodeBoundingBox = barcode.boundingBox;
-      // });
+      setState(() {
+        _validRect = validRect;
+        _intersectionRect = intersection;
+        _barcodeBoundingBox = barcode.boundingBox;
+      });
 
-      if (doesContain) {
-        //print('!!!!! RESULT: ' + barcode.rawValue);
-        _cameraController.stopImageStream().then((_) {
-          _cameraController.dispose();
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                  transitionDuration: Duration(seconds: 3),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      DiscountDetailsPage()));
-        });
-      }
+      // if (doesContain) {
+      //   print('!!!!! RESULT: ' + barcode.rawValue);
+      //   _cameraController.stopImageStream().then(
+      //     (_) {
+      //       _cameraController.dispose();
+      //       final Widget _discountDetailsPage =
+      //           DiscountDetailsPage(canPop: false);
+      //       Navigator.push(
+      //         context,
+      //         PageRouteBuilder(
+      //             transitionDuration: Duration(seconds: 3),
+      //             pageBuilder: (context, animation, secondaryAnimation) =>
+      //                 _discountDetailsPage),
+      //       );
+      //     },
+      //   );
+      // }
+
     }
   }
 
@@ -166,29 +182,35 @@ class _CameraPageState extends State<CameraPage> {
     if (_cameraController != null && _cameraController.value.isInitialized) {
       return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            leading: FlatButton(
-              onPressed: () {
-                _cameraController
-                    .stopImageStream()
-                    .then((value) => Navigator.pop(context));
-              },
-              child: SvgPicture.asset(
-                'assets/svg/left_arrow.svg',
-                fit: BoxFit.contain,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(_appBarHeight),
+            child: AppBar(
+              leading: CustomFlatButton(
+                icon: svgLeftArrow,
+                onPressed: () {
+                  _cameraController
+                      .stopImageStream()
+                      .then((_) => Navigator.pop(context));
+                },
               ),
+              title: Text(
+                'Добавить карту',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: _appBarHeight * 0.38,
+                ),
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.white,
+              actions: [
+                CustomFlatButton(
+                  icon: Icon(
+                    Icons.wb_sunny_outlined,
+                    color: cPink,
+                  ),
+                ),
+              ],
             ),
-            title: Text(
-              'Добавить карту',
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            actions: [
-              IconButton(
-                  icon: Icon(Icons.wb_sunny_outlined, color: cPink),
-                  onPressed: () => null)
-            ],
           ),
           body: Stack(
             children: [
@@ -203,106 +225,102 @@ class _CameraPageState extends State<CameraPage> {
                   ),
                 ),
               ),
-              Container(
-                constraints: const BoxConstraints.expand(),
-                child: CustomPaint(
-                  painter: WindowPainter(
-                    windowSize: _searchBoxSize,
-                    backgroundColor: Colors.black38,
-                  ),
+              Center(
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Container(
+                      constraints: const BoxConstraints.expand(),
+                      child: CustomPaint(
+                        painter: WindowPainter(
+                          windowSize: Size(
+                            constraints.maxWidth * 0.95,
+                            constraints.maxHeight * 0.35,
+                          ),
+                          backgroundColor: Colors.black54,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Positioned(
-                left: widget.size.width * 0.1,
-                right: widget.size.width * 0.1,
-                top: widget.size.height * 0.05,
+                left: _hor,
+                right: _hor,
+                top: _vert,
                 child: Text(
                   'Отсканируйте штрих-код вашей карты.\nДержите штрих-код в кадре, чтобы просканировать его.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.white,
+                  style: style2(context).copyWith(color: Colors.white),
+                ),
+              ),
+              Center(
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return Container(
+                      width: constraints.maxWidth * 0.95,
+                      height: constraints.maxHeight * 0.35,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Center(
+                child: CustomPaint(
+                  painter: BarcodeRect(
+                    barcodeRect: _validRect,
+                    color: const Color(0xFF0099FF),
                   ),
                 ),
               ),
               Center(
-                child: Container(
-                  width: 320,
-                  height: 144,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
+                child: CustomPaint(
+                  painter: BarcodeRect(
+                      barcodeRect: _barcodeBoundingBox,
+                      color: const Color(0xFF66BB6A)),
                 ),
               ),
-              // Center(
-              //   child: CustomPaint(
-              //     painter: BarcodeRect(
-              //       barcodeRect: _validRect,
-              //       color: const Color(0xFF0099FF),
-              //     ),
-              //   ),
-              // ),
-              // Center(
-              //   child: CustomPaint(
-              //     painter: BarcodeRect(
-              //         barcodeRect: _barcodeBoundingBox,
-              //         color: const Color(0xFF66BB6A)),
-              //   ),
-              // ),
-              // Center(
-              //   child: CustomPaint(
-              //     painter: BarcodeRect(
-              //         barcodeRect: _intersectionRect,
-              //         color: const Color(0xFFCFD8DC)),
-              //   ),
-              // ),
+              Center(
+                child: CustomPaint(
+                  painter: BarcodeRect(
+                      barcodeRect: _intersectionRect,
+                      color: const Color(0xFFCFD8DC)),
+                ),
+              ),
               Positioned(
-                left: widget.size.width * 0.15,
-                right: widget.size.width * 0.15,
-                bottom: widget.size.height * 0.05,
+                left: _hor * 3,
+                right: _hor * 3,
+                bottom: _vert,
                 child: GestureDetector(
                   onTap: () {
                     _cameraController.stopImageStream().then((_) {
                       _cameraController.dispose();
-                      Navigator.of(context).push(
+                      final Widget _discountCalculatorPage =
+                          DiscountCalculatorPage();
+                      Navigator.push(
+                        context,
                         PageRouteBuilder(
                           transitionDuration: Duration(seconds: 0),
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
-                                  DiscountCalculatorPage(),
+                                  _discountCalculatorPage,
                         ),
                       );
                     });
                   },
-                  child: Container(
-                    height: 48.0, //size.height * cHeight,
-                    decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(color: Colors.white)),
-                    child: Center(
-                      child: Text(
-                        'Ввести вручную',
-                        style: TextStyle(
-                            //fontSize: size.height * 0.025,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                  child: CustomButton(
+                    onTap: () {},
+                    text: 'Ввести вручную',
+                    color: Colors.transparent,
+                    textColor: Colors.white,
+                    borderColor: Colors.white,
                   ),
                 ),
-              )
-
-              //   CustomButton(
-              //       onTap: DiscountCalculatorPage(size: widget.size),
-              //       buttonText: 'Ввести вручную',
-              //       buttonColor: Colors.transparent,
-              //       buttonBorderColor: Colors.white,
-              //       buttonTextColor: Colors.white),
-              // )
+              ),
             ],
           ),
         ),

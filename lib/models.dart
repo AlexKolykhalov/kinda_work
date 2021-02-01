@@ -50,7 +50,7 @@ class Company {
     this.menu = const <Menu>[],
     this.news = const <News>[],
     this.rate = 0.0,
-    this.favoriteSelected = false,
+    this.favorite = false,
     this.messages = 0,
     this.discount = 0,
   });
@@ -63,7 +63,7 @@ class Company {
   final List<Menu> menu;
   final List<News> news;
   final double rate;
-  final bool favoriteSelected;
+  final bool favorite;
   final int messages;
   final int discount;
 }
@@ -105,7 +105,7 @@ class Promotion {
     @required this.description,
     this.type,
     this.rate = 0.0,
-    this.favoriteSelected = false,
+    this.favorite = false,
     this.messages = 0,
     this.discount = 0,
     this.oldPrice = 0.0,
@@ -117,7 +117,7 @@ class Promotion {
   final String description;
   final String type;
   final double rate;
-  final bool favoriteSelected;
+  final bool favorite;
   final int messages;
   final int discount;
   final num oldPrice;

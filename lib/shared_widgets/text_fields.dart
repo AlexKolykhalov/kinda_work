@@ -1,17 +1,51 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/login/BLoC/switcher_icon_cubit.dart';
 import 'package:kinda_work/other/pages/discount/discount_details_page.dart';
 import 'package:kinda_work/styles.dart';
+
+class EmailPhoneTextField extends StatefulWidget {
+  EmailPhoneTextField({Key key}) : super(key: key);
+
+  @override
+  _EmailPhoneTextFieldState createState() => _EmailPhoneTextFieldState();
+}
+
+class _EmailPhoneTextFieldState extends State<EmailPhoneTextField> {
+  bool _switcher = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return _switcher
+        ? EmailTextField(
+            onPressed: () {
+              setState(() {
+                _switcher = false;
+              });
+            },
+            isVisibleIcon: true)
+        : PhoneTextField(
+            onPressed: () {
+              setState(() {
+                _switcher = true;
+              });
+            },
+            isVisibleIcon: true,
+          );
+  }
+}
 
 class EmailTextField extends StatefulWidget {
   const EmailTextField({
     Key key,
+    this.onPressed,
+    this.isVisibleIcon = false,
   }) : super(key: key);
+
+  final VoidCallback onPressed;
+  final bool isVisibleIcon;
 
   @override
   _EmailTextFieldState createState() => _EmailTextFieldState();
@@ -19,7 +53,6 @@ class EmailTextField extends StatefulWidget {
 
 class _EmailTextFieldState extends State<EmailTextField> {
   final _controller = TextEditingController();
-  final bool _showIcon = true;
 
   @override
   void dispose() {
@@ -51,18 +84,16 @@ class _EmailTextFieldState extends State<EmailTextField> {
                   ),
                 ),
               ),
-              IconButton(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onPressed: () {
-                  if (_showIcon) {
-                    _controller.clear();
-                    BlocProvider.of<SwitcherIconCubit>(context).changed();
-                  }
-                },
-                padding: EdgeInsets.zero,
-                iconSize: constraints.maxHeight * 0.5,
-                icon: _showIcon ? Icon(Icons.phone, color: cPink) : Icon(null),
+              Visibility(
+                visible: widget.isVisibleIcon,
+                child: IconButton(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onPressed: widget.onPressed,
+                  padding: EdgeInsets.zero,
+                  iconSize: constraints.maxHeight * 0.5,
+                  icon: Icon(Icons.phone, color: cPink),
+                ),
               ),
             ],
           );
@@ -75,12 +106,14 @@ class _EmailTextFieldState extends State<EmailTextField> {
 class PhoneTextField extends StatefulWidget {
   const PhoneTextField({
     Key key,
+    this.onPressed,
     this.maxLength,
-    this.hintText = '',
+    this.isVisibleIcon = false,
   }) : super(key: key);
 
+  final VoidCallback onPressed;
   final int maxLength;
-  final String hintText;
+  final bool isVisibleIcon;
 
   @override
   _PhoneTextFieldState createState() => _PhoneTextFieldState();
@@ -109,12 +142,13 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                 onChanged: (value) {
                   if (widget.maxLength != null &&
                       value.length == widget.maxLength) {
+                    final Widget _discountDetailsPage = DiscountDetailsPage();
                     Navigator.push(
                       context,
                       PageRouteBuilder(
                         transitionDuration: Duration(seconds: 5),
                         pageBuilder: (context, animation, secondaryAnimation) =>
-                            DiscountDetailsPage(),
+                            _discountDetailsPage,
                       ),
                     );
                     _controller.clear();
@@ -131,7 +165,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                   counterText: '',
                   fillColor: Colors.white,
                   filled: true,
-                  hintText: widget.hintText,
+                  hintText: '(XX) XXX-XX-XX',
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: constraints.maxWidth * 0.05,
                   ),
@@ -157,14 +191,13 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                 ),
               ),
               Visibility(
-                visible: false,
+                visible: widget.isVisibleIcon,
                 child: IconButton(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
-                  onPressed: () {
-                    _controller.clear();
-                    BlocProvider.of<SwitcherIconCubit>(context).changed();
-                  },
+                  onPressed: widget.onPressed,
+                  padding: EdgeInsets.zero,
+                  iconSize: constraints.maxHeight * 0.5,
                   icon: Icon(Icons.email, color: cPink),
                 ),
               ),

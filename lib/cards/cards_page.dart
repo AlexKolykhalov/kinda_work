@@ -15,7 +15,6 @@ class CardsPage extends StatelessWidget {
           settings: settings,
           builder: (context) {
             return Scaffold(
-              // TODO look at back arrow
               appBar: CustomAppBar(
                 height: appBarHeight(context),
                 title: 'Карты',

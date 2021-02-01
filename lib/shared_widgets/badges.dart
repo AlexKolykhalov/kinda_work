@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/styles.dart';
 
-// TODO refactoring
 class RateBadge extends StatelessWidget {
   const RateBadge({
     Key key,

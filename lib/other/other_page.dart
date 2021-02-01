@@ -66,10 +66,10 @@ class OtherPage extends StatelessWidget {
                             ),
                           );
                         },
-                        buttonText: 'Добавить компанию',
-                        buttonColor: cGrey,
-                        buttonBorderColor: Colors.grey[600],
-                        buttonTextColor: Colors.black,
+                        text: 'Добавить компанию',
+                        color: cGrey,
+                        borderColor: Colors.grey[600],
+                        textColor: Colors.black,
                       )
                     ],
                   ),

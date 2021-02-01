@@ -60,7 +60,19 @@ class _PromotionPageState extends State<PromotionPage>
         appBar: CustomAppBar(
           height: appBarHeight(context),
           title: 'Подробности акции',
-          actions: [Icon(Icons.favorite, color: cPink)],
+          actions: [
+            CustomFlatButton(
+              icon: widget.promotion.favorite
+                  ? Icon(
+                      Icons.favorite,
+                      color: cPink,
+                    )
+                  : Icon(
+                      Icons.favorite_border_outlined,
+                      color: cPink,
+                    ),
+            ),
+          ],
           bottom: AppBarBottom(
             tabController: _tabController,
             onTap: (int value) {
@@ -181,7 +193,7 @@ class Description extends StatelessWidget {
                                               style: style3(context),
                                             ),
                                           ),
-                                          // TODO странно, но так надо
+                                          //странно, но так надо
                                           Icon(
                                             Icons.keyboard_arrow_down,
                                             color: cPink,
@@ -296,15 +308,19 @@ class Description extends StatelessWidget {
                     ),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: Duration(seconds: 0),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  PromotionConditionsPage(),
-                        ),
-                      ),
+                      onTap: () {
+                        final Widget _promotionConditionsPage =
+                            PromotionConditionsPage();
+                        return Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: Duration(seconds: 0),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    _promotionConditionsPage,
+                          ),
+                        );
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -477,9 +493,9 @@ class Description extends StatelessWidget {
           child: CustomButton(
             margin: EdgeInsets.symmetric(horizontal: _hor),
             onTap: () => displayQrCode(context),
-            buttonText: 'Предъявите скидку -50%',
-            buttonColor: cPink,
-            buttonTextColor: Colors.white,
+            text: 'Предъявите скидку -50%',
+            color: cPink,
+            textColor: Colors.white,
           ),
         ),
       ],

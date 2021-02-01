@@ -65,9 +65,9 @@ class ReviewPage extends StatelessWidget {
                       ),
                     );
                   },
-                  buttonText: 'Оставить отзыв +110 баллов',
-                  buttonColor: cPink,
-                  buttonTextColor: Colors.white,
+                  text: 'Оставить отзыв +110 баллов',
+                  color: cPink,
+                  textColor: Colors.white,
                 )
               ],
             ),
@@ -119,12 +119,12 @@ class ReviewRating extends StatelessWidget {
                 children: [
                   RatingPoint(
                     title: 'Обслуживание',
-                    icon: cService,
+                    icon: svgService,
                     point: 0,
                   ),
                   RatingPoint(
                     title: 'Кухня',
-                    icon: cKitchen,
+                    icon: svgKitchen,
                     point: 1,
                   )
                 ],
@@ -132,13 +132,10 @@ class ReviewRating extends StatelessWidget {
               SizedBox(height: size(context, 0.015)),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 RatingPoint(
-                  title: 'Цена/Качество',
-                  icon: cPriceQuality,
-                  point: 2,
-                ),
+                    title: 'Цена/Качество', icon: svgPriceQuality, point: 2),
                 RatingPoint(
                   title: 'Атмосфера',
-                  icon: cAmbiance,
+                  icon: svgAmbiance,
                   point: 3,
                 )
               ]),

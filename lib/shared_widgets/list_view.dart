@@ -128,6 +128,8 @@ class SectionElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // TODO нужен ли в данном случае
+      // final Widget _widget = page
       onTap: () => Navigator.push(
         context,
         PageRouteBuilder(

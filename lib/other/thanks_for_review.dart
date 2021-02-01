@@ -179,9 +179,9 @@ class ThanksForReviewPage extends StatelessWidget {
               ),
               child: CustomButton(
                 onTap: null,
-                buttonText: 'Отправить',
-                buttonColor: cPink,
-                buttonTextColor: Colors.white,
+                text: 'Отправить',
+                color: cPink,
+                textColor: Colors.white,
               ),
             )
           ],

@@ -155,9 +155,9 @@ void _displayBottomSheet(
                 ),
                 CustomButton(
                   onTap: null,
-                  buttonText: 'Посетил ${user['visits']} раз',
-                  buttonColor: cPink,
-                  buttonTextColor: Colors.white,
+                  text: 'Посетил ${user['visits']} раз',
+                  color: cPink,
+                  textColor: Colors.white,
                 )
               ],
             );

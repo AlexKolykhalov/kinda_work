@@ -170,19 +170,19 @@ class CallReviewButtons extends StatelessWidget {
         Expanded(
           child: CustomButton(
             onTap: () => displayPhones(context),
-            buttonText: 'Позвонить',
-            buttonColor: Colors.green,
-            buttonTextColor: Colors.white,
+            text: 'Позвонить',
+            color: Colors.green,
+            textColor: Colors.white,
           ),
         ),
         SizedBox(width: size(context, hor)),
         Expanded(
           child: CustomButton(
             onTap: null,
-            buttonText: 'Оставить отзыв',
-            buttonColor: Colors.white,
-            buttonTextColor: Colors.black,
-            buttonBorderColor: Colors.grey[600],
+            text: 'Оставить отзыв',
+            color: Colors.white,
+            textColor: Colors.black,
+            borderColor: Colors.grey[600],
           ),
         ),
       ],

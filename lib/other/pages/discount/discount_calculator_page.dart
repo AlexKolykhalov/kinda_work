@@ -41,10 +41,7 @@ class DiscountCalculatorPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: _hor),
-            PhoneTextField(
-              maxLength: 9,
-              hintText: '(XX) XXX-XX-XX',
-            ),
+            PhoneTextField(maxLength: 9),
           ],
         ),
       ),

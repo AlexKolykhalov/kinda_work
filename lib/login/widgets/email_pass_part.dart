@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/login/BLoC/switcher_icon_cubit.dart';
 import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/shared_widgets/text_fields.dart';
@@ -22,13 +20,7 @@ class EmailPasswordPart extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: size(context, 0.05)),
             child: Column(
               children: [
-                BlocBuilder<SwitcherIconCubit, bool>(
-                  builder: (context, state) {
-                    return Container(
-                      child: state ? EmailTextField() : PhoneTextField(),
-                    );
-                  },
-                ),
+                EmailPhoneTextField(),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: size(context, 0.02)),
                   child: PasswordTextField(),
@@ -43,9 +35,9 @@ class EmailPasswordPart extends StatelessWidget {
                           StartPage(),
                     ),
                   ),
-                  buttonText: 'Войти',
-                  buttonColor: cPink,
-                  buttonTextColor: Colors.white,
+                  text: 'Войти',
+                  color: cPink,
+                  textColor: Colors.white,
                 ),
               ],
             ),

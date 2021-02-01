@@ -56,10 +56,9 @@ class ThanksPage extends StatelessWidget {
                     ),
                   );
                 },
-                buttonText: 'Закрыть',
-                buttonColor: cPink,
-                buttonTextColor: Colors.white,
-                isBoldButtonText: true,
+                text: 'Закрыть',
+                color: cPink,
+                textColor: Colors.white,
               ),
             ],
           ),

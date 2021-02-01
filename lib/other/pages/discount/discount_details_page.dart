@@ -11,7 +11,12 @@ import 'package:kinda_work/shared_widgets/text_fields.dart';
 import 'package:kinda_work/styles.dart';
 
 class DiscountDetailsPage extends StatefulWidget {
-  const DiscountDetailsPage({Key key}) : super(key: key);
+  const DiscountDetailsPage({
+    Key key,
+    this.canPop = true,
+  }) : super(key: key);
+
+  final bool canPop;
 
   @override
   _DiscountDetailsPageState createState() => _DiscountDetailsPageState();
@@ -67,10 +72,12 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
             child: AppBar(
               backgroundColor: cGrey,
               elevation: _isVisible ? 0.0 : 4.0,
-              leading: FlatButton(
-                onPressed: () => Navigator.pop(context),
-                child:
-                    Container(width: size(context, 0.035), child: cLeftArrow),
+              leading: Visibility(
+                visible: widget.canPop,
+                child: CustomFlatButton(
+                  icon: svgLeftArrow,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ),
               centerTitle: true,
               title: _isVisible
@@ -130,14 +137,19 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                   ),
                   Text('Размер скидки', style: style3(context)),
                   GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 0),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            DiscountConditionsPage(),
-                      ),
-                    ),
+                    onTap: () {
+                      final Widget _discountConditionsPage =
+                          DiscountConditionsPage();
+                      return Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: Duration(seconds: 0),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  _discountConditionsPage,
+                        ),
+                      );
+                    },
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: size(context, 0.03)),
@@ -161,18 +173,22 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                       SizedBox(width: size(context, hor)),
                       Expanded(
                         child: CustomButton(
-                          onTap: () => Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration(seconds: 0),
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      ThanksPage(text: 'Скидка зафиксирована'),
-                            ),
-                          ),
-                          buttonText: 'OK',
-                          buttonColor: cPink,
-                          buttonTextColor: Colors.white,
+                          onTap: () {
+                            final Widget _thanksPage =
+                                ThanksPage(text: 'Скидка зафиксирована');
+                            return Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(seconds: 0),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        _thanksPage,
+                              ),
+                            );
+                          },
+                          text: 'OK',
+                          color: cPink,
+                          textColor: Colors.white,
                         ),
                       ),
                     ],
@@ -181,20 +197,24 @@ class _DiscountDetailsPageState extends State<DiscountDetailsPage> {
                   Visibility(
                     visible: _isVisible ?? false,
                     child: CustomButton(
-                      onTap: () => Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: Duration(seconds: 0),
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  VisitHistoryPage(
-                                      historyVisits: historyVisitsOneUser),
-                        ),
-                      ),
-                      buttonText: 'Посетил 8 раз',
-                      buttonColor: cGrey,
-                      buttonBorderColor: Colors.grey[600],
-                      buttonTextColor: Colors.black,
+                      onTap: () {
+                        final Widget _visitHistoryPage = VisitHistoryPage(
+                          historyVisits: historyVisitsOneUser,
+                        );
+                        return Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: Duration(seconds: 0),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    _visitHistoryPage,
+                          ),
+                        );
+                      },
+                      text: 'Посетил 8 раз',
+                      color: cGrey,
+                      borderColor: Colors.grey[600],
+                      textColor: Colors.black,
                     ),
                   ),
                 ],

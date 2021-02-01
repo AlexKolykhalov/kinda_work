@@ -55,19 +55,22 @@ class AddCompanyPage extends StatelessWidget {
                   ],
                 ),
                 CustomButton(
-                  onTap: () => Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          ThanksPage(
-                        text:
-                            'В ближайшее время с Вами свяжется аккаунт-менеджер',
+                  onTap: () {
+                    final Widget _thanksPage = ThanksPage(
+                      text:
+                          'В ближайшее время с Вами свяжется аккаунт-менеджер',
+                    );
+                    return Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            _thanksPage,
                       ),
-                    ),
-                  ),
-                  buttonText: 'Отправить',
-                  buttonColor: cPink,
-                  buttonTextColor: Colors.white,
+                    );
+                  },
+                  text: 'Отправить',
+                  color: cPink,
+                  textColor: Colors.white,
                 )
               ],
             ),

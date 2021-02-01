@@ -74,9 +74,9 @@ class BookingPageDetails extends StatelessWidget {
             CustomButton(
               margin: EdgeInsets.symmetric(horizontal: _hor, vertical: _vert),
               onTap: null,
-              buttonText: 'Подтвердить бронь/запись',
-              buttonColor: cPink,
-              buttonTextColor: Colors.white,
+              text: 'Подтвердить бронь/запись',
+              color: cPink,
+              textColor: Colors.white,
             ),
           ],
         ),

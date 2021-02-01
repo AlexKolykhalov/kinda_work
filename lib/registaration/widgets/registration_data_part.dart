@@ -37,9 +37,9 @@ class RegistrationDataPart extends StatelessWidget {
                 ),
               );
             },
-            buttonText: 'Получить СМС с кодом',
-            buttonTextColor: Colors.white,
-            buttonColor: cPink,
+            text: 'Получить СМС с кодом',
+            textColor: Colors.white,
+            color: cPink,
           ),
         ],
       ),

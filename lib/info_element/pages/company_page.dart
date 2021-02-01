@@ -60,7 +60,19 @@ class _CompanyPageState extends State<CompanyPage>
         appBar: CustomAppBar(
           height: appBarHeight(context),
           title: 'Подробности места',
-          actions: [Icon(Icons.favorite_border_outlined, color: cPink)],
+          actions: [
+            CustomFlatButton(
+              icon: widget.company.favorite
+                  ? Icon(
+                      Icons.favorite,
+                      color: cPink,
+                    )
+                  : Icon(
+                      Icons.favorite_border_outlined,
+                      color: cPink,
+                    ),
+            ),
+          ],
           bottom: AppBarBottom(
             tabController: _tabController,
             onTap: (int value) {
@@ -76,7 +88,6 @@ class _CompanyPageState extends State<CompanyPage>
             ],
           ),
         ),
-        // TODO найти CustomAppBar c bottom
         body: IndexedStack(
           index: _index,
           children: [
@@ -500,9 +511,9 @@ class Description extends StatelessWidget {
           child: CustomButton(
             onTap: null,
             margin: EdgeInsets.symmetric(horizontal: _hor),
-            buttonText: 'Экономь с нами 20%',
-            buttonColor: cPink,
-            buttonTextColor: Colors.white,
+            text: 'Экономь с нами 20%',
+            color: cPink,
+            textColor: Colors.white,
           ),
         )
       ],
@@ -597,10 +608,10 @@ class Prices extends StatelessWidget {
                               ),
                               CustomButton(
                                 onTap: null,
-                                buttonText: 'Все блюда раздела (15)',
-                                buttonColor: cGrey,
-                                buttonTextColor: Colors.black,
-                                buttonBorderColor: Colors.grey[600],
+                                text: 'Все блюда раздела (15)',
+                                color: cGrey,
+                                textColor: Colors.black,
+                                borderColor: Colors.grey[600],
                               ),
                               SizedBox(height: size(context, 0.12)),
                             ],
@@ -628,9 +639,9 @@ class Prices extends StatelessWidget {
           child: CustomButton(
             onTap: () => displayQrCode(context),
             margin: EdgeInsets.symmetric(horizontal: _hor),
-            buttonText: 'Предъявите скидку -20%',
-            buttonColor: cPink,
-            buttonTextColor: Colors.white,
+            text: 'Предъявите скидку -20%',
+            color: cPink,
+            textColor: Colors.white,
           ),
         )
       ],
@@ -683,10 +694,10 @@ class CompanyReviews extends StatelessWidget {
                   CustomButton(
                     margin: EdgeInsets.symmetric(horizontal: _hor),
                     onTap: null,
-                    buttonText: 'Оставить отзыв',
-                    buttonColor: cGrey,
-                    buttonTextColor: Colors.black,
-                    buttonBorderColor: Colors.grey[600],
+                    text: 'Оставить отзыв',
+                    color: cGrey,
+                    textColor: Colors.black,
+                    borderColor: Colors.grey[600],
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: _vert),
@@ -715,10 +726,10 @@ class CompanyReviews extends StatelessWidget {
                   CustomButton(
                     margin: EdgeInsets.symmetric(horizontal: _hor),
                     onTap: null,
-                    buttonText: 'Еще 10 отзывов',
-                    buttonColor: cGrey,
-                    buttonTextColor: Colors.black,
-                    buttonBorderColor: Colors.grey[600],
+                    text: 'Еще 10 отзывов',
+                    color: cGrey,
+                    textColor: Colors.black,
+                    borderColor: Colors.grey[600],
                   ),
                   SizedBox(height: size(context, 0.12)),
                 ],
@@ -734,9 +745,9 @@ class CompanyReviews extends StatelessWidget {
           child: CustomButton(
             onTap: null,
             margin: EdgeInsets.symmetric(horizontal: _hor),
-            buttonText: 'Экономь с нами 20%',
-            buttonColor: cPink,
-            buttonTextColor: Colors.white,
+            text: 'Экономь с нами 20%',
+            color: cPink,
+            textColor: Colors.white,
           ),
         )
       ],
@@ -794,9 +805,9 @@ class NewsFeed extends StatelessWidget {
           child: CustomButton(
             onTap: null,
             margin: EdgeInsets.symmetric(horizontal: _hor),
-            buttonText: 'Экономь с нами 20%',
-            buttonColor: cPink,
-            buttonTextColor: Colors.white,
+            text: 'Экономь с нами 20%',
+            color: cPink,
+            textColor: Colors.white,
           ),
         ),
       ],
