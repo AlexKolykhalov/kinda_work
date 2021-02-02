@@ -5,9 +5,6 @@ import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-//class ScannerUtils {
-//  ScannerUtils._();
-
 Future<CameraDescription> getCamera(CameraLensDirection dir) async {
   return await availableCameras().then(
     (List<CameraDescription> cameras) => cameras.firstWhere(
@@ -70,4 +67,3 @@ ImageRotation _rotationIntToImageRotation(int rotation) {
       return ImageRotation.rotation270;
   }
 }
-//}

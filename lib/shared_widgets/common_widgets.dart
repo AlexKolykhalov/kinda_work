@@ -177,9 +177,7 @@ class BottomButtons extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              // TODO camera page
-              final Widget _cameraPage =
-                  CameraPage(size: MediaQuery.of(context).size);
+              final Widget _cameraPage = CameraPage();
               return Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => _cameraPage),

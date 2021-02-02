@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kinda_work/BLoC/cubit/transition_cubit.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/shared_widgets/app_bars.dart';
@@ -18,31 +20,43 @@ class DiscountCalculatorPage extends StatelessWidget {
         height: appBarHeight(context),
         title: 'Калькулятор скидки',
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: _hor, vertical: _vert),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Для фиксации и вычисления скидки пользователя введите код',
-              style: style3(context).copyWith(color: Colors.grey[600]),
-            ),
-            SizedBox(height: _hor),
-            CustomTextField(
-              keyboardType: TextInputType.number,
-              maxLength: 16,
-              hintText: 'Код (только цифры)',
-            ),
-            SizedBox(height: _vert),
-            Text(
-              'или номер телефона',
-              style: style3(context).copyWith(
-                color: Colors.grey[600],
+      body: BlocProvider(
+        create: (context) => TransitionCubit(),
+        child: BlocBuilder<TransitionCubit, TransitionState>(
+          builder: (context, state) {
+            if (state is TransitionLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: _hor, vertical: _vert),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Для фиксации и вычисления скидки пользователя введите код',
+                    style: style3(context).copyWith(color: Colors.grey[600]),
+                  ),
+                  SizedBox(height: _hor),
+                  CustomTextField(
+                    keyboardType: TextInputType.number,
+                    maxLength: 16,
+                    hintText: 'Код (только цифры)',
+                  ),
+                  SizedBox(height: _vert),
+                  Text(
+                    'или номер телефона',
+                    style: style3(context).copyWith(
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: _hor),
+                  PhoneTextField(maxLength: 9),
+                ],
               ),
-            ),
-            SizedBox(height: _hor),
-            PhoneTextField(maxLength: 9),
-          ],
+            );
+          },
         ),
       ),
     );
