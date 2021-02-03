@@ -14,7 +14,7 @@ class RestaurantsCafe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->RestaurantsCafe');
+    print('***RestaurantsCafe***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
     return SafeArea(

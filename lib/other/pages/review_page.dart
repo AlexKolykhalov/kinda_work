@@ -54,7 +54,6 @@ class ReviewPage extends StatelessWidget {
                   ReviewRating(),
                 ]),
                 CustomButton(
-                  // TODO final to over pages in Navigator
                   onTap: () {
                     final Widget _thanks = ThanksForReviewPage();
                     return Navigator.push(

@@ -12,7 +12,7 @@ class RegistrationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->RegistrationPage');
+    print('***RegistrationPage***');
     final MediaQueryData _mq = MediaQuery.of(context);
     final double _offset = _mq.size.height * (vert * 2);
     return SafeArea(

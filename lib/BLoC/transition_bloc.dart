@@ -15,7 +15,7 @@ class TransitionBloc extends Bloc<TransitionEvent, TransitionState> {
   ) async* {
     if (event is Fetched) {
       yield TransitionLoading();
-      Future.delayed(Duration(seconds: 3));
+      await Future.delayed(Duration(seconds: 2));
       yield TransitionLoaded();
     }
   }

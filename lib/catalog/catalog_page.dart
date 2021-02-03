@@ -13,7 +13,7 @@ class CatalogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->CatalogPage');
+    print('***CatalogPage***');
     double _hor = size(context, hor);
     double _vert = size(context, vert);
     return Navigator(

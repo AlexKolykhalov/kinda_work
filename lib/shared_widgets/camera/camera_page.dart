@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kinda_work/BLoC/transition_bloc.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/discount/discount_calculator_page.dart';
@@ -73,9 +75,9 @@ class _CameraPageState extends State<CameraPage> {
             : ResolutionPreset.low;
 
     _cameraController = CameraController(camera, preset);
-    await _cameraController.initialize();
-    _previewSize = _cameraController.value.previewSize;
-    setState(() {});
+    await _cameraController.initialize().whenComplete(
+          () => _previewSize = _cameraController.value.previewSize,
+        );
   }
 
   Future<void> _initImageStreaming(int sensorOrientation) async {
@@ -93,78 +95,100 @@ class _CameraPageState extends State<CameraPage> {
         (dynamic result) {
           _handleResult(
             barcodes: result,
-            // imageSize: Size(image.width.toDouble(), image.height.toDouble()),
+            imageSize: Size(image.width.toDouble(), image.height.toDouble()),
           );
         },
-      ).whenComplete(() => isDetecting = false);
-    });
+      ).whenComplete(() {
+        isDetecting = false;
+      });
+    }).whenComplete(() => setState(() {}));
   }
 
   void _handleResult({
     @required List<Barcode> barcodes,
-    // @required Size imageSize,
+    @required Size imageSize,
   }) {
     if (!_cameraController.value.isStreamingImages) {
       return;
     }
 
-    // final MediaQueryData _mq = MediaQuery.of(context);
-    // final Size _searchBoxSize = Size(_hor * 30, _vert * 10);
-    // final double maxLogicalHeight =
-    //     _mq.size.height - _mq.padding.top - _mq.padding.bottom;
-    // final double imageHeight = defaultTargetPlatform == TargetPlatform.iOS
-    //     ? imageSize.height
-    //     : imageSize.width;
+    final MediaQueryData _mq = MediaQuery.of(context);
+    final Size _searchBoxSize = Size(_hor * 30, _vert * 10);
+    final double _maxLogicalHeight =
+        _mq.size.height - _mq.padding.top - _mq.padding.bottom;
+    final double _imageHeight = defaultTargetPlatform == TargetPlatform.iOS
+        ? imageSize.height
+        : imageSize.width;
 
-    // final double imageScale = imageHeight / maxLogicalHeight;
-    // final double halfWidth = imageScale * _searchBoxSize.width / 2;
-    // final double halfHeight = imageScale * _searchBoxSize.height / 2;
+    final double _imageScale = _imageHeight / _maxLogicalHeight;
+    final double _scaleWidth = _imageScale * _searchBoxSize.width;
+    final double _scaleHeight = _imageScale * _searchBoxSize.height;
 
-    // final Offset center = imageSize.center(Offset.zero);
+    // final double halfWidth = _imageScale * _searchBoxSize.width / 2;
+    // final double halfHeight = _imageScale * _searchBoxSize.height / 2;
 
     // final Rect validRect = Rect.fromLTRB(
-    //   center.dx - halfWidth,
-    //   center.dy - halfHeight,
-    //   center.dx + halfWidth,
-    //   center.dy + halfHeight,
+    //   _center.dx - halfWidth,
+    //   _center.dy - halfHeight,
+    //   _center.dx + halfWidth,
+    //   _center.dy + halfHeight,
     // );
 
-    final Rect validRect = Rect.fromLTWH(
-      _hor,
-      _vert * 5.5,
-      _vert * 10.0,
-      _vert * 2.5,
-    );
+    // final Rect validRect = Rect.fromLTWH(
+    //   _hor,
+    //   _vert * 5.5,
+    //   _vert * 10.0,
+    //   _vert * 2.5,
+    // );
+
+    // final Rect validRect = Rect.fromLTWH(
+    //   _hor,
+    //   _vert * 5.5,
+    //   imageSize.width / 2,
+    //   imageSize.height / 2,
+    // );
 
     for (Barcode barcode in barcodes) {
+      // final Rect _barcodeRect = Rect.fromCenter(
+      //   center: _center,
+      //   width: barcode.boundingBox.width,
+      //   height: barcode.boundingBox.height,
+      // );
+      // final Offset _center = imageSize.center(Offset(barcode.boundingBox.center, 0.0));
+
+      final Rect validRect = Rect.fromCenter(
+        center: _center,
+        width: _scaleWidth,
+        height: _scaleHeight * 0.65,
+      );
+
       final Rect intersection = validRect.intersect(barcode.boundingBox);
       final bool doesContain = intersection == barcode.boundingBox;
+      // final Rect intersection = validRect.intersect(_barcodeRect);
+      // final bool doesContain = intersection == _barcodeRect;
       print('${barcode.rawValue} $doesContain');
 
-      // setState(() {
-      //   _validRect = validRect;
-      //   _intersectionRect = intersection;
-      //   _barcodeBoundingBox = barcode.boundingBox;
-      // });
+      setState(() {
+        _validRect = validRect;
+        _intersectionRect = intersection;
+        _barcodeBoundingBox = barcode.boundingBox;
+      });
 
       if (doesContain) {
-        // print('!!!!! RESULT: ' + barcode.rawValue);
         _cameraController.stopImageStream().then(
           (_) {
             _cameraController.dispose();
-            final Widget _discountDetailsPage =
-                // DiscountDetailsPage(canPop: false);
-                DiscountDetailsPage();
-            Timer(
-              Duration(seconds: 2),
-              () => Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(seconds: 0),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      _discountDetailsPage,
-                ),
+            BlocProvider.of<TransitionBloc>(context).add(Fetched());
+            final Widget _discountDetailsPage = DiscountDetailsPage();
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 0),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    _discountDetailsPage,
               ),
+            ).then(
+              (value) => _initCameraAndScanner(),
             );
           },
         );
@@ -185,150 +209,147 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('-->CameraPage');
-    if (_cameraController != null &&
-        _cameraController.value.isInitialized &&
-        _cameraController.value.isStreamingImages) {
-      return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(_appBarHeight),
-          child: AppBar(
-            leading: CustomFlatButton(
-              icon: svgLeftArrow,
-              onPressed: () {
-                _cameraController
-                    .stopImageStream()
-                    .then((_) => Navigator.pop(context));
-              },
-            ),
-            title: Text(
-              'Добавить карту',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: _appBarHeight * 0.38,
-              ),
-            ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            actions: [
-              CustomFlatButton(
-                icon: Icon(
-                  Icons.wb_sunny_outlined,
-                  color: cPink,
-                ),
-              ),
-            ],
+    print('***CameraPage***');
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(_appBarHeight),
+        child: AppBar(
+          leading: CustomFlatButton(
+            icon: svgLeftArrow,
+            onPressed: () {
+              _cameraController
+                  .stopImageStream()
+                  .then((_) => Navigator.pop(context));
+            },
           ),
-        ),
-        body: Stack(
-          children: [
-            Container(
-              child: Transform.scale(
-                scale: _getImageZoom(MediaQuery.of(context)),
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: _cameraController.value.aspectRatio,
-                    child: CameraPreview(_cameraController),
-                  ),
-                ),
-              ),
+          title: Text(
+            'Добавить карту',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: _appBarHeight * 0.38,
             ),
-            Center(
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return Container(
-                    constraints: const BoxConstraints.expand(),
-                    child: CustomPaint(
-                      painter: WindowPainter(
-                        windowSize: Size(
-                          constraints.maxWidth - 2 * _hor,
-                          constraints.maxHeight * 0.35,
-                        ),
-                        backgroundColor: Colors.black54,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Positioned(
-              left: _hor,
-              right: _hor,
-              top: _vert,
-              child: Text(
-                'Отсканируйте штрих-код вашей карты.\nДержите штрих-код в кадре, чтобы просканировать его.',
-                textAlign: TextAlign.center,
-                style: style2(context).copyWith(color: Colors.white),
-              ),
-            ),
-            Center(
-              child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return Container(
-                    width: constraints.maxWidth - 2 * _hor,
-                    height: constraints.maxHeight * 0.35,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  );
-                },
-              ),
-            ),
-            CustomPaint(
-              painter: BarcodeRect(
-                barcodeRect: _validRect,
-                color: const Color(0xFF0099FF),
-              ),
-            ),
-            CustomPaint(
-              painter: BarcodeRect(
-                  barcodeRect: _barcodeBoundingBox,
-                  color: const Color(0xFF66BB6A)),
-            ),
-            CustomPaint(
-              painter: BarcodeRect(
-                  barcodeRect: _intersectionRect,
-                  color: const Color(0xFFCFD8DC)),
-            ),
-            Positioned(
-              left: _hor * 3,
-              right: _hor * 3,
-              bottom: _vert,
-              child: GestureDetector(
-                onTap: () {
-                  _cameraController.stopImageStream().then((_) {
-                    _cameraController.dispose();
-                    final Widget _discountCalculatorPage =
-                        DiscountCalculatorPage();
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 0),
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            _discountCalculatorPage,
-                      ),
-                    );
-                  });
-                },
-                child: CustomButton(
-                  onTap: () {},
-                  text: 'Ввести вручную',
-                  color: Colors.transparent,
-                  textColor: Colors.white,
-                  borderColor: Colors.white,
-                ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          actions: [
+            CustomFlatButton(
+              icon: Icon(
+                Icons.wb_sunny_outlined,
+                color: cPink,
               ),
             ),
           ],
         ),
-      );
-    } else {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
+      ),
+      body: (_cameraController != null &&
+              _cameraController.value.isInitialized &&
+              _cameraController.value.isStreamingImages)
+          ? Stack(
+              children: [
+                Container(
+                  child: Transform.scale(
+                    scale: _getImageZoom(MediaQuery.of(context)),
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: _cameraController.value.aspectRatio,
+                        child: CameraPreview(_cameraController),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      return Container(
+                        constraints: const BoxConstraints.expand(),
+                        child: CustomPaint(
+                          painter: WindowPainter(
+                            windowSize: Size(
+                              constraints.maxWidth - 2 * _hor,
+                              constraints.maxHeight * 0.35,
+                            ),
+                            backgroundColor: Colors.black54,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  left: _hor,
+                  right: _hor,
+                  top: _vert,
+                  child: Text(
+                    'Отсканируйте штрих-код вашей карты.\nДержите штрих-код в кадре, чтобы просканировать его.',
+                    textAlign: TextAlign.center,
+                    style: style2(context).copyWith(color: Colors.white),
+                  ),
+                ),
+                Center(
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      return Container(
+                        width: constraints.maxWidth - 2 * _hor,
+                        height: constraints.maxHeight * 0.35,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                CustomPaint(
+                  painter: BarcodeRect(
+                    barcodeRect: _validRect,
+                    color: const Color(0xFF0099FF),
+                  ),
+                ),
+                CustomPaint(
+                  painter: BarcodeRect(
+                      barcodeRect: _barcodeBoundingBox,
+                      color: const Color(0xFF66BB6A)),
+                ),
+                CustomPaint(
+                  painter: BarcodeRect(
+                      barcodeRect: _intersectionRect,
+                      color: const Color(0xFFCFD8DC)),
+                ),
+                Positioned(
+                  left: _hor * 3,
+                  right: _hor * 3,
+                  bottom: _vert,
+                  child: GestureDetector(
+                    onTap: () {
+                      _cameraController.stopImageStream().then((_) {
+                        _cameraController.dispose();
+                        final Widget _discountCalculatorPage =
+                            DiscountCalculatorPage();
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: Duration(seconds: 0),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    _discountCalculatorPage,
+                          ),
+                        );
+                      });
+                    },
+                    child: CustomButton(
+                      onTap: () {},
+                      text: 'Ввести вручную',
+                      color: Colors.transparent,
+                      textColor: Colors.white,
+                      borderColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Center(child: CircularProgressIndicator()),
+    );
   }
 }

@@ -1,11 +1,8 @@
-import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kinda_work/BLoC/bloc/transition_bloc.dart';
-import 'package:kinda_work/BLoC/cubit/transition_cubit.dart';
-
+import 'package:kinda_work/BLoC/transition_bloc.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/discount/discount_details_page.dart';
 import 'package:kinda_work/styles.dart';
@@ -343,11 +340,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 onChanged: (value) {
                   if (widget.maxLength != null &&
                       value.length == widget.maxLength) {
-                    // BlocProvider.of<TransitionCubit>(context).loading();
-                    // Future.delayed(Duration(seconds: 5)).whenComplete(() {
-                    //   BlocProvider.of<TransitionCubit>(context).initial();
-                    //   print('end of time!!');
-                    // });
                     BlocProvider.of<TransitionBloc>(context).add(Fetched());
                     final Widget _discountDetailsPage = DiscountDetailsPage();
                     Navigator.push(

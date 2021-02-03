@@ -10,7 +10,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->LoginPage');
+    print('***LoginPage***');
     MediaQueryData _mq = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(

@@ -20,7 +20,7 @@ class OtherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->OtherPage');
+    print('***OtherPage***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
     return Navigator(
@@ -80,6 +80,12 @@ class OtherPage extends StatelessWidget {
         );
       },
     );
+
+    // BlocProvider(
+    //   create: (context) => TransitionBloc(),
+    //   child:
+
+    // );
   }
 }
 

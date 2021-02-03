@@ -54,7 +54,7 @@ class _PromotionPageState extends State<PromotionPage>
 
   @override
   Widget build(BuildContext context) {
-    print('-->PromotionPage');
+    print('***PromotionPage***');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

@@ -39,7 +39,7 @@ class _PromotionsPageState extends State<PromotionsPage>
 
   @override
   Widget build(BuildContext context) {
-    print('-->PromotionsPage');
+    print('***PromotionsPage***');
     return Navigator(
       onGenerateRoute: (settings) {
         return MaterialPageRoute(

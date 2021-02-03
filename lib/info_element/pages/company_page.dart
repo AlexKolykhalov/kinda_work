@@ -54,7 +54,7 @@ class _CompanyPageState extends State<CompanyPage>
 
   @override
   Widget build(BuildContext context) {
-    print('-->CompanyPage');
+    print('***CompanyPage***');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(

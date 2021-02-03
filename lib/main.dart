@@ -5,14 +5,14 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/login/login.dart';
 
 void main() {
-  print('-->Main');
+  print('***Main***');
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('-->MyApp');
+    print('***MyApp***');
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: cGrey,

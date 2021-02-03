@@ -12,7 +12,7 @@ class Beauty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->Beauty');
+    print('***Beauty***');
     return Scaffold(
       appBar: CustomAppBar(height: appBarHeight(context), title: 'Красота'),
       body: Stack(

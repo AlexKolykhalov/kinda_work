@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/main_page.dart';
-import 'package:kinda_work/other/other_page.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 

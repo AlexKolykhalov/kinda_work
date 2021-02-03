@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:kinda_work/BLoC/transition_bloc.dart';
 import 'package:kinda_work/cards/cards_page.dart';
 import 'package:kinda_work/catalog/catalog_page.dart';
-
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/BLoC/search_result_bloc.dart';
 import 'package:kinda_work/shared_widgets/app_bars.dart';
@@ -54,18 +55,22 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('***StartPage***');
     return SafeArea(
       top: false,
       child: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: [
-            _mainPage,
-            _catalogPage,
-            _promotionsPage,
-            _cardsPage,
-            _otherPage,
-          ],
+        body: BlocProvider(
+          create: (context) => TransitionBloc(),
+          child: IndexedStack(
+            index: _currentIndex,
+            children: [
+              _mainPage,
+              _catalogPage,
+              _promotionsPage,
+              _cardsPage,
+              _otherPage,
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           key: _keyBottomAppBar,
@@ -78,6 +83,21 @@ class _StartPageState extends State<StartPage> {
           showUnselectedLabels: true,
           onTap: (int index) {
             setState(() {
+              if (index == 0) {
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => _mainPage,
+                //   ),
+                //   (route) => false,
+                // );
+                // Navigator.removeRouteBelow(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => _mainPage,
+                //   ),
+                // );
+              }
               _currentIndex = index;
             });
           },
@@ -184,7 +204,7 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->MainPage');
+    print('***MainPage***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
     return Navigator(
