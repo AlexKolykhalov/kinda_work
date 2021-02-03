@@ -148,6 +148,17 @@ class _CameraPageState extends State<CameraPage> {
     //   imageSize.height / 2,
     // );
 
+    final Rect validRect = Rect.fromCenter(
+      center: imageSize.center(
+        Offset(
+          -_mq.size.width * 0.1,
+          _mq.size.height * 0.05,
+        ),
+      ),
+      width: _scaleWidth * 0.85,
+      height: _scaleHeight * 0.3,
+    );
+
     for (Barcode barcode in barcodes) {
       // final Rect _barcodeRect = Rect.fromCenter(
       //   center: _center,
@@ -155,12 +166,6 @@ class _CameraPageState extends State<CameraPage> {
       //   height: barcode.boundingBox.height,
       // );
       // final Offset _center = imageSize.center(Offset(barcode.boundingBox.center, 0.0));
-
-      final Rect validRect = Rect.fromCenter(
-        center: _center,
-        width: _scaleWidth,
-        height: _scaleHeight * 0.65,
-      );
 
       final Rect intersection = validRect.intersect(barcode.boundingBox);
       final bool doesContain = intersection == barcode.boundingBox;
