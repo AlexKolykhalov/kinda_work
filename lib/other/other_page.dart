@@ -23,68 +23,64 @@ class OtherPage extends StatelessWidget {
     print('***OtherPage***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
-    return Navigator(
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) {
-            return Scaffold(
-              appBar: CustomAppBar(
-                height: appBarHeight(context),
-                showBackArrow: false,
-                title: 'Прочее',
-              ),
-              body: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: _vert),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TopPart(),
-                      Divider(thickness: 1.0),
-                      BusinessPart(),
-                      Divider(thickness: 1.0),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: _vert),
-                        child: Column(
-                          children: [
-                            BottomPart(),
-                            Divider(thickness: 1.0),
-                          ],
-                        ),
-                      ),
-                      CustomButton(
-                        margin: EdgeInsets.symmetric(horizontal: _hor),
-                        onTap: () {
-                          final _addCompanyPage = AddCompanyPage();
-                          return Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      _addCompanyPage,
-                            ),
-                          );
-                        },
-                        text: 'Добавить компанию',
-                        color: cGrey,
-                        borderColor: Colors.grey[600],
-                        textColor: Colors.black,
-                      )
-                    ],
-                  ),
+    return Scaffold(
+      appBar: CustomAppBar(
+        height: appBarHeight(context),
+        showBackArrow: false,
+        title: 'Прочее',
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: _vert),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TopPart(),
+              Divider(thickness: 1.0),
+              BusinessPart(),
+              Divider(thickness: 1.0),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: _vert),
+                child: Column(
+                  children: [
+                    BottomPart(),
+                    Divider(thickness: 1.0),
+                  ],
                 ),
               ),
-            );
-          },
-        );
-      },
+              CustomButton(
+                margin: EdgeInsets.symmetric(horizontal: _hor),
+                onTap: () {
+                  final _addCompanyPage = AddCompanyPage();
+                  return Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          _addCompanyPage,
+                    ),
+                  );
+                },
+                text: 'Добавить компанию',
+                color: cGrey,
+                borderColor: Colors.grey[600],
+                textColor: Colors.black,
+              )
+            ],
+          ),
+        ),
+      ),
     );
 
-    // BlocProvider(
-    //   create: (context) => TransitionBloc(),
-    //   child:
+    // return Navigator(
+    //   onGenerateRoute: (settings) {
+    //     return MaterialPageRoute(
+    //       settings: settings,
+    //       builder: (context) {
+    //         return
 
+    //       },
+    //     );
+    //   },
     // );
   }
 }

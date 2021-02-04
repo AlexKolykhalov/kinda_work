@@ -38,7 +38,6 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // TODO maybe only push
       onTap: onTap,
       child: Container(
         height: math.min(size(context, 0.075), 48.0),

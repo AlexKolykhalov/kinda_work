@@ -55,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    print('***ProfilePage***');
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppBar(
@@ -133,6 +134,7 @@ class _GeneralState extends State<General> {
 
   @override
   void initState() {
+    // TODO save rank in class User
     _rank = getRank(widget.user.points);
     super.initState();
   }

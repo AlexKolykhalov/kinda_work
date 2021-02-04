@@ -12,7 +12,7 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/discount/discount_calculator_page.dart';
 import 'package:kinda_work/other/pages/discount/discount_details_page.dart';
 import 'package:kinda_work/shared_widgets/camera/scanner_utils.dart';
-import 'package:kinda_work/shared_widgets/camera/widgets.dart';
+import 'package:kinda_work/shared_widgets/camera/camera_widgets.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
@@ -113,16 +113,17 @@ class _CameraPageState extends State<CameraPage> {
     }
 
     final MediaQueryData _mq = MediaQuery.of(context);
-    final Size _searchBoxSize = Size(_hor * 30, _vert * 10);
-    final double _maxLogicalHeight =
-        _mq.size.height - _mq.padding.top - _mq.padding.bottom;
-    final double _imageHeight = defaultTargetPlatform == TargetPlatform.iOS
-        ? imageSize.height
-        : imageSize.width;
 
-    final double _imageScale = _imageHeight / _maxLogicalHeight;
-    final double _scaleWidth = _imageScale * _searchBoxSize.width;
-    final double _scaleHeight = _imageScale * _searchBoxSize.height;
+    // final Size _searchBoxSize = Size(_hor * 30, _vert * 10);
+    // final double _maxLogicalHeight =
+    //     _mq.size.height - _mq.padding.top - _mq.padding.bottom;
+    // final double _imageHeight = defaultTargetPlatform == TargetPlatform.iOS
+    //     ? imageSize.height
+    //     : imageSize.width;
+    // final double _imageScale = _imageHeight / _maxLogicalHeight;
+
+    // final double _scaleWidth = _imageScale * imageSize.width;
+    // final double _scaleHeight = _imageScale * imageSize.height;
 
     // final double halfWidth = _imageScale * _searchBoxSize.width / 2;
     // final double halfHeight = _imageScale * _searchBoxSize.height / 2;
@@ -134,43 +135,27 @@ class _CameraPageState extends State<CameraPage> {
     //   _center.dy + halfHeight,
     // );
 
-    // final Rect validRect = Rect.fromLTWH(
-    //   _hor,
-    //   _vert * 5.5,
-    //   _vert * 10.0,
-    //   _vert * 2.5,
+    // final Rect validRect = Rect.fromCenter(
+    //   center: imageSize.center(
+    //     Offset(-_mq.size.width * 0.1, _mq.size.height * 0.05,),
+    //   ),
+    //   width: _scaleWidth * 0.85,
+    //   height: _scaleHeight * 0.3,
     // );
-
-    // final Rect validRect = Rect.fromLTWH(
-    //   _hor,
-    //   _vert * 5.5,
-    //   imageSize.width / 2,
-    //   imageSize.height / 2,
-    // );
-
-    final Rect validRect = Rect.fromCenter(
-      center: imageSize.center(
-        Offset(
-          -_mq.size.width * 0.1,
-          _mq.size.height * 0.05,
-        ),
-      ),
-      width: _scaleWidth * 0.85,
-      height: _scaleHeight * 0.3,
-    );
 
     for (Barcode barcode in barcodes) {
-      // final Rect _barcodeRect = Rect.fromCenter(
-      //   center: _center,
-      //   width: barcode.boundingBox.width,
-      //   height: barcode.boundingBox.height,
-      // );
-      // final Offset _center = imageSize.center(Offset(barcode.boundingBox.center, 0.0));
-
+      final Rect validRect = Rect.fromCenter(
+        center: imageSize.center(
+          Offset(
+            -_mq.size.width * 0.1,
+            _mq.size.height * 0.05,
+          ),
+        ),
+        width: barcode.boundingBox.width * 1.2,
+        height: barcode.boundingBox.height * 1.1,
+      );
       final Rect intersection = validRect.intersect(barcode.boundingBox);
       final bool doesContain = intersection == barcode.boundingBox;
-      // final Rect intersection = validRect.intersect(_barcodeRect);
-      // final bool doesContain = intersection == _barcodeRect;
       print('${barcode.rawValue} $doesContain');
 
       setState(() {

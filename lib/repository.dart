@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:kinda_work/main/pages/beauty.dart';
+import 'package:kinda_work/main/pages/beauty_page.dart';
 import 'package:kinda_work/main/pages/restaurants_cafe_page.dart';
 import 'package:kinda_work/models.dart';
 
@@ -229,12 +229,12 @@ List<Map<String, dynamic>> sectionElements = [
   {
     'img': 'assets/png/features/1.png',
     'text': 'Рестораны и кафе',
-    'page': RestaurantsCafe(),
+    'page': RestaurantsCafePage(),
   },
   {
     'img': 'assets/png/features/2.png',
     'text': 'Красота',
-    'page': Beauty(),
+    'page': BeautyPage(),
   },
   {
     'img': 'assets/png/features/3.png',

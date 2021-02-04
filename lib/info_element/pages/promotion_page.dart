@@ -294,12 +294,15 @@ class Description extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: _vert),
                       child: Column(
                         children: [
-                          // TODO два одинаковых widget
-                          // с одинаковыми данными
-                          // нужно сделать входные параметры
-                          DropdownWidget(),
+                          // TODO доделать параметры
+                          DropdownWidget(
+                            title:
+                                'Окрашивание краской салона в один тон (мытье + сушка по форме)',
+                          ),
                           SizedBox(height: _vert),
-                          DropdownWidget(),
+                          DropdownWidget(
+                            title: 'Японское выпрямление волос',
+                          ),
                         ],
                       ),
                     ),

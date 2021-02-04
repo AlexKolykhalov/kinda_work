@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/other/pages/discount/thanks_page.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/shared_widgets/app_bars.dart';
@@ -13,7 +12,7 @@ class AddCompanyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->AddCompanyPage');
+    print('***AddCompanyPage***');
     MediaQueryData _mq = MediaQuery.of(context);
     final double _hor = _mq.size.height * hor;
     final double _vert = _mq.size.height * vert;
@@ -26,10 +25,7 @@ class AddCompanyPage extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-            height: _mq.size.height -
-                _mq.padding.top -
-                _appBarHeight -
-                bottomAppHeight,
+            height: _mq.size.height - _mq.padding.top - _appBarHeight,
             padding: EdgeInsets.symmetric(horizontal: _hor, vertical: _vert),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

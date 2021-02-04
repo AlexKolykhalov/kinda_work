@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:kinda_work/BLoC/transition_bloc.dart';
 import 'package:kinda_work/cards/cards_page.dart';
 import 'package:kinda_work/catalog/catalog_page.dart';
 import 'package:kinda_work/constants.dart';
@@ -57,20 +56,17 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     print('***StartPage***');
     return SafeArea(
-      top: false,
+      // top: false,
       child: Scaffold(
-        body: BlocProvider(
-          create: (context) => TransitionBloc(),
-          child: IndexedStack(
-            index: _currentIndex,
-            children: [
-              _mainPage,
-              _catalogPage,
-              _promotionsPage,
-              _cardsPage,
-              _otherPage,
-            ],
-          ),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            _mainPage,
+            _catalogPage,
+            _promotionsPage,
+            _cardsPage,
+            _otherPage,
+          ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           key: _keyBottomAppBar,
@@ -83,21 +79,6 @@ class _StartPageState extends State<StartPage> {
           showUnselectedLabels: true,
           onTap: (int index) {
             setState(() {
-              if (index == 0) {
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => _mainPage,
-                //   ),
-                //   (route) => false,
-                // );
-                // Navigator.removeRouteBelow(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => _mainPage,
-                //   ),
-                // );
-              }
               _currentIndex = index;
             });
           },
@@ -207,128 +188,128 @@ class MainPage extends StatelessWidget {
     print('***MainPage***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
-    return Navigator(
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) {
-            return BlocProvider(
-              create: (context) => SearchResultBloc(),
-              child: Scaffold(
-                appBar: CustomAppBarWithSearch(
-                  height: appBarHeight(context),
+    return BlocProvider(
+      create: (context) => SearchResultBloc(),
+      child: Scaffold(
+        appBar: CustomAppBarWithSearch(
+          height: appBarHeight(context),
+        ),
+        body: BlocBuilder<SearchResultBloc, SearchResultState>(
+          builder: (context, state) {
+            if (state is SearchResultLoadInProgress) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (state is SearchResultLoadSuccess) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SearchResultPrices(
+                      companies: state.result['companies'],
+                    ),
+                    Divider(thickness: 1.0),
+                    SearchResultPromotions(
+                      promotions: state.result['promotions'],
+                    ),
+                    Divider(thickness: 1.0),
+                    SearchResultCompanies(
+                      companies: state.result['companies'],
+                    ),
+                    Divider(thickness: 1.0),
+                    SearchResultTypeOfCompanies(
+                      typeCompanies: state.result['type_companies'],
+                    ),
+                    Divider(thickness: 1.0),
+                  ],
                 ),
-                body: BlocBuilder<SearchResultBloc, SearchResultState>(
-                  builder: (context, state) {
-                    if (state is SearchResultLoadInProgress) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (state is SearchResultLoadSuccess) {
-                      return SingleChildScrollView(
+              );
+            }
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(_hor),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: CustomSlider(images: sliderImages)),
+                      ),
+                      Sections(
+                        padding: EdgeInsets.only(left: _hor),
+                        elements: sectionElements,
+                      ),
+                      //TODO do description for this widget & widgets at all
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: _hor),
                         child: Column(
                           children: [
-                            SearchResultPrices(
-                              companies: state.result['companies'],
+                            CustomGridViewTitle(
+                              padding: EdgeInsets.only(top: _vert),
+                              title: 'Популярные места',
+                              textTotalAmount: '5369 из 15600',
                             ),
-                            Divider(thickness: 1.0),
-                            SearchResultPromotions(
-                              promotions: state.result['promotions'],
+                            CustomGridView(
+                              padding: EdgeInsets.symmetric(vertical: _vert),
+                              elements: popularCompanies,
+                              mainAxisSpacing: _hor,
+                              crossAxisSpacing: _hor,
                             ),
-                            Divider(thickness: 1.0),
-                            SearchResultCompanies(
-                              companies: state.result['companies'],
+                            CustomButton(
+                              onTap: null,
+                              text: 'Смотреть все предложения',
+                              color: cGrey,
+                              textColor: cIndigo,
+                              borderColor: cIndigo,
                             ),
-                            Divider(thickness: 1.0),
-                            SearchResultTypeOfCompanies(
-                              typeCompanies: state.result['type_companies'],
+                            CustomGridViewTitle(
+                              padding: EdgeInsets.only(top: _vert),
+                              title: 'Популярные акции',
+                              textTotalAmount: '5090',
                             ),
-                            Divider(thickness: 1.0),
+                            CustomGridView(
+                              padding: EdgeInsets.symmetric(vertical: _vert),
+                              elements: popularPromotions,
+                              mainAxisSpacing: _hor,
+                              crossAxisSpacing: _hor,
+                            ),
+                            CustomButton(
+                              margin: EdgeInsets.only(bottom: _vert),
+                              onTap: null,
+                              text: 'Смотреть все предложения',
+                              color: cGrey,
+                              textColor: cIndigo,
+                              borderColor: cIndigo,
+                            ),
+                            SizedBox(height: size(context, 0.085)),
                           ],
                         ),
-                      );
-                    }
-                    return Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(_hor),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    child: CustomSlider(images: sliderImages)),
-                              ),
-                              Sections(
-                                padding: EdgeInsets.only(left: _hor),
-                                elements: sectionElements,
-                              ),
-                              //TODO do description for this widget & widgets at all
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: _hor),
-                                child: Column(
-                                  children: [
-                                    CustomGridViewTitle(
-                                      padding: EdgeInsets.only(top: _vert),
-                                      title: 'Популярные места',
-                                      textTotalAmount: '5369 из 15600',
-                                    ),
-                                    CustomGridView(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: _vert),
-                                      elements: popularCompanies,
-                                      mainAxisSpacing: _hor,
-                                      crossAxisSpacing: _hor,
-                                    ),
-                                    CustomButton(
-                                      onTap: null,
-                                      text: 'Смотреть все предложения',
-                                      color: cGrey,
-                                      textColor: cIndigo,
-                                      borderColor: cIndigo,
-                                    ),
-                                    CustomGridViewTitle(
-                                      padding: EdgeInsets.only(top: _vert),
-                                      title: 'Популярные акции',
-                                      textTotalAmount: '5090',
-                                    ),
-                                    CustomGridView(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: _vert),
-                                      elements: popularPromotions,
-                                      mainAxisSpacing: _hor,
-                                      crossAxisSpacing: _hor,
-                                    ),
-                                    CustomButton(
-                                      margin: EdgeInsets.only(bottom: _vert),
-                                      onTap: null,
-                                      text: 'Смотреть все предложения',
-                                      color: cGrey,
-                                      textColor: cIndigo,
-                                      borderColor: cIndigo,
-                                    ),
-                                    SizedBox(height: size(context, 0.085)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom: _vert,
-                          child: BottomButtons(
-                            padding: EdgeInsets.symmetric(horizontal: _hor),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                Positioned(
+                  bottom: _vert,
+                  child: BottomButtons(
+                    padding: EdgeInsets.symmetric(horizontal: _hor),
+                  ),
+                ),
+              ],
             );
           },
-        );
-      },
+        ),
+      ),
     );
+
+    // Navigator(
+    //   onGenerateRoute: (settings) {
+    //     return MaterialPageRoute(
+    //       settings: settings,
+    //       builder: (context) {
+    //         return
+    //       },
+    //     );
+    //   },
+    // );
   }
 }
 

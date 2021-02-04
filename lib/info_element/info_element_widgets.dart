@@ -547,123 +547,112 @@ class NewsWidget extends StatelessWidget {
 }
 
 class DropdownWidget extends StatefulWidget {
-  const DropdownWidget({Key key}) : super(key: key);
+  const DropdownWidget({
+    Key key,
+    @required this.title,
+    this.description = '',
+  }) : super(key: key);
+
+  final String title;
+  final String description;
 
   @override
   _DropdownWidgetState createState() => _DropdownWidgetState();
 }
 
 class _DropdownWidgetState extends State<DropdownWidget> {
-  bool _isVisible;
-
-  @override
-  void initState() {
-    super.initState();
-    _isVisible = true;
-  }
+  bool _isVisible = true;
 
   @override
   Widget build(BuildContext context) {
     print('-->DropdownWidget');
-    double _hor = size(context, hor);
-    return Container(
-      // TODO подумать над динамической высотой
-      // когда сворачиваем, должна уменьшаться
-      // высота контейнера
-      height: size(context, 0.35),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Column(
+    final double _hor = size(context, hor);
+    return Column(
+      children: [
+        Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(_hor),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: constraints.maxHeight * 0.45,
-                color: Colors.white,
-                padding: EdgeInsets.all(_hor),
-                child: Column(
-                  children: [
-                    Text(
-                      'Окрашивание краской салона в один тон (мытье + сушка по форме)',
-                      style: style2(context).copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Expanded(child: Container()),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          '25 - 40 р.',
-                          style: style2(context).copyWith(
-                            color: cPink,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: _hor),
-                        Text(
-                          'Без скидки 55 - 85 р.',
-                          style: style2(context),
-                        ),
-                      ],
-                    )
-                  ],
+              Text(
+                widget.title,
+                style: style2(context).copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Visibility(
-                visible: _isVisible,
-                child: Expanded(
-                  child: Container(
-                    color: Colors.orange[50],
-                    padding: EdgeInsets.all(_hor),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Короткие волосы (до 15 см)',
-                          style: style3(context),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '12 р.',
-                              style: style3(context).copyWith(
-                                color: cPink,
-                              ),
-                            ),
-                            SizedBox(width: _hor),
-                            Text(
-                              '15 р.',
-                              style: style3(context).copyWith(
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+              SizedBox(height: _hor),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '25 - 40 р.',
+                    style: style2(context).copyWith(
+                      color: cPink,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  setState(() {
-                    _isVisible = !_isVisible;
-                  });
-                },
-                child: Container(
-                  color: Colors.orange[50],
-                  width: MediaQuery.of(context).size.width,
-                  child: Icon(
-                      _isVisible
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      color: cPink),
-                ),
-              ),
+                  SizedBox(width: _hor),
+                  Text(
+                    'Без скидки 55 - 85 р.',
+                    style: style2(context),
+                  ),
+                ],
+              )
             ],
-          );
-        },
-      ),
+          ),
+        ),
+        Visibility(
+          visible: _isVisible,
+          child: Container(
+            color: Colors.orange[50],
+            padding: EdgeInsets.all(_hor),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.description,
+                  style: style3(context),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '12 р.',
+                      style: style3(context).copyWith(
+                        color: cPink,
+                      ),
+                    ),
+                    SizedBox(width: _hor),
+                    Text(
+                      '15 р.',
+                      style: style3(context).copyWith(
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            setState(() {
+              _isVisible = !_isVisible;
+            });
+          },
+          child: Container(
+            color: Colors.orange[100],
+            width: MediaQuery.of(context).size.width,
+            child: Icon(
+                _isVisible
+                    ? Icons.keyboard_arrow_up
+                    : Icons.keyboard_arrow_down,
+                color: cPink),
+          ),
+        ),
+      ],
     );
   }
 }

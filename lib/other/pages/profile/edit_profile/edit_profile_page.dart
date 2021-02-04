@@ -13,6 +13,7 @@ class EditProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('***EditProfilePage***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
     return SafeArea(

@@ -40,51 +40,54 @@ class _PromotionsPageState extends State<PromotionsPage>
   @override
   Widget build(BuildContext context) {
     print('***PromotionsPage***');
-    return Navigator(
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) {
-            return Scaffold(
-              appBar: CustomAppBar(
-                height: appBarHeight(context),
-                showBackArrow: false,
-                title: 'Акции - бесплатно',
-                bottom: AppBarBottom(
-                  tabController: _tabController,
-                  onTap: (value) {
-                    setState(() {
-                      _index = value;
-                    });
-                  },
-                  bottomData: [
-                    'Все акции',
-                    'Рестораны и кафе',
-                    'Красота',
-                    'Развлечения',
-                    'Спорт',
-                    'Авто',
-                  ],
-                  labelPadding: null,
-                  isScrollable: true,
-                ),
-              ),
-              body: IndexedStack(
-                index: _index,
-                children: [
-                  _allPromotions,
-                  _restaurantsCafe,
-                  _beaty,
-                  _entertainment,
-                  _sport,
-                  _auto,
-                ],
-              ),
-            );
+    return Scaffold(
+      appBar: CustomAppBar(
+        height: appBarHeight(context),
+        showBackArrow: false,
+        title: 'Акции - бесплатно',
+        bottom: AppBarBottom(
+          tabController: _tabController,
+          onTap: (value) {
+            setState(() {
+              _index = value;
+            });
           },
-        );
-      },
+          bottomData: [
+            'Все акции',
+            'Рестораны и кафе',
+            'Красота',
+            'Развлечения',
+            'Спорт',
+            'Авто',
+          ],
+          labelPadding: null,
+          isScrollable: true,
+        ),
+      ),
+      body: IndexedStack(
+        index: _index,
+        children: [
+          _allPromotions,
+          _restaurantsCafe,
+          _beaty,
+          _entertainment,
+          _sport,
+          _auto,
+        ],
+      ),
     );
+
+    // Navigator(
+    //   onGenerateRoute: (settings) {
+    //     return MaterialPageRoute(
+    //       settings: settings,
+    //       builder: (context) {
+    //         return
+
+    //       },
+    //     );
+    //   },
+    // );
   }
 }
 

@@ -7,14 +7,14 @@ import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
-class RestaurantsCafe extends StatelessWidget {
-  const RestaurantsCafe({
+class RestaurantsCafePage extends StatelessWidget {
+  const RestaurantsCafePage({
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('***RestaurantsCafe***');
+    print('***RestaurantsCafePage***');
     final double _hor = size(context, hor);
     final double _vert = size(context, vert);
     return SafeArea(

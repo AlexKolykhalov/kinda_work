@@ -13,54 +13,60 @@ class ThanksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->ThanksPage');
+    print('***ThanksPage***');
+    final MediaQueryData _mq = MediaQuery.of(context);
+    final double _h = _mq.size.height * 0.15;
+    final double _vert = _mq.size.height * vert;
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: size(context, 0.07),
-            vertical: size(context, vert),
-          ),
-          child: Column(
-            children: [
-              Container(
-                child: Column(
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: Container(
+            height: _mq.size.height - _mq.padding.top,
+            padding: EdgeInsets.symmetric(
+              horizontal: size(context, 0.07),
+              vertical: _vert,
+            ),
+            child: Column(
+              children: [
+                Expanded(child: Container()),
+                Column(
                   children: [
                     Container(
-                      width: size(context, 0.15),
-                      height: size(context, 0.15),
-                      margin: EdgeInsets.only(top: size(context, 0.2)),
+                      width: _h,
+                      height: _h,
                       child: SvgPicture.asset('assets/svg/thumbsup.svg'),
                     ),
-                    SizedBox(height: size(context, 0.05)),
+                    SizedBox(height: _vert * 2),
                     Text(
                       'Спасибо!',
                       style: style1(context).copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: size(context, 0.025)),
+                    SizedBox(height: _vert),
                     Text(text, style: style3(context)),
                   ],
                 ),
-              ),
-              Expanded(child: Container()),
-              CustomButton(
-                onTap: () {
-                  final Widget _mainPage = MainPage();
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          _mainPage,
-                    ),
-                  );
-                },
-                text: 'Закрыть',
-                color: cPink,
-                textColor: Colors.white,
-              ),
-            ],
+                Expanded(child: Container()),
+                CustomButton(
+                  onTap: () {
+                    final Widget _startPage = StartPage();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  _startPage,
+                        ),
+                        (route) => false);
+                  },
+                  text: 'Закрыть',
+                  color: cPink,
+                  textColor: Colors.white,
+                ),
+              ],
+            ),
           ),
         ),
       ),
