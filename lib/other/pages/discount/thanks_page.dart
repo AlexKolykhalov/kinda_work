@@ -45,7 +45,11 @@ class ThanksPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: _vert),
-                    Text(text, style: style3(context)),
+                    Text(
+                      text,
+                      textAlign: TextAlign.center,
+                      style: style3(context),
+                    ),
                   ],
                 ),
                 Expanded(child: Container()),

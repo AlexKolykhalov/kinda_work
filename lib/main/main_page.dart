@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kinda_work/cards/bloc/cards_bloc.dart';
 
 import 'package:kinda_work/cards/cards_page.dart';
 import 'package:kinda_work/catalog/catalog_page.dart';
@@ -80,6 +81,9 @@ class _StartPageState extends State<StartPage> {
           onTap: (int index) {
             setState(() {
               _currentIndex = index;
+              if (index == 3) {
+                BlocProvider.of<CardsBloc>(context).add(ReceivedCards());
+              }
             });
           },
           items: [

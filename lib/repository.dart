@@ -517,3 +517,10 @@ List<Review> reviews = [
     reviewPoints: 55,
   ),
 ];
+
+List<UserCard> cards = [
+  UserCard(
+    cardNumber: 12312123,
+    name: 'Альфа-банк',
+  ),
+];

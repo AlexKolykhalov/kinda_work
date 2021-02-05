@@ -167,6 +167,19 @@ class Review {
 //   final Promotion promotion;
 //   final User user;
 // }
+class UserCard {
+  UserCard({
+    this.cardNumber,
+    this.name,
+    this.img,
+    this.notes,
+  });
+
+  final int cardNumber;
+  final String name;
+  final Image img;
+  final List<String> notes;
+}
 
 class User {
   const User({
