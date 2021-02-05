@@ -523,4 +523,12 @@ List<UserCard> cards = [
     cardNumber: 12312123,
     name: 'Альфа-банк',
   ),
+  UserCard(
+    cardNumber: 12312123,
+    name: 'Альфа-банк',
+  ),
+  UserCard(
+    cardNumber: 12312123,
+    name: 'Альфа-банк',
+  ),
 ];

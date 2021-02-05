@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kinda_work/cards/bloc/cards_bloc.dart';
+import 'package:kinda_work/cards/cubit/edit_card_cubit.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/models.dart';
 
@@ -15,6 +16,7 @@ class CardsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('***CardsPage***');
+    final _appBarHeight = appBarHeight(context);
     return BlocBuilder<CardsBloc, CardsState>(
       builder: (context, state) {
         if (state is CardsLoaded) {
@@ -28,14 +30,55 @@ class CardsPage extends StatelessWidget {
               body: NoCardsPage(),
             );
           }
-          return Scaffold(
-            appBar: CustomAppBar(
-              height: appBarHeight(context),
-              title: 'Карты',
-              showBackArrow: false,
-              actions: [CustomFlatButton(icon: Icon(Icons.add, color: cPink))],
+          return BlocProvider(
+            create: (context) => EditCardCubit(),
+            child: Scaffold(
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(_appBarHeight),
+                child: AppBar(
+                  leading: BlocBuilder<EditCardCubit, bool>(
+                    builder: (context, state) {
+                      return Visibility(
+                        visible: state,
+                        child: CustomFlatButton(
+                          icon: Icon(Icons.delete_outlined, color: cPink),
+                          onPressed: () => null,
+                        ),
+                      );
+                    },
+                  ),
+                  title: Text(
+                    'Карты',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: _appBarHeight * 0.38,
+                    ),
+                  ),
+                  centerTitle: true,
+                  backgroundColor: Colors.white,
+                  actions: [
+                    BlocBuilder<EditCardCubit, bool>(
+                      builder: (context, state) {
+                        return state
+                            ? CustomFlatButton(
+                                icon: Icon(
+                                  Icons.edit_outlined,
+                                  color: cPink,
+                                ),
+                              )
+                            : CustomFlatButton(
+                                icon: Icon(
+                                  Icons.add,
+                                  color: cPink,
+                                ),
+                              );
+                      },
+                    )
+                  ],
+                ),
+              ),
+              body: CurrentCardsPage(cards: state.cards),
             ),
-            body: CurrentCardsPage(cards: state.cards),
           );
         }
         return Center(child: CircularProgressIndicator());
@@ -164,47 +207,70 @@ class CurrentCardsPage extends StatelessWidget {
   }
 }
 
-class CardWidget extends StatelessWidget {
+class CardWidget extends StatefulWidget {
   const CardWidget({Key key}) : super(key: key);
 
   @override
+  _CardWidgetState createState() => _CardWidgetState();
+}
+
+bool _selectedItems = false;
+
+class _CardWidgetState extends State<CardWidget> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => null,
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                ),
-              ),
-              Positioned(
-                top: constraints.maxHeight * 0.1,
-                right: constraints.maxHeight * 0.1,
-                child: Container(
-                  width: constraints.maxHeight * 0.15,
-                  height: constraints.maxHeight * 0.15,
+    return Opacity(
+      opacity: _isPressed ? 0.8 : 1.0,
+      child: GestureDetector(
+        onLongPress: () {
+          setState(() {
+            if (_isPressed == _selectedItems) {
+              _isPressed = !_isPressed;
+              _selectedItems = !_selectedItems;
+              BlocProvider.of<EditCardCubit>(context).changedAppBar();
+            }
+          });
+        },
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Stack(
+              children: [
+                Container(
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: cPink,
+                    color: Colors.green,
                   ),
-                  child: Center(
-                    child: LayoutBuilder(
-                      builder:
-                          (BuildContext context, BoxConstraints constraints) {
-                        return Icon(Icons.check,
-                            color: Colors.white,
-                            size: constraints.maxHeight * 0.7);
-                      },
+                ),
+                Visibility(
+                  visible: _isPressed,
+                  child: Positioned(
+                    top: constraints.maxHeight * 0.1,
+                    right: constraints.maxHeight * 0.1,
+                    child: Container(
+                      width: constraints.maxHeight * 0.15,
+                      height: constraints.maxHeight * 0.15,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: cPink,
+                      ),
+                      child: Center(
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Icon(Icons.check,
+                                color: Colors.white,
+                                size: constraints.maxHeight * 0.7);
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
-          );
-        },
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

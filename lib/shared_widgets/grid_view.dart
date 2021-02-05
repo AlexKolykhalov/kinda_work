@@ -307,7 +307,7 @@ class PromotionInfo extends StatelessWidget {
                             'от ${element.newPrice} р.',
                             style: TextStyle(
                               color: cPink,
-                              fontSize: containerConstraints2.maxHeight * 0.35,
+                              fontSize: containerConstraints2.maxHeight * 0.335,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -317,7 +317,7 @@ class PromotionInfo extends StatelessWidget {
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               color: Colors.grey[600],
-                              fontSize: containerConstraints2.maxHeight * 0.35,
+                              fontSize: containerConstraints2.maxHeight * 0.335,
                             ),
                           ),
                         ],
