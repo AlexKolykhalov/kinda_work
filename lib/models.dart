@@ -167,8 +167,8 @@ class Review {
 //   final Promotion promotion;
 //   final User user;
 // }
-class UserCard {
-  UserCard({
+class DiscountCard {
+  DiscountCard({
     this.cardNumber,
     this.name,
     this.img,
@@ -177,7 +177,7 @@ class UserCard {
 
   final int cardNumber;
   final String name;
-  final Image img;
+  final List<Image> img;
   final List<String> notes;
 }
 

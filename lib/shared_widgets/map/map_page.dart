@@ -226,7 +226,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('-->MapPage');
+    print('***MapPage***');
     var center = LatLng(53.909480, 27.544318);
     return SafeArea(
       child: Scaffold(

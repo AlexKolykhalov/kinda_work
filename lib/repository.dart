@@ -518,17 +518,17 @@ List<Review> reviews = [
   ),
 ];
 
-List<UserCard> cards = [
-  UserCard(
+List<DiscountCard> cards = [
+  DiscountCard(
     cardNumber: 12312123,
     name: 'Альфа-банк',
   ),
-  UserCard(
+  DiscountCard(
     cardNumber: 12312123,
-    name: 'Альфа-банк',
+    name: 'Лента',
   ),
-  UserCard(
+  DiscountCard(
     cardNumber: 12312123,
-    name: 'Альфа-банк',
+    name: 'Пятерочка',
   ),
 ];

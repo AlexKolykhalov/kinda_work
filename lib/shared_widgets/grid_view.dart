@@ -159,6 +159,7 @@ class CustomGridViewElement extends StatelessWidget {
             final Widget _elementPage = element is Company
                 ? CompanyPage(company: element)
                 : PromotionPage(promotion: element);
+            // final Widget _elementPage = CompanyPage(company: element);
             return Navigator.push(
               context,
               PageRouteBuilder(

@@ -39,6 +39,8 @@ class _PromotionsPageState extends State<PromotionsPage>
 
   @override
   Widget build(BuildContext context) {
+    // TODO why this widget always rebuild?
+    // probably because statefull Widget
     print('***PromotionsPage***');
     return Scaffold(
       appBar: CustomAppBar(

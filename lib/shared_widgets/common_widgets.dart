@@ -79,6 +79,8 @@ class CustomFlatButton extends StatelessWidget {
       onPressed: onPressed,
       padding: EdgeInsets.zero,
       minWidth: size(context, 0.035),
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: Container(
         width: size(context, 0.035),
         child: icon,
@@ -412,6 +414,154 @@ void displayQrCode(BuildContext context) {
                   style: TextStyle(fontSize: _size.height * 0.05)),
             ),
           ],
+        ),
+      );
+    },
+  );
+}
+
+void displayCardImages(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      final MediaQueryData _mq = MediaQuery.of(context);
+      final double _hor = _mq.size.height * hor;
+      final double _vert = _mq.size.height * vert;
+      return Container(
+        height: _mq.size.height * 0.7,
+        color: cGrey,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Column(
+              children: [
+                Container(
+                  width: constraints.maxWidth * 0.15,
+                  height: constraints.maxHeight * 0.01,
+                  margin: EdgeInsets.only(top: constraints.maxHeight * 0.025),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[600],
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: _vert),
+                      margin: EdgeInsets.only(left: _vert),
+                      child: Text(
+                        'Изображения',
+                        style: style2(context).copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        final Widget _cameraPage = CameraPage(barcode: false);
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    _cameraPage,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: constraints.maxHeight * 0.8,
+                        padding: EdgeInsets.only(left: _hor),
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(width: _hor);
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            return index < 2
+                                ? Column(
+                                    children: [
+                                      Container(
+                                        height: constraints.maxHeight * 0.7,
+                                        width: constraints.maxWidth * 0.6,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[600],
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: Center(
+                                          child: LayoutBuilder(
+                                            builder: (BuildContext context,
+                                                BoxConstraints
+                                                    constraintsElement) {
+                                              return Container(
+                                                width: constraintsElement
+                                                        .maxWidth *
+                                                    0.75,
+                                                height: constraintsElement
+                                                        .maxHeight *
+                                                    0.5,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      width: constraintsElement
+                                                              .maxWidth *
+                                                          0.35,
+                                                      height: constraintsElement
+                                                              .maxHeight *
+                                                          0.3,
+                                                      child: svgNoImage,
+                                                    ),
+                                                    Text(
+                                                      'Лицевая сторона',
+                                                      style: style2(context)
+                                                          .copyWith(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: index != 0,
+                                        child: Container(
+                                          height: constraints.maxHeight * 0.1,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.delete_outlined,
+                                                color: cPink,
+                                              ),
+                                              SizedBox(width: _vert),
+                                              Icon(
+                                                Icons.replay,
+                                                color: cPink,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : Container();
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
         ),
       );
     },

@@ -69,7 +69,8 @@ class ProfileData extends StatelessWidget {
         ),
         CustomTextField(
           text: 'О да, я крут!',
-          isMultiLines: true,
+          minLines: 6,
+          maxLines: 6,
         ),
       ],
     );

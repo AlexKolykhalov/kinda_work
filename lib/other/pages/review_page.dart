@@ -21,12 +21,10 @@ class ReviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('-->ReviewPage');
+    print('***ReviewPage***');
     final MediaQueryData _mq = MediaQuery.of(context);
-    final double _height = _mq.size.height -
-        _mq.padding.top -
-        appBarHeight(context) -
-        bottomAppHeight;
+    final double _height =
+        _mq.size.height - _mq.padding.top - appBarHeight(context);
     final double _hor = _mq.size.height * hor;
     final double _vert = _mq.size.height * vert;
     return SafeArea(
@@ -89,7 +87,8 @@ class ReviewText extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: size(context, hor)),
           child: CustomTextField(
             hintText: 'Текст отзыва',
-            isMultiLines: true,
+            minLines: 6,
+            maxLines: 6,
           ),
         ),
         Text(

@@ -10,5 +10,5 @@ class CardsLoading extends CardsState {}
 class CardsLoaded extends CardsState {
   CardsLoaded({@required this.cards});
 
-  final List<UserCard> cards;
+  final List<DiscountCard> cards;
 }

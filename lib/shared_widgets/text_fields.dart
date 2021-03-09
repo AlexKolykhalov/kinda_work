@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kinda_work/BLoC/transition_bloc.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/other/pages/discount/discount_details_page.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
 class EmailPhoneTextField extends StatefulWidget {
@@ -35,6 +36,66 @@ class _EmailPhoneTextFieldState extends State<EmailPhoneTextField> {
             },
             isVisibleIcon: true,
           );
+  }
+}
+
+class BarcodeTextField extends StatefulWidget {
+  BarcodeTextField({Key key, this.onPressed}) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  _BarcodeTextFieldState createState() => _BarcodeTextFieldState();
+}
+
+class _BarcodeTextFieldState extends State<BarcodeTextField> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: math.min(size(context, 0.075), 48.0),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              TextField(
+                controller: _controller,
+                keyboardType: TextInputType.number,
+                textAlignVertical: TextAlignVertical.center,
+                maxLength: 16,
+                style: style2(context).copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  counterText: '',
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: 'Номер карты',
+                  hintStyle: style2(context).copyWith(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.normal,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth * 0.05,
+                  ),
+                ),
+              ),
+              CustomFlatButton(icon: svgBarCodeIcon),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -283,10 +344,14 @@ class CustomTextField extends StatefulWidget {
     this.isEnabled = true,
     this.isMultiLines = false,
     this.popupMenuItems = const [],
+    this.minLines = 1,
+    this.maxLines = 1,
   }) : super(key: key);
 
   final FocusNode focusNode;
   final TextInputType keyboardType;
+  final int minLines;
+  final int maxLines;
   final String text;
   final int maxLength;
   final FontWeight fontWeight;
@@ -311,7 +376,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   void didChangeDependencies() {
-    if (widget.isMultiLines) {
+    if (widget.minLines > 1 && widget.maxLines > 1) {
       _height = null;
     } else {
       _height = math.min(size(context, 0.075), 48.0);
@@ -340,6 +405,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 onChanged: (value) {
                   if (widget.maxLength != null &&
                       value.length == widget.maxLength) {
+                    // TODO make event Fetcheted more understandable
                     BlocProvider.of<TransitionBloc>(context).add(Fetched());
                     final Widget _discountDetailsPage = DiscountDetailsPage();
                     Navigator.push(
@@ -357,8 +423,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 keyboardType: widget.keyboardType,
                 textAlignVertical: TextAlignVertical.center,
                 maxLength: widget.maxLength,
-                minLines: widget.isMultiLines ? 6 : 1,
-                maxLines: widget.isMultiLines ? 6 : 1,
+                minLines: widget.minLines,
+                maxLines: widget.maxLines,
                 style: style2(context).copyWith(
                   color: widget.isEnabled ? Colors.black : Colors.grey[600],
                   fontWeight: widget.fontWeight,
@@ -373,8 +439,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   hintStyle:
                       style2(context).copyWith(fontWeight: FontWeight.normal),
                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: constraints.maxWidth * 0.05,
-                    vertical: widget.isMultiLines ? 5.0 : 0.0,
+                    horizontal: constraints.maxWidth * 0.03,
+                    vertical: (widget.minLines > 1 && widget.maxLines > 1)
+                        ? constraints.maxWidth * 0.02
+                        : 0.0,
                   ),
                 ),
               ),

@@ -17,7 +17,12 @@ import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/styles.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key key}) : super(key: key);
+  const CameraPage({
+    Key key,
+    this.barcode = true,
+  }) : super(key: key);
+
+  final bool barcode;
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -200,146 +205,262 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     print('***CameraPage***');
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(_appBarHeight),
-        child: AppBar(
-          leading: CustomFlatButton(
-            icon: svgLeftArrow,
-            onPressed: () {
-              _cameraController
-                  .stopImageStream()
-                  .then((_) => Navigator.pop(context));
-            },
-          ),
-          title: Text(
-            'Добавить карту',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: _appBarHeight * 0.38,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          actions: [
-            CustomFlatButton(
-              icon: Icon(
-                Icons.wb_sunny_outlined,
-                color: cPink,
+    return widget.barcode
+        ? Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(_appBarHeight),
+              child: AppBar(
+                leading: CustomFlatButton(
+                  icon: svgLeftArrow,
+                  onPressed: () {
+                    _cameraController
+                        .stopImageStream()
+                        .then((_) => Navigator.pop(context));
+                  },
+                ),
+                title: Text(
+                  'Добавить карту',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: _appBarHeight * 0.38,
+                  ),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.white,
+                actions: [
+                  CustomFlatButton(
+                    icon: Icon(
+                      Icons.wb_sunny_outlined,
+                      color: cPink,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-      body: (_cameraController != null &&
-              _cameraController.value.isInitialized &&
-              _cameraController.value.isStreamingImages)
-          ? Stack(
-              children: [
-                Container(
-                  child: Transform.scale(
-                    scale: _getImageZoom(MediaQuery.of(context)),
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio: _cameraController.value.aspectRatio,
-                        child: CameraPreview(_cameraController),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return Container(
-                        constraints: const BoxConstraints.expand(),
-                        child: CustomPaint(
-                          painter: WindowPainter(
-                            windowSize: Size(
-                              constraints.maxWidth - 2 * _hor,
-                              constraints.maxHeight * 0.35,
+            body: (_cameraController != null &&
+                    _cameraController.value.isInitialized &&
+                    _cameraController.value.isStreamingImages)
+                ? Stack(
+                    children: [
+                      Container(
+                        child: Transform.scale(
+                          scale: _getImageZoom(MediaQuery.of(context)),
+                          child: Center(
+                            child: AspectRatio(
+                              aspectRatio: _cameraController.value.aspectRatio,
+                              child: CameraPreview(_cameraController),
                             ),
-                            backgroundColor: Colors.black54,
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  left: _hor,
-                  right: _hor,
-                  top: _vert,
-                  child: Text(
-                    'Отсканируйте штрих-код вашей карты.\nДержите штрих-код в кадре, чтобы просканировать его.',
-                    textAlign: TextAlign.center,
-                    style: style2(context).copyWith(color: Colors.white),
-                  ),
-                ),
-                Center(
-                  child: LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return Container(
-                        width: constraints.maxWidth - 2 * _hor,
-                        height: constraints.maxHeight * 0.35,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      Center(
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Container(
+                              constraints: const BoxConstraints.expand(),
+                              child: CustomPaint(
+                                painter: WindowPainter(
+                                  windowSize: Size(
+                                    constraints.maxWidth - 2 * _hor,
+                                    constraints.maxHeight * 0.35,
+                                  ),
+                                  backgroundColor: Colors.black54,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
-                CustomPaint(
-                  painter: BarcodeRect(
-                    barcodeRect: _validRect,
-                    color: const Color(0xFF0099FF),
-                  ),
-                ),
-                CustomPaint(
-                  painter: BarcodeRect(
-                      barcodeRect: _barcodeBoundingBox,
-                      color: const Color(0xFF66BB6A)),
-                ),
-                CustomPaint(
-                  painter: BarcodeRect(
-                      barcodeRect: _intersectionRect,
-                      color: const Color(0xFFCFD8DC)),
-                ),
-                Positioned(
-                  left: _hor * 3,
-                  right: _hor * 3,
-                  bottom: _vert,
-                  child: GestureDetector(
-                    onTap: () {
-                      _cameraController.stopImageStream().then((_) {
-                        _cameraController.dispose();
-                        final Widget _discountCalculatorPage =
-                            DiscountCalculatorPage();
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            transitionDuration: Duration(seconds: 0),
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    _discountCalculatorPage,
+                      ),
+                      Positioned(
+                        left: _hor,
+                        right: _hor,
+                        top: _vert,
+                        child: Text(
+                          'Отсканируйте штрих-код вашей карты.\nДержите штрих-код в кадре, чтобы просканировать его.',
+                          textAlign: TextAlign.center,
+                          style: style2(context).copyWith(color: Colors.white),
+                        ),
+                      ),
+                      Center(
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Container(
+                              width: constraints.maxWidth - 2 * _hor,
+                              height: constraints.maxHeight * 0.35,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      CustomPaint(
+                        painter: BarcodeRect(
+                          barcodeRect: _validRect,
+                          color: const Color(0xFF0099FF),
+                        ),
+                      ),
+                      CustomPaint(
+                        painter: BarcodeRect(
+                            barcodeRect: _barcodeBoundingBox,
+                            color: const Color(0xFF66BB6A)),
+                      ),
+                      CustomPaint(
+                        painter: BarcodeRect(
+                            barcodeRect: _intersectionRect,
+                            color: const Color(0xFFCFD8DC)),
+                      ),
+                      Positioned(
+                        left: _hor * 3,
+                        right: _hor * 3,
+                        bottom: _vert,
+                        child: GestureDetector(
+                          onTap: () {
+                            _cameraController.stopImageStream().then((_) {
+                              _cameraController.dispose();
+                              final Widget _discountCalculatorPage =
+                                  DiscountCalculatorPage();
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration: Duration(seconds: 0),
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      _discountCalculatorPage,
+                                ),
+                              );
+                            });
+                          },
+                          child: CustomButton(
+                            onTap: () {},
+                            text: 'Ввести вручную',
+                            color: Colors.transparent,
+                            textColor: Colors.white,
+                            borderColor: Colors.white,
                           ),
-                        );
-                      });
-                    },
-                    child: CustomButton(
-                      onTap: () {},
-                      text: 'Ввести вручную',
-                      color: Colors.transparent,
-                      textColor: Colors.white,
-                      borderColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )
+                : Center(child: CircularProgressIndicator()),
+          )
+        : Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(_appBarHeight),
+              child: AppBar(
+                leading: CustomFlatButton(
+                  icon: svgLeftArrow,
+                  onPressed: () {
+                    _cameraController
+                        .stopImageStream()
+                        .then((_) => Navigator.pop(context));
+                  },
+                ),
+                backgroundColor: Colors.white,
+                actions: [
+                  CustomFlatButton(
+                    icon: Icon(
+                      Icons.wb_sunny_outlined,
+                      color: cPink,
                     ),
                   ),
-                ),
-              ],
-            )
-          : Center(child: CircularProgressIndicator()),
-    );
+                ],
+              ),
+            ),
+            body: (_cameraController != null &&
+                    _cameraController.value.isInitialized &&
+                    _cameraController.value.isStreamingImages)
+                ? Stack(
+                    children: [
+                      Container(
+                        child: Transform.scale(
+                          scale: _getImageZoom(MediaQuery.of(context)),
+                          child: Center(
+                            child: AspectRatio(
+                              aspectRatio: _cameraController.value.aspectRatio,
+                              child: CameraPreview(_cameraController),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Container(
+                              constraints: const BoxConstraints.expand(),
+                              child: CustomPaint(
+                                painter: WindowPainter(
+                                  windowSize: Size(
+                                    constraints.maxWidth - 6 * _hor,
+                                    constraints.maxHeight * 0.65,
+                                  ),
+                                  backgroundColor: Colors.black54,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        left: _hor,
+                        right: _hor,
+                        top: _vert,
+                        child: Text(
+                          'Сделайте фото лицевой стороны\nвашей бонусной карты. Держите её в кадре.',
+                          textAlign: TextAlign.center,
+                          style: style2(context).copyWith(color: Colors.white),
+                        ),
+                      ),
+                      Center(
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Container(
+                              width: constraints.maxWidth - 6 * _hor,
+                              height: constraints.maxHeight * 0.65,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      CustomPaint(
+                        painter: BarcodeRect(
+                          barcodeRect: _validRect,
+                          color: const Color(0xFF0099FF),
+                        ),
+                      ),
+                      CustomPaint(
+                        painter: BarcodeRect(
+                            barcodeRect: _barcodeBoundingBox,
+                            color: const Color(0xFF66BB6A)),
+                      ),
+                      CustomPaint(
+                        painter: BarcodeRect(
+                            barcodeRect: _intersectionRect,
+                            color: const Color(0xFFCFD8DC)),
+                      ),
+                      Positioned(
+                        left: _hor * 3,
+                        right: _hor * 3,
+                        bottom: _vert,
+                        child: CustomButton(
+                          onTap: () {},
+                          text: 'Сделать фото',
+                          color: Colors.transparent,
+                          textColor: Colors.white,
+                          borderColor: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )
+                : Center(child: CircularProgressIndicator()),
+          );
   }
 }
