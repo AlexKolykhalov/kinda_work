@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kinda_work/reservation/reservation_page.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
@@ -310,28 +311,43 @@ class Description extends StatelessWidget {
                         Positioned(
                           top: constraints.maxHeight * 0.4,
                           right: constraints.maxWidth * 0.02,
-                          child: Container(
-                            width: constraints.maxHeight * 0.1,
-                            height: constraints.maxHeight * 0.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[600],
-                                  blurRadius: 5.0,
-                                )
-                              ],
-                              color: cPink,
-                            ),
-                            child: LayoutBuilder(
-                              builder: (BuildContext context,
-                                  BoxConstraints constraints) {
-                                return Icon(
-                                  Icons.fact_check_outlined,
-                                  color: Colors.white,
-                                  size: constraints.maxHeight * 0.6,
-                                );
-                              },
+                          child: GestureDetector(
+                            onTap: () {
+                              final Widget _reservationPage =
+                                  ReservationPage(company: company);
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration: Duration(seconds: 0),
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      _reservationPage,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: constraints.maxHeight * 0.1,
+                              height: constraints.maxHeight * 0.1,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey[600],
+                                    blurRadius: 5.0,
+                                  )
+                                ],
+                                color: cPink,
+                              ),
+                              child: LayoutBuilder(
+                                builder: (BuildContext context,
+                                    BoxConstraints constraints) {
+                                  return Icon(
+                                    Icons.fact_check_outlined,
+                                    color: Colors.white,
+                                    size: constraints.maxHeight * 0.6,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         )

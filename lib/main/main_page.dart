@@ -770,9 +770,11 @@ class SearchCompany extends StatelessWidget {
   const SearchCompany({
     Key key,
     @required this.element,
+    this.visibleRateArrowElements = true,
   }) : super(key: key);
 
   final Company element;
+  final bool visibleRateArrowElements;
 
   @override
   Widget build(BuildContext context) {
@@ -828,11 +830,14 @@ class SearchCompany extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  RateBadge(rate: 8.0, textColor: Colors.green),
-                  CustomRedRightArrow(onPressed: null),
-                ],
+              Visibility(
+                visible: visibleRateArrowElements,
+                child: Row(
+                  children: [
+                    RateBadge(rate: 8.0, textColor: Colors.green),
+                    CustomRedRightArrow(onPressed: null),
+                  ],
+                ),
               )
             ],
           );

@@ -49,6 +49,7 @@ class Company {
     this.web = '',
     this.menu = const <Menu>[],
     this.news = const <News>[],
+    this.bookingSchedule = const [],
     this.rate = 0.0,
     this.favorite = false,
     this.messages = 0,
@@ -62,6 +63,7 @@ class Company {
   final String web;
   final List<Menu> menu;
   final List<News> news;
+  final List<Map> bookingSchedule;
   final double rate;
   final bool favorite;
   final int messages;
