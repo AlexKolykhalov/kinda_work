@@ -169,11 +169,15 @@ class PhoneTextField extends StatefulWidget {
   const PhoneTextField({
     Key key,
     this.onPressed,
+    this.text,
+    this.hintText,
     this.maxLength,
     this.isVisibleIcon = false,
   }) : super(key: key);
 
   final VoidCallback onPressed;
+  final String text;
+  final String hintText;
   final int maxLength;
   final bool isVisibleIcon;
 
@@ -182,7 +186,13 @@ class PhoneTextField extends StatefulWidget {
 }
 
 class _PhoneTextFieldState extends State<PhoneTextField> {
-  final _controller = TextEditingController();
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.text);
+  }
 
   @override
   void dispose() {
@@ -227,12 +237,12 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                   counterText: '',
                   fillColor: Colors.white,
                   filled: true,
-                  hintText: '(XX) XXX-XX-XX',
+                  hintText: widget.hintText ?? '(XX) XXX-XX-XX',
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: constraints.maxWidth * 0.05,
                   ),
                   prefixIcon: Container(
-                    width: constraints.maxWidth * 0.3,
+                    width: constraints.maxWidth * 0.25,
                     height: constraints.maxHeight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -308,7 +318,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                   hintText: 'Пароль',
                   hintStyle: style2(context),
                   contentPadding: EdgeInsets.symmetric(
-                      horizontal: constraints.maxWidth * 0.05),
+                    horizontal: constraints.maxWidth * 0.05,
+                  ),
                 ),
               ),
               IconButton(
@@ -340,6 +351,7 @@ class CustomTextField extends StatefulWidget {
     this.focusNode,
     this.fontWeight = FontWeight.normal,
     this.hintText,
+    this.errorText,
     this.keyboardType = TextInputType.text,
     this.isEnabled = true,
     this.isMultiLines = false,
@@ -356,6 +368,7 @@ class CustomTextField extends StatefulWidget {
   final int maxLength;
   final FontWeight fontWeight;
   final String hintText;
+  final String errorText;
   final bool isEnabled;
   final List<dynamic> popupMenuItems;
   final bool isMultiLines;
@@ -393,7 +406,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: _height,
+      height: widget.errorText != null
+          ? math.min(size(context, 0.11), 73.0)
+          : _height,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Stack(
@@ -432,6 +447,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   counterText: '',
+                  errorText: widget.errorText,
+                  errorStyle: style4(context),
                   enabled: widget.isEnabled,
                   fillColor: Colors.white,
                   filled: widget.isEnabled ?? false,

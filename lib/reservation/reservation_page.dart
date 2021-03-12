@@ -3,8 +3,9 @@ import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/shared_widgets/app_bars.dart';
-import 'package:kinda_work/shared_widgets/badges.dart';
+import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
+import 'package:kinda_work/shared_widgets/text_fields.dart';
 import 'package:kinda_work/styles.dart';
 
 class ReservationPage extends StatelessWidget {
@@ -43,8 +44,21 @@ class ReservationPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: _hor),
               child: Column(
                 children: [
-                  TimeScheduleWidget(bookingSchedule: company.bookingSchedule),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: _vert),
+                    child: TimeScheduleWidget(
+                        bookingSchedule: company.bookingSchedule),
+                  ),
                   TextFieldWidgets(),
+                  Padding(
+                    padding: EdgeInsets.only(top: _vert * 2, bottom: _vert),
+                    child: CustomButton(
+                      onTap: () {},
+                      text: 'Забронировать',
+                      color: cPink,
+                      textColor: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -128,31 +142,15 @@ class TimeScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _hor = size(context, hor);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: size(context, vert)),
-          child: Text(
-            'Время',
-            style: style3(context).copyWith(fontWeight: FontWeight.bold),
-          ),
+        Text(
+          'Время',
+          style: style3(context).copyWith(fontWeight: FontWeight.bold),
         ),
-        // Container(
-        //   height: 150.0,
-        //   child: GridView.builder(
-        //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        //       crossAxisSpacing: 20.0,
-        //       mainAxisSpacing: 10.0,
-        //       childAspectRatio: 16 / 9,
-        //       crossAxisCount: 4,
-        //     ),
-        //     itemBuilder: (context, index) => TimeGridElement(
-        //       value: bookingSchedule[index]['time'],
-        //     ),
-        //     itemCount: 8,
-        //   ),
-        // ),
+        SizedBox(height: _hor),
         TimeGrid(bookingSchedule: bookingSchedule),
       ],
     );
@@ -166,7 +164,34 @@ class TextFieldWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: []);
+    final double _hor = size(context, hor);
+    return Column(children: [
+      CustomTextField(
+        hintText: 'Пожелания (необязательно)',
+        maxLines: 3,
+        minLines: 3,
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: _hor),
+        child: CustomTextField(text: 'Фредди Макгрегор'),
+      ),
+      PhoneTextField(
+        text: '(50) 780-99-01',
+      ),
+      SizedBox(height: _hor),
+      Visibility(
+        visible: true,
+        child: Column(
+          children: [
+            CustomTextField(
+              hintText: 'СМС-код',
+              errorText: 'Неверный формат кода',
+            ),
+            SizedBox(height: _hor),
+          ],
+        ),
+      )
+    ]);
   }
 }
 
@@ -227,8 +252,9 @@ class _TimeGridState extends State<TimeGrid> {
                     });
                   },
                   child: TimeGridElement(
-                    value: entry.key + 4 == 7 ? '***' : entry.value['time'],
+                    value: entry.value['time'],
                     isSelected: entry.key + 4 == _index && entry.key + 4 != 7,
+                    isLast: entry.key + 4 == 7,
                   ),
                 ),
               )
@@ -238,17 +264,6 @@ class _TimeGridState extends State<TimeGrid> {
     );
   }
 }
-
-// class UsualTimeGridElement extends StatelessWidget {
-//   const UsualTimeGridElement({Key key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: child,
-//     );
-//   }
-// }
 
 class TimeGridElement extends StatelessWidget {
   const TimeGridElement({
@@ -264,12 +279,14 @@ class TimeGridElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
       width: size(context, 0.11),
       height: size(context, 0.05),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(size(context, 0.8)),
           color: isSelected ? Colors.green : Colors.white),
+      duration: Duration(milliseconds: 200),
+      curve: Curves.bounceInOut,
       child: Center(
         child: isLast
             ? Icon(Icons.more_horiz)

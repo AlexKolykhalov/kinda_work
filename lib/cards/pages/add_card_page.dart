@@ -5,7 +5,6 @@ import 'package:kinda_work/cards/widgets.dart';
 import 'package:kinda_work/constants.dart';
 import 'package:kinda_work/repository.dart';
 import 'package:kinda_work/shared_widgets/app_bars.dart';
-import 'package:kinda_work/shared_widgets/camera/camera_page.dart';
 import 'package:kinda_work/shared_widgets/common_widgets.dart';
 import 'package:kinda_work/shared_widgets/red_arrow_icon.dart';
 import 'package:kinda_work/styles.dart';

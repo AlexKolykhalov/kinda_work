@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:kinda_work/constants.dart';
-import 'package:kinda_work/main/main_page.dart';
 import 'package:kinda_work/models.dart';
 import 'package:kinda_work/other/pages/profile/widgets.dart';
 import 'package:kinda_work/other/thanks_for_review.dart';

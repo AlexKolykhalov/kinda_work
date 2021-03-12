@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +19,7 @@ TextStyle style1(BuildContext context) {
 }
 
 TextStyle style2(BuildContext context) {
-  return TextStyle(fontSize: size(context, 0.023));
+  return TextStyle(fontSize: min(size(context, 0.023), 17.0));
 }
 
 TextStyle style3(BuildContext context) {
