@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kinda_work/reservation/reservation_page.dart';
+import 'package:kinda_work/shared_widgets/slider.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:kinda_work/constants.dart';
@@ -142,15 +143,9 @@ class Description extends StatelessWidget {
                       children: [
                         Column(
                           children: [
-                            Container(
+                            CustomSlider(
                               height: constraints.maxHeight * 0.45,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  // TODO должен быть Slider
-                                  image: AssetImage(company.img),
-                                ),
-                              ),
+                              images: sliderImages,
                             ),
                             Container(
                               height: constraints.maxHeight * 0.55,

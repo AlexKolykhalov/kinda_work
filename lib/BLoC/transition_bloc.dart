@@ -13,7 +13,7 @@ class TransitionBloc extends Bloc<TransitionEvent, TransitionState> {
   Stream<TransitionState> mapEventToState(
     TransitionEvent event,
   ) async* {
-    if (event is Fetched) {
+    if (event is Transitioned) {
       yield TransitionLoading();
       await Future.delayed(Duration(seconds: 2));
       yield TransitionLoaded();

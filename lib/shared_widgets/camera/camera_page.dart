@@ -173,7 +173,7 @@ class _CameraPageState extends State<CameraPage> {
         _cameraController.stopImageStream().then(
           (_) {
             _cameraController.dispose();
-            BlocProvider.of<TransitionBloc>(context).add(Fetched());
+            BlocProvider.of<TransitionBloc>(context).add(Transitioned());
             final Widget _discountDetailsPage = DiscountDetailsPage();
             Navigator.push(
               context,

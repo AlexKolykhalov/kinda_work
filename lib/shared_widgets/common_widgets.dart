@@ -16,7 +16,6 @@ import 'package:kinda_work/models.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     Key key,
-    this.padding,
     this.margin,
     @required this.onTap,
     @required this.text,
@@ -26,7 +25,6 @@ class CustomButton extends StatelessWidget {
     this.fontWeight = FontWeight.bold,
   }) : super(key: key);
 
-  final EdgeInsets padding;
   final EdgeInsets margin;
   final VoidCallback onTap;
   final String text;
@@ -41,9 +39,6 @@ class CustomButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: math.min(size(context, 0.075), 48.0),
-        // TODO remove padding & margin on top
-        // GestureDetector
-        padding: padding,
         margin: margin,
         decoration: BoxDecoration(
             color: color,
@@ -112,24 +107,25 @@ class BottomButtons extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           GestureDetector(
-              onTap: () => displayQrCode(context),
-              child: Container(
-                width: _h,
-                height: _h,
-                padding: EdgeInsets.all(size(context, 0.02)),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: cIndigo,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 5.0,
-                      offset: Offset(1.0, 2.0),
-                    ),
-                  ],
-                ),
-                child: svgQrCodeIcon,
-              )),
+            onTap: () => displayQrCode(context),
+            child: Container(
+              width: _h,
+              height: _h,
+              padding: EdgeInsets.all(size(context, 0.02)),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: cIndigo,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 5.0,
+                    offset: Offset(1.0, 2.0),
+                  ),
+                ],
+              ),
+              child: svgQrCodeIcon,
+            ),
+          ),
           Container(
             width: size(context, 0.21),
             height: _h,
@@ -145,6 +141,8 @@ class BottomButtons extends StatelessWidget {
               ],
             ),
             child: GestureDetector(
+              //позволяет GestureDetector отрабатывать на все Row
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 final Widget _mapPage = MapPage();
                 return Navigator.push(
@@ -156,24 +154,25 @@ class BottomButtons extends StatelessWidget {
                 );
               },
               child: Padding(
-                  padding: EdgeInsets.all(size(context, 0.015)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: 25.0,
-                        height: 25.0,
-                        child: svgLocationIcon,
+                padding: EdgeInsets.all(size(context, 0.015)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: 25.0,
+                      height: 25.0,
+                      child: svgLocationIcon,
+                    ),
+                    Text(
+                      'На карте',
+                      style: style1(context).copyWith(
+                        color: cIndigo,
                       ),
-                      Text(
-                        'На карте',
-                        style: style1(context).copyWith(
-                          color: cIndigo,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  )),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           GestureDetector(

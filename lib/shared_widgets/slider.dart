@@ -6,7 +6,7 @@ import 'package:kinda_work/styles.dart';
 class CustomSlider extends StatefulWidget {
   const CustomSlider({
     Key key,
-    @required this.images,
+    this.images = const [],
     this.height,
   })  : assert(images.length == 4),
         super(key: key);

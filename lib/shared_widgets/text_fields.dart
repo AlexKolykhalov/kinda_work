@@ -420,8 +420,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 onChanged: (value) {
                   if (widget.maxLength != null &&
                       value.length == widget.maxLength) {
-                    // TODO make event Fetcheted more understandable
-                    BlocProvider.of<TransitionBloc>(context).add(Fetched());
+                    BlocProvider.of<TransitionBloc>(context)
+                        .add(Transitioned());
                     final Widget _discountDetailsPage = DiscountDetailsPage();
                     Navigator.push(
                       context,
